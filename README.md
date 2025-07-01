@@ -2,6 +2,24 @@
 
 ## 📌 Tech Stack (thống nhất ngày: [19/6/2025])
 
+🚀 Next.js Project Setup Guide
+
+> Hướng dẫn chi tiết để chạy dự án Next.js sau khi clone về lần đầu.
+
+---
+
+## ✅ Clone dự án
+
+```bash
+git clone [https://github.com/your-org/your-project.git](https://github.com/quocnhat02/MockProject_062025_Nhom1.git)
+cd MockProject_062025_Nhom1/frontend
+
+# npm
+npm install
+
+npm run dev
+
+
 ### 🔧 Backend:
 
 - **Framework:** Spring Boot `3.5.0`
