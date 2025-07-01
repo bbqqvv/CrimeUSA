@@ -1,7 +1,7 @@
 import { MessageCircle, Shield, Users } from 'lucide-react';
 import React from 'react';
 import { Button } from '../ui/button';
-
+import Link from 'next/link';
 export const CanHelp = () => {
     return (
         <section className="text-center py-10 px-4 md:px-6 space-y-6 bg-gray-50">
@@ -25,7 +25,9 @@ export const CanHelp = () => {
             </div>
 
             <div>
-                <Button className="mt-4">File A Report</Button>
+                <Link href="/reporter">
+                    <Button className="mt-4">File A Report</Button>
+                </Link>
             </div>
         </section>
     );

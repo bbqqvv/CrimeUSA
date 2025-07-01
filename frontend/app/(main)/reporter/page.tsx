@@ -1,7 +1,7 @@
-import React from 'react'
-
-export const Reporter = () => {
+export default function ReporterPage() {
     return (
-        <div>Đây là step 1 trong figma còn mấy step sau thì ae tự nguyên cứu 😂</div>
-    )
+        <div>
+            <h1>Reporter Page</h1>
+        </div>
+    );
 }
