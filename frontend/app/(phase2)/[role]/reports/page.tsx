@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter, useParams } from "next/navigation"
 import { Search, LogOut, ChevronDown } from "lucide-react"
 import {
   Table,
@@ -45,82 +46,22 @@ const mockReports = [
     status: "Under Investigation", 
     statusColor: "text-green-600 bg-green-50"
   },
-  {
-    caseId: "#45169",
-    typeOfCrime: "Drug Offenses",
-    levelOfSeverity: "3rd Degree Felony",
-    date: "15/06/2022",
-    receivingUnit: "ATF",
-    location: "San Francisco, CA",
-    status: "Awaiting Prosecution",
-    statusColor: "text-orange-600 bg-orange-50"
-  },
-  {
-    caseId: "#34304",
-    typeOfCrime: "Cybercrimes",
-    levelOfSeverity: "2nd Degree Felony",
-    date: "06/09/2022",
-    receivingUnit: "State Bureau of Investigation (SBI)",
-    location: "Chicago, IL",
-    status: "Awaiting Prosecution",
-    statusColor: "text-orange-600 bg-orange-50"
-  },
-  {
-    caseId: "#17188",
-    typeOfCrime: "Drug Offenses",
-    levelOfSeverity: "Misdemeanor",
-    date: "25/09/2022",
-    receivingUnit: "ATF",
-    location: "Seattle, WA",
-    status: "Closed",
-    statusColor: "text-red-600 bg-red-50"
-  },
-  {
-    caseId: "#73003",
-    typeOfCrime: "Property Crimes",
-    levelOfSeverity: "Misdemeanor", 
-    date: "04/10/2022",
-    receivingUnit: "Local PD - Investigation Division",
-    location: "Seattle, WA",
-    status: "Under Investigation",
-    statusColor: "text-green-600 bg-green-50"
-  },
-  {
-    caseId: "#58825",
-    typeOfCrime: "White-Collar Crimes",
-    levelOfSeverity: "2nd Degree Felony",
-    date: "17/10/2022",
-    receivingUnit: "Economic Crimes Division (PD)",
-    location: "New York, NY",
-    status: "Under Investigation",
-    statusColor: "text-green-600 bg-green-50"
-  },
-  {
-    caseId: "#89094",
-    typeOfCrime: "Public Order Crimes",
-    levelOfSeverity: "Misdemeanor",
-    date: "01/11/2022",
-    receivingUnit: "Local PD - Investigation Division",
-    location: "Seattle, WA",
-    status: "Closed",
-    statusColor: "text-red-600 bg-red-50"
-  },
-  {
-    caseId: "#85252",
-    typeOfCrime: "Property Crimes",
-    levelOfSeverity: "3rd Degree Felony",
-    date: "22/11/2022",
-    receivingUnit: "Local PD - Investigation Division",
-    location: "Chicago, IL",
-    status: "Awaiting Prosecution",
-    statusColor: "text-orange-600 bg-orange-50"
-  }
 ]
 
 export default function ReportsPage() {
+  const router = useRouter()
+  const params = useParams()
   const [searchTerm, setSearchTerm] = useState("")
   const [entriesPerPage, setEntriesPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
+
+  const handleRowClick = (caseId: string) => {
+    // Remove the # symbol from caseId for URL
+    const reportId = caseId.replace('#', '')
+    // Get current role from URL params
+    const role = params.role
+    router.push(`/${role}/reports/${reportId}`)
+  }
 
   // Filter reports based on search term
   const filteredReports = mockReports.filter(report =>
@@ -217,8 +158,12 @@ export default function ReportsPage() {
             </TableHeader>
             <TableBody>
               {paginatedReports.map((report, index) => (
-                <TableRow key={index} className="hover:bg-gray-50">
-                  <TableCell className="font-medium text-blue-600">
+                <TableRow 
+                  key={index} 
+                  className="hover:bg-gray-50 cursor-pointer transition-colors"
+                  onClick={() => handleRowClick(report.caseId)}
+                >
+                  <TableCell className="font-medium text-blue-600 hover:text-blue-800">
                     {report.caseId}
                   </TableCell>
                   <TableCell className="text-gray-900">
@@ -249,11 +194,7 @@ export default function ReportsPage() {
 
         {/* Pagination */}
         <div className="bg-white border-t border-gray-200 px-6 py-4 rounded-b-lg">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Showing {startIndex + 1} to {Math.min(startIndex + entriesPerPage, filteredReports.length)} of {filteredReports.length} entries
-            </div>
-            
+          <div className="flex items-center justify-center">
             <div className="flex items-center space-x-2">
               <Button
                 variant="outline"

@@ -3,6 +3,8 @@
 ## 🚀 Khởi chạy dự án
 
 # Cài đặt dependencies (Next.js recommend pnpm)
+npm install -g pnpm@latest-10
+
 pnpm install
 
 # Chạy development server
