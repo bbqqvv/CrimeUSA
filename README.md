@@ -1,4 +1,14 @@
-# 🛠️ Framework, Library, Tools – [Criminal Investigation Management System]
+# 🕵️‍♂️ Criminal Investigation Management System
+
+> A modern web application built to manage complex criminal investigations — combining Next.js (frontend) and Spring Boot (microservices backend).
+
+---
+
+## 🎯 Mục tiêu dự án
+
+Xây dựng hệ thống hỗ trợ cơ quan điều tra tại Mỹ quản lý toàn bộ quy trình điều tra tội phạm, từ tiếp nhận báo cáo, xử lý vật chứng, bắt giữ nghi phạm, đến kết án và lưu trữ hồ sơ.
+
+---
 
 ## 📌 Tech Stack (thống nhất ngày: [19/6/2025])
 
