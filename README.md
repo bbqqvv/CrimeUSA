@@ -20,16 +20,6 @@ npm install
 npm run dev
 ```
 
-### 🔧 Backend:
-
-- **Framework:** Spring Boot `3.5.0`
-- **Java Version:** `21`
-- **Dependencies:**
-  - Lombok `1.18.30`
-- Mapstruct 1.18.30
-- Spring Security
-  -Spring Oauth-2
-
 ### 🌐 Frontend:
 
 - **Framework:** Next.js `15.3.4` (App Router)
@@ -43,6 +33,34 @@ npm run dev
   - React Hook Form `7.58.1`
   - Zod `3.25.67` (nếu dùng validate)
   - React Query `5.80.10` (nếu dùng fetch)
+
+### 🔧 Backend:
+
+- **Framework:** Spring Boot `3.5.0`
+- **Java Version:** `21`
+- **Dependencies:**
+  - Lombok `1.18.30`
+- Mapstruct 1.18.30
+- Spring Security
+  -Spring Oauth-2
+
+#### 📁 Danh sách Microservices
+
+| Service | Chức năng chính |
+|--------|-----------------|
+| `auth-service` | Đăng nhập, phân quyền, JWT |
+| `case-service` | Quản lý vụ án, kết quả, timeline |
+| `report-service` | Tiếp nhận và xử lý báo cáo |
+| `suspect-service` | Quản lý nghi phạm, án phạt |
+| `evidence-service` | Vật chứng, điều tra kỹ thuật số/pháp y |
+| `investigation-service` | Lên kế hoạch điều tra, phỏng vấn |
+| `warrant-arrest-service` | Quản lý lệnh và quá trình bắt giữ |
+| `victim-witness-service` | Người bị hại và nhân chứng |
+| `api-gateway` | Cổng truy cập trung tâm |
+| `discovery-server` | Eureka hoặc Nacos |
+| `config-server` | Quản lý cấu hình tập trung |
+
+---
 
 ### 🗃️ Database - tools:
 
