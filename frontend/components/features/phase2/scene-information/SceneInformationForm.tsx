@@ -3,11 +3,10 @@ import { Button } from "@/components/ui/button";
 export default function SceneInformationForm() {
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border">
-        <h1 className="text-2xl font-bold text-center mb-6">SCENE INFORMATION</h1>
-      </div>
-
+      {/* Main Form Container with Background */}
+      <div className="bg-[#E7E7E7] rounded-lg shadow-sm border">
+        {/* Form Header */}
+        <h1 className="bg-[#C8E3FF] text-2xl font-bold text-center mb-6 py-2 mx-0 rounded-t-lg">SCENE INFORMATION</h1>
       {/* Placeholder Content */}
       <div className="bg-white rounded-lg p-6 shadow-sm border">
         <h2 className="text-lg font-semibold mb-4">Initial Statements</h2>
@@ -42,6 +41,7 @@ export default function SceneInformationForm() {
         <Button size="lg">
           Save
         </Button>
+      </div>
       </div>
     </div>
   );

@@ -3,10 +3,9 @@ import { Button } from "@/components/ui/button";
 export default function InvestigationReportForm() {
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border">
-        <h1 className="text-2xl font-bold text-center mb-6">INITIAL INVESTIGATION REPORT</h1>
-      </div>
+       <div className="bg-[#E7E7E7] rounded-lg shadow-sm border">
+        {/* Form Header */}
+        <h1 className="bg-[#C8E3FF] text-2xl font-bold text-center mb-6 py-2 mx-0 rounded-t-lg">INITIAL INVESTIGATION REPORT</h1>
 
       {/* Placeholder Content */}
       <div className="bg-white rounded-lg p-6 shadow-sm border">
@@ -32,6 +31,7 @@ export default function InvestigationReportForm() {
         <Button size="lg">
           Save
         </Button>
+      </div>
       </div>
     </div>
   );
