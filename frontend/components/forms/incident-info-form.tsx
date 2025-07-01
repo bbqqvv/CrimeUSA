@@ -25,7 +25,7 @@ export function IncidentInfoForm({ data, onChange }: IncidentInfoFormProps) {
           <Label className="text-sm font-medium">
             Type of crime <span className="text-red-500">*</span>
           </Label>
-          <Select value={data.crimeType} onValueChange={(value) => onChange("crimeType", value)}>
+          <Select value={data.crimeType} onValueChange={(value: string) => onChange("crimeType", value)}>
             <SelectTrigger className="mt-1 bg-gray-100">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
@@ -43,7 +43,7 @@ export function IncidentInfoForm({ data, onChange }: IncidentInfoFormProps) {
           <Label className="text-sm font-medium">
             Severity <span className="text-red-500">*</span>
           </Label>
-          <Select value={data.severity} onValueChange={(value) => onChange("severity", value)}>
+          <Select value={data.severity} onValueChange={(value: string) => onChange("severity", value)}>
             <SelectTrigger className="mt-1 bg-gray-100">
               <SelectValue placeholder="Select an option" />
             </SelectTrigger>
