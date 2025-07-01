@@ -13,7 +13,7 @@ export const LogoSection: React.FC = () => {
       </div>
       <nav className="bg-white border-t border-gray-200">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 gap-7 sm:space-y-0 sm:space-x-8 py-4">
+          <div className="flex flex-wrap  items-center justify-center space-y-4 gap-7 sm:space-y-0 sm:space-x-8 py-4">
             <a href="#" className="text-gray-700 hover:text-blue-900 font-medium transition-colors">
               Home
             </a>
