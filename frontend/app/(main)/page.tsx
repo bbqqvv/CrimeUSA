@@ -7,11 +7,9 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 export default function HomePage() {
     return (
         <main>
-            <div className="p-10">
-                <Hero />
-            </div>
+            <Hero />
             <CanHelp />
-            <Separator className="my-4" />
+            <Separator />
             <ProgramsResources />
         </main>
     );

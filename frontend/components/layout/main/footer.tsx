@@ -36,7 +36,7 @@ export const Footer = () => {
                 <div className="space-y-4">
                     {/* Logo + Search */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 gap-2">
-                        <div className="bg-white text-black font-semibold px-3 py-1 rounded w-fit">Logo</div>
+                        <img src="/images/logo/Logo-text.png" alt="NYC Logo" className="w-full h-full" />
                         <input
                             type="text"
                             placeholder="Search..."
