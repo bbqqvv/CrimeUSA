@@ -3,6 +3,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Navigation } from './nav';
 export const Header: React.FC = () => {
   return (
     <header className="bg-black text-white">
@@ -35,6 +36,7 @@ export const Header: React.FC = () => {
           </DropdownMenu>
         </div>
       </div>
+      <Navigation />
     </header>
   );
 };
