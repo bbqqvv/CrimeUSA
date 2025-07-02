@@ -1,5 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-
 export function IncidentInformation() {
   return (
     <div className="mb-8 pb-8 border-b-2 border-gray-200">
@@ -15,9 +13,7 @@ export function IncidentInformation() {
           </div>
           <div className="border-b border-gray-200 pb-4">
             <h3 className="font-semibold text-gray-900 mb-2">Severity</h3>
-            <Badge className="bg-yellow-50 text-yellow-800 border-yellow-200 hover:bg-yellow-50">
-              Moderate
-            </Badge>
+            <p className="text-gray-600">Moderate</p>
           </div>
         </div>
 

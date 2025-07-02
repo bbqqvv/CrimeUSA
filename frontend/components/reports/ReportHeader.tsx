@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock } from "lucide-react";
+import Badge from "../ui/Badge";
 
 export function ReportHeader() {
   return (
@@ -10,9 +10,7 @@ export function ReportHeader() {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Status:</span>
-          <Badge className="bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-100">
-            Pending
-          </Badge>
+          <Badge status="Pending"></Badge>
         </div>
       </div>
       <div className="text-right space-y-2">
