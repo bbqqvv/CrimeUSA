@@ -5,15 +5,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EyeIcon, Printer } from "lucide-react";
 import { StatusComponent } from "./status-component";
 
-// Sample data
-const report = [
+export function ReviewReportTable() {
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const report = [
   {
     reportID: "1",
     provider: "oaxbvfk.5098@drive.com",
     date: "10/2/2025",
     time: "12:00",
     status: "Pending",
-    action: "AD",
   },
   {
     reportID: "2",
@@ -21,12 +21,8 @@ const report = [
     date: "10/3/2025",
     time: "12:00",
     status: "Pending",
-    action: "ÁD",
   },
 ];
-
-export function ReportTable() {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
   return (
     <div className="border rounded-md">

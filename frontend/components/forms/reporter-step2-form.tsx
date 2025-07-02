@@ -10,12 +10,12 @@ import { PartiesTable } from "@/components/tables/parties-table"
 import { CRIME_TYPES, SEVERITY_LEVELS } from "@/constants/form-options"
 import type { IncidentInfo } from "@/types/form"
 
-interface IncidentInfoFormProps {
+interface ReporterStep2PageProps {
   data: IncidentInfo
   onChange: (field: keyof IncidentInfo, value: string) => void
 }
 
-export function IncidentInfoForm({ data, onChange }: IncidentInfoFormProps) {
+export function ReporterStep2Page({ data, onChange }: ReporterStep2PageProps) {
   return (
     <div className="bg-white p-8 rounded-lg shadow-sm">
       <h2 className="text-xl font-semibold mb-6 text-center border-b pb-4">Incident Information</h2>

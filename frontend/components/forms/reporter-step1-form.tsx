@@ -6,12 +6,12 @@ import { FormField } from "@/components/ui/form-field"
 import { RELATIONSHIP_OPTIONS } from "@/constants/form-options"
 import type { ReporterInfo } from "@/types/form"
 
-interface ReporterInfoFormProps {
+interface ReporterStep1PageProps {
   data: ReporterInfo
   onChange: (field: keyof ReporterInfo, value: string) => void
 }
 
-export function ReporterInfoForm({ data, onChange }: ReporterInfoFormProps) {
+export function ReporterStep1Page({ data, onChange }: ReporterStep1PageProps) {
   return (
     <div className="bg-white p-8 rounded-lg shadow-sm">
       <h2 className="text-xl font-semibold mb-6 text-center border-b pb-4">Reporter Information</h2>
