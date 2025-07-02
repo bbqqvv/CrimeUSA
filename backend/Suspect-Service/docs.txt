@@ -1,0 +1,8 @@
+API Rest
+Suspect Service
+POST /suspects
+GET /suspects/{id}
+PUT /suspects/{id}/status
+POST /suspects/{id}/evidences
+GET /suspects?caseId=...
+POST /suspects/{id}/prosecute
