@@ -12,9 +12,9 @@ export const SEVERITY_LEVELS = [
   { value: "critical", label: "Critical" },
 ]
 
-export const RELATIONSHIP_OPTIONS = [
-  { value: "victim", label: "Victim" },
-  { value: "witness", label: "Witness" },
-  { value: "offender", label: "Offender" },
-  { value: "anonymous", label: "Anonymous" },
-]
+export const relationshipOptions = [
+    { value: "victim", label: "Victim" },
+    { value: "witness", label: "Witness" },
+    { value: "offender", label: "Offender" },
+    { value: "anonymous", label: "Anonymous" },
+];

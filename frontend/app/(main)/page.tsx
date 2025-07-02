@@ -1,17 +1,17 @@
 
 import { CanHelp } from "@/components/home/can-help";
 import { Hero } from "@/components/home/hero";
+import { LogoSection } from "@/components/home/header";
 import { ProgramsResources } from "@/components/home/programs-resources";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 
 export default function HomePage() {
     return (
         <main>
-            <div className="p-10">
-                <Hero />
-            </div>
+            <LogoSection />
+            <Hero />
             <CanHelp />
-            <Separator className="my-4" />
+            <Separator />
             <ProgramsResources />
         </main>
     );
