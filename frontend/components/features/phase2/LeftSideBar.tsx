@@ -23,7 +23,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -34,6 +34,11 @@ import {
 
 export default function LeftSidebar() {
     const router = useRouter();
+    const params = useParams();
+    
+    // Get role and reportsId from URL parameters
+    const role = params.role as string;
+    const reportsId = params.reportsId as string;
     
     /**
      * STATE MANAGEMENT
@@ -42,16 +47,18 @@ export default function LeftSidebar() {
      * independent control of each collapsible section.
      */
     const [initialResponseOpen, setInitialResponseOpen] = useState(true);   // Default open
-    const [sceneInfoOpen, setSceneInfoOpen] = useState(false);               // Default open
+    const [sceneInfoOpen, setSceneInfoOpen] = useState(false);               // Default closed
     const [investigationOpen, setInvestigationOpen] = useState(false);      // Default closed
 
     /**
      * NAVIGATION HANDLER
      * 
      * Handles navigation to different pages when text is clicked
+     * Uses dynamic role and reportsId from URL params
      */
     const handleNavigation = (path: string) => {
-        router.push(path);
+        const fullPath = `/${role}/reports/${reportsId}${path}`;
+        router.push(fullPath);
     };
 
     return (
@@ -69,7 +76,7 @@ export default function LeftSidebar() {
                         <div className="flex">
                             {/* CLICKABLE TITLE for navigation */}
                             <button
-                                onClick={() => handleNavigation('/dot2/initial-response')}
+                                onClick={() => handleNavigation('/initial-response')}
                                 className={cn(
                                     "flex-1 text-left p-3 transition-all duration-200 hover:bg-blue-200",
                                     initialResponseOpen
@@ -105,37 +112,37 @@ export default function LeftSidebar() {
                         <CollapsibleContent className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                             <div className="border-t border-gray-300 bg-white">
                                 <button
-                                    onClick={() => handleNavigation('/dot2/initial-response/dispatch-time')}
+                                    onClick={() => handleNavigation('/initial-response/dispatch-time')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Time of dispatching forces to the scene
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/initial-response/arrival-time')}
+                                    onClick={() => handleNavigation('/initial-response/arrival-time')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Time of arrival at the scene
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/initial-response/officers')}
+                                    onClick={() => handleNavigation('/initial-response/officers')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     List of officers assigned to the scene
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/initial-response/assessment')}
+                                    onClick={() => handleNavigation('/initial-response/assessment')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Preliminary assessment of the scene situation
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/initial-response/preservation')}
+                                    onClick={() => handleNavigation('/initial-response/preservation')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Scene preservation measures taken
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/initial-response/medical-support')}
+                                    onClick={() => handleNavigation('/initial-response/medical-support')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Information on medical/rescue support provided
@@ -156,7 +163,7 @@ export default function LeftSidebar() {
                     >
                         <div className="flex">
                             <button
-                                onClick={() => handleNavigation('/dot2/scene-information')}
+                                onClick={() => handleNavigation('/scene-information')}
                                 className={cn(
                                     "flex-1 text-left p-3 transition-all duration-200 hover:bg-blue-200",
                                     sceneInfoOpen
@@ -188,31 +195,31 @@ export default function LeftSidebar() {
                         <CollapsibleContent className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                             <div className="border-t border-gray-300 bg-white">
                                 <button
-                                    onClick={() => handleNavigation('/dot2/scene-information/statements')}
+                                    onClick={() => handleNavigation('/scene-information/statements')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Initial Statements
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/scene-information/description')}
+                                    onClick={() => handleNavigation('/scene-information/statements/details')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Scene Description
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/scene-information/media')}
+                                    onClick={() => handleNavigation('/scene-information/media')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Images and Videos
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/scene-information/evidence')}
+                                    onClick={() => handleNavigation('/scene-information/evidence')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Preliminary Physical Evidence Information
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/scene-information/sketch')}
+                                    onClick={() => handleNavigation('/scene-information/sketch')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Scene Sketch
@@ -233,7 +240,7 @@ export default function LeftSidebar() {
                     >
                         <div className="flex">
                             <button
-                                onClick={() => handleNavigation('/dot2/preliminary-investigation')}
+                                onClick={() => handleNavigation('/preliminary-investigation')}
                                 className={cn(
                                     "flex-1 text-left p-3 transition-all duration-200 hover:bg-blue-200",
                                     investigationOpen
@@ -267,49 +274,49 @@ export default function LeftSidebar() {
                         <CollapsibleContent className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                             <div className="border-t border-gray-300 bg-white">
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/location')}
+                                    onClick={() => handleNavigation('/preliminary-investigation')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Location of Investigation
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/start-time')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/start-time')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Start time
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/end-time')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/end-time')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     End time
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/officers')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/officers')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     List of officers assigned
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/actions')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/actions')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Actions Taken
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/evidence')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/evidence')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Collected Evidence
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/conclusion')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/conclusion')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Preliminary Conclusion
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/dot2/preliminary-investigation/reporter')}
+                                    onClick={() => handleNavigation('/preliminary-investigation/reporter')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Reporter

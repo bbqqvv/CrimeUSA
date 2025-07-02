@@ -1,15 +1,46 @@
-interface LayoutProps {
-  children: React.ReactNode;
-}
+/**
+ * LAYOUT COMPONENT FOR PHASE 2
+ * 
+ * This is a Next.js layout component that provides the common structure
+ * for all pages in the (phase2)/dot2 route group.
+ * 
+ * PURPOSE:
+ * - Provides consistent layout across all phase 2 pages
+ * - Includes the LeftSidebar navigation component
+ * - Sets up the main flex container for sidebar + content layout
+ * 
+ * USAGE:
+ * This layout automatically wraps all pages in the (phase2)/dot2 directory.
+ * Any page.tsx file in this directory will be rendered as {children}
+ * alongside the persistent LeftSidebar.
+ * 
+ * STRUCTURE:
+ * ┌─────────────────────────────────────┐
+ * │  LeftSidebar  │      children       │
+ * │               │    (page content)   │
+ * │               │                     │
+ * │               │                     │
+ * └─────────────────────────────────────┘
+ */
 
-export default function ReportDetailLayout({ children }: LayoutProps) {
+import LeftSidebar from "@/components/features/phase2/LeftSideBar";
+
+export default function Page({
+  children,
+}: {
+  children: React.ReactNode  // The page content that will be rendered
+}) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto  py-8">
-        <div className="flex gap-8">
-          {children}
-        </div>
-      </div>
+    // Main container with flex layout and full height
+    <div className="flex min-h-screen bg-gray-100">
+      
+      {/* LEFT SIDEBAR */}
+      {/* Persistent navigation sidebar that appears on all pages */}
+      <LeftSidebar />
+      
+      {/* MAIN CONTENT AREA */}
+      {/* This is where individual page components will be rendered */}
+      {children}
     </div>
-  );
+   );
 }

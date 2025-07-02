@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Trash2, Upload, File } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { DeleteEvidenceModal } from "../../../DeleteEvidenceModal";
+import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
 
 /**
  * WITNESS STATEMENT DETAIL PAGE

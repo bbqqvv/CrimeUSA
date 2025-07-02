@@ -60,7 +60,8 @@ export default function ReportsPage() {
     const reportId = caseId.replace('#', '')
     // Get current role from URL params
     const role = params.role
-    router.push(`/${role}/reports/${reportId}`)
+    // Navigate directly to initial-response as the default starting point
+    router.push(`/${role}/reports/${reportId}/initial-response`)
   }
 
   // Filter reports based on search term

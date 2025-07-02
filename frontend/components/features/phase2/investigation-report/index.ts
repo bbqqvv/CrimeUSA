@@ -1,1 +1,0 @@
-export { default as InvestigationReportForm } from './InvestigationReportForm'; 

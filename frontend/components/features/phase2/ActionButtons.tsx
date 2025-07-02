@@ -21,7 +21,7 @@
  */
 
 import { Trash2, Edit, ChevronRight } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface ActionButtonsProps {
   onEdit?: (row: any, index: number) => void;    // Optional edit handler

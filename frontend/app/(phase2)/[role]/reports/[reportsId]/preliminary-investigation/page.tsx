@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "lucide-react";
-import { SectionContainer } from "@/components/(phase2)/SectionContainer";
-import { DataTable } from "@/components/(phase2)/DataTable";
-import { ActionButtons } from "@/components/(phase2)/ActionButtons";
-import { DeleteEvidenceModal } from "../DeleteEvidenceModal";
+import { SectionContainer } from "@/components/features/phase2/SectionContainer";
+import { DataTable } from "@/components/features/phase2/DataTable";
+import { ActionButtons } from "@/components/features/phase2/ActionButtons";
+import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
 
 /**
  * PRELIMINARY INVESTIGATION PAGE

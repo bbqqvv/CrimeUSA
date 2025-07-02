@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { DeleteEvidenceModal } from "../../DeleteEvidenceModal";
+import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
 
 /**
  * ASSESSMENT DETAIL PAGE
