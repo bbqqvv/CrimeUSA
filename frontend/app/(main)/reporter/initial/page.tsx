@@ -109,6 +109,7 @@ export default function RelevantPartiesForm() {
               <Button
                 type="button"
                 variant="secondary"
+                 className="text-muted-foreground"
                 onClick={() => fileInputRef.current?.click()}
               >
                 Upload file
