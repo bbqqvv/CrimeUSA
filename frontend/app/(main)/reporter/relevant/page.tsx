@@ -1,7 +1,7 @@
 
 
 'use client'
-
+import { toast } from 'sonner'
 import { useRef, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,10 +15,19 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Card, CardContent } from '@/components/ui/card'
+import { useRouter } from 'next/navigation'
 
 export default function RelevantPartiesForm() {
   const [files, setFiles] = useState<File[]>([])
+  const [formData, setFormData] = useState({
+    fullname: '',
+    relation: '',
+    gender: '',
+    nationality: '',
+    description: ''
+  })
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const router = useRouter()
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -28,6 +37,46 @@ export default function RelevantPartiesForm() {
 
   const removeFile = (index: number) => {
     setFiles(files.filter((_, i) => i !== index))
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Lưu dữ liệu vào sessionStorage (tạm thời)
+    const errors: string[] = []
+
+    // Kiểm tra các trường rỗng
+    if (!formData.relation) errors.push('Relationship to the incident is required.')
+    if (!formData.gender) errors.push('Gender is required.')
+    
+
+    if (errors.length > 0) {
+      toast.error('Please fill all required fields:', {
+        description: errors.join('\n'),
+      })
+      return
+    }
+    const relevantParties = JSON.parse(sessionStorage.getItem('relevantParties') || '[]')
+    const newParty = {
+      id: relevantParties.length + 1,
+      ...formData,
+      attachments: files.length > 0 ? `${files.length} files` : 'No attachments'
+    }
+    sessionStorage.setItem('relevantParties', JSON.stringify([...relevantParties, newParty]))
+    router.push('/reporter') // Quay lại trang chính reporter
+  }
+
+  const handleCancel = () => {
+    router.push('/reporter') // Điều hướng trở lại reporter
   }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`
@@ -46,16 +95,24 @@ export default function RelevantPartiesForm() {
           This form is used to document the roles and identities of all parties connected to the incident.
         </p>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="fullname" className="mb-2 block">Full name</Label>
-              <Input id="fullname" placeholder="E.g., John Michael Doe" className="w-full" />
+              <Input
+                id="fullname"
+                name="fullname"
+                placeholder="E.g., John Michael Doe"
+                className="w-full"
+                value={formData.fullname}
+                onChange={handleInputChange}
+                required
+              />
             </div>
 
             <div>
               <Label htmlFor="relation" className="mb-2 block">Relationship to the incident *</Label>
-              <Select>
+              <Select onValueChange={(value) => handleSelectChange('relation', value)}>
                 <SelectTrigger id="relation" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
@@ -70,7 +127,7 @@ export default function RelevantPartiesForm() {
 
             <div>
               <Label htmlFor="gender" className="mb-2 block">Gender</Label>
-              <Select>
+              <Select onValueChange={(value) => handleSelectChange('gender', value)}>
                 <SelectTrigger id="gender" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
@@ -84,7 +141,15 @@ export default function RelevantPartiesForm() {
 
             <div>
               <Label htmlFor="nationality" className="mb-2 block">Nationality</Label>
-              <Input id="nationality" placeholder="E.g., American" className="w-full" />
+              <Input
+                id="nationality"
+                name="nationality"
+                placeholder="E.g., American"
+                className="w-full"
+                value={formData.nationality}
+                onChange={handleInputChange}
+                required
+              />
             </div>
           </div>
 
@@ -92,8 +157,12 @@ export default function RelevantPartiesForm() {
             <Label htmlFor="description" className="mb-2 block">Statement / Description</Label>
             <Textarea
               id="description"
+              name="description"
               placeholder="Provide a clear and detailed description..."
               className="w-full"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -124,7 +193,7 @@ export default function RelevantPartiesForm() {
               <Button
                 type="button"
                 variant="secondary"
-                  className="text-muted-foreground"
+                className="text-muted-foreground"
                 onClick={() => fileInputRef.current?.click()}
               >
                 Upload file
@@ -171,7 +240,7 @@ export default function RelevantPartiesForm() {
           </div>
 
           <div className="flex justify-end space-x-4 pt-4">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={handleCancel}>
               Cancel
             </Button>
             <Button type="submit">Create</Button>
