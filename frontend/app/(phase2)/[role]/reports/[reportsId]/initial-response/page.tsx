@@ -8,7 +8,7 @@ import { SectionContainer } from "@/components/features/phase2/SectionContainer"
 import { DataTable } from "@/components/features/phase2/DataTable";
 import { ActionButtons } from "@/components/features/phase2/ActionButtons";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 /**
  * INITIAL RESPONSE PAGE
@@ -63,7 +63,6 @@ const officersInit = [
 
 export default function Page() {
 	// State management for all data sections
-	// These states hold the current data for each table/section
 	const [statements, setStatements] = useState(initialStatementInit);
 	const [preservations, setPreservations] = useState(preservationInit);
 	const [medical, setMedical] = useState(medicalInit);
@@ -73,8 +72,9 @@ export default function Page() {
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [evidenceToDelete, setEvidenceToDelete] = useState<any>(null);
 
-	// Router
+	// Router and params
 	const router = useRouter();
+	const params = useParams(); // Get dynamic route parameters
 
 	/**
 	 * COLUMN CONFIGURATIONS
@@ -183,12 +183,13 @@ export default function Page() {
 		// TODO: Open medical detail modal or navigate to detail page
 	};
 
-    const handleViewDetails = (statement: any, index: number) => {
-        console.log("View details:", statement, index);
-        // Navigate to assessment detail page
-        router.push(`/dot2/initial-response/assessment`);
-    };
-
+	const handleViewDetails = (statement: any, index: number) => {
+		console.log("View details:", statement, index);
+		// Navigate to assessment detail page with dynamic parameters
+		router.push(
+			`/${params.role}/reports/${params.reportsId}/initial-response/assessment`
+		);
+	};
 
 	// Confirm deletion handler
 	const handleConfirmDelete = () => {

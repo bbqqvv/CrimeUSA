@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
 
 /**
@@ -37,6 +37,7 @@ const assessmentData = {
 
 export default function AssessmentDetailPage() {
    const router = useRouter();
+   const params = useParams();
    const [isEditing, setIsEditing] = useState(false);
    const [editableData, setEditableData] = useState(assessmentData);
    
@@ -44,7 +45,8 @@ export default function AssessmentDetailPage() {
    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
    const handleBack = () => {
-      router.back(); // Navigate back to previous page
+      // Navigate back to initial response page with correct dynamic parameters
+      router.push(`/${params.role}/reports/${params.reportsId}/initial-response`);
    };
 
    const handleEdit = () => {
@@ -76,13 +78,11 @@ export default function AssessmentDetailPage() {
    };
 
    const handleConfirmDelete = () => {
-      // TODO: Delete assessment from database/API
       console.log("Deleting assessment:", editableData.id);
       
-      // Navigate back to main assessment list after deletion
-      router.push('/dot2/initial-response');
+      // Navigate back to main assessment list after deletion with correct dynamic parameters
+      router.push(`/${params.role}/reports/${params.reportsId}/initial-response`);
       
-      // Reset modal state
       setShowDeleteModal(false);
    };
 

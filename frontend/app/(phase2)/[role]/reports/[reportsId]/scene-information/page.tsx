@@ -8,7 +8,8 @@ import { SectionContainer } from "@/components/features/phase2/SectionContainer"
 import { DataTable } from "@/components/features/phase2/DataTable";
 import { ActionButtons } from "@/components/features/phase2/ActionButtons";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+
 /**
  * SCENE INFORMATION PAGE
  *
@@ -109,8 +110,9 @@ export default function Page() {
    const [showDeleteModal, setShowDeleteModal] = useState(false);
    const [evidenceToDelete, setEvidenceToDelete] = useState<any>(null);
 
-   // Router for navigation
+   // Router and params for navigation
    const router = useRouter();
+   const params = useParams();
 
    /**
     * COLUMN CONFIGURATIONS
@@ -166,7 +168,7 @@ export default function Page() {
 
    // Add handlers - would typically open a form modal
    const handleAddStatement = () => {
-      router.push('/dot2/scene-information/statements');
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/statements`);
    };
 
    const handleAddSceneDescription = () => {
@@ -180,12 +182,12 @@ export default function Page() {
    };
 
    const handleAddPreliminaryEvidence = () => {
-      router.push('/dot2/scene-information/evidence');
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/evidence`);
    };
 
    // Edit handlers - would typically open a pre-filled form modal
    const handleEditStatement = (statement: any, index: number) => {
-      router.push(`/dot2/scene-information/statements/details`); // Navigate to statement detail page
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/statements/details`);
    };
 
    const handleEditSceneDescription = (description: any, index: number) => {
@@ -225,7 +227,7 @@ export default function Page() {
    };
       // View handlers - would typically open a detail view or navigate to detail page
    const handleViewStatement = (statement: any, index: number) => {
-      router.push(`/dot2/scene-information/statements/details`); // Navigate to statement detail page
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/statements/details`);
    };
 
    const handleViewSceneDescription = (description: any, index: number) => {
