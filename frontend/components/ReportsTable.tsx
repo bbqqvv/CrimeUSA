@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { reports } from '@/data/mockData';
-import Badge from './ui/Badge';
+import Badge from './ui/badge';
 
 type ReportStatus = 'Approved' | 'Pending' | 'Rejected';
 

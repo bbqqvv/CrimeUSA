@@ -39,8 +39,17 @@ export default function Step2({ data, onNext, onBack }: any) {
   const router = useRouter();
 
   // Dữ liệu lấy từ props (database)
-  const relevantParties = data.relevantParties || [];
-  const initialEvidence = data.initialEvidence || [];
+  //const relevantParties = data.relevantParties || [];
+  //const initialEvidence = data.initialEvidence || [];
+  // Lấy dữ liệu từ session
+
+  const relevantParties = typeof window !== 'undefined'
+    ? JSON.parse(sessionStorage.getItem('relevantParties') || '[]')
+    : [];
+  const initialEvidence = typeof window !== 'undefined'
+    ? JSON.parse(sessionStorage.getItem('initialEvidence') || '[]')
+    : []
+
 
   const handleChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -63,6 +72,12 @@ export default function Step2({ data, onNext, onBack }: any) {
     setShowDelete(false);
     // Xử lý xoá thực tế ở đây nếu cần
   };
+
+  const handleDeleteEvidence = (id: number) => {
+  const updatedEvidence = initialEvidence.filter((item: any) => item.id !== id)
+  sessionStorage.setItem('initialEvidence', JSON.stringify(updatedEvidence))
+  // Có thể cần thêm state để trigger re-render
+}
 
   return (
     <div className="w-full max-w-screen-md mx-auto py-8">
@@ -166,92 +181,99 @@ export default function Step2({ data, onNext, onBack }: any) {
         </div>
       </div>
 
-      {/* Relevant Parties */}
-      <div className="my-8">
-        <div className="flex items-center mb-4">
-          <div className="flex-1 border-t border-gray-300" />
-          <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
-            Relevant Parties
-          </h2>
-          <div className="flex-1 border-t border-gray-300" />
-        </div>
-        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-[#F8F8F8]">
-                <TableHead className="text-center font-semibold">ID</TableHead>
-                <TableHead className="text-center font-semibold">
-                  Relevant Role
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Name
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Statement
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Attachments
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Action
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {relevantParties.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center text-gray-400">
-                    No data
-                  </TableCell>
+      <div className="w-full max-w-screen-md mx-auto py-8">
+
+        {/* Relevant Parties */}
+        <div className="my-8">
+          <div className="flex items-center mb-4">
+            <div className="flex-1 border-t border-gray-300" />
+            <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
+              Relevant Parties
+            </h2>
+            <div className="flex-1 border-t border-gray-300" />
+          </div>
+          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#F8F8F8]">
+                  <TableHead className="text-center font-semibold">ID</TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Relevant Role
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Name
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Statement
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Attachments
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Action
+                  </TableHead>
                 </TableRow>
-              ) : (
-                relevantParties.map((party: any) => (
-                  <TableRow key={party.id} className="border-t border-gray-200">
-                    <TableCell className="text-center font-medium">
-                      #{party.id}
-                    </TableCell>
-                    <TableCell className="text-center">{party.role}</TableCell>
-                    <TableCell className="text-center text-gray-400">
-                      —
-                    </TableCell>
-                    <TableCell className="text-center text-gray-400">
-                      —
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <a href="#" className="text-[#3B82F6] underline">
-                        {party.attachments}
-                      </a>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <button className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700">
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        className="inline-flex items-center text-[#F44336] hover:text-red-700"
-                        onClick={handleDelete}
-                      >
-                        <Trash2 size={18} />
-                      </button>
+              </TableHeader>
+              <TableBody>
+                {relevantParties.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-gray-400">
+                      No data
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  relevantParties.map((party: any) => (
+                    <TableRow key={party.id} className="border-t border-gray-200">
+                      <TableCell className="text-center font-medium">
+                        #{party.id}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {party.relation}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {party.fullname || '—'}
+                      </TableCell>
+                      <TableCell className="text-center max-w-xs truncate">
+                        {party.description || '—'}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <span className="text-[#3B82F6]">
+                          {party.attachments}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <button className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700">
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          className="inline-flex items-center text-[#F44336] hover:text-red-700"
+                          onClick={handleDelete}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex justify-end mt-2">
+            <Button
+              variant="outline"
+              className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
+              onClick={() => router.push("/reporter/relevant")}
+            >
+              ADD
+            </Button>
+          </div>
         </div>
-        <div className="flex justify-end mt-2">
-          <Button
-            variant="outline"
-            className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-            onClick={() => router.push("/reporter/relevant")}
-          >
-            ADD
-          </Button>
-        </div>
+
+
       </div>
 
       {/* Initial Evidence */}
-      <div className="my-8">
+      {/* <div className="my-8">
         <div className="flex items-center mb-4">
           <div className="flex-1 border-t border-gray-300" />
           <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
@@ -332,7 +354,93 @@ export default function Step2({ data, onNext, onBack }: any) {
             ADD
           </Button>
         </div>
-      </div>
+      </div> */
+        <div className="my-8">
+          <div className="flex items-center mb-4">
+            <div className="flex-1 border-t border-gray-300" />
+            <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
+              Initial Evidence
+            </h2>
+            <div className="flex-1 border-t border-gray-300" />
+          </div>
+          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#F8F8F8]">
+                  <TableHead className="text-center font-semibold">ID</TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Types of Evidence
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Location
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Description
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Attachments
+                  </TableHead>
+                  <TableHead className="text-center font-semibold">
+                    Action
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {initialEvidence.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center text-gray-400">
+                      No data
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  initialEvidence.map((evidence: any) => (
+                    <TableRow key={evidence.id} className="border-t border-gray-200">
+                      <TableCell className="text-center font-medium">
+                        #{evidence.id}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {evidence.evidenceType}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {evidence.location}
+                      </TableCell>
+                      <TableCell className="text-center max-w-xs truncate">
+                        {evidence.description}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <span className="text-[#3B82F6]">
+                          {evidence.attachments}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <button className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700">
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          className="inline-flex items-center text-[#F44336] hover:text-red-700"
+                          onClick={() => handleDeleteEvidence(evidence.id)}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex justify-end mt-2">
+            <Button
+              variant="outline"
+              className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
+              onClick={() => router.push("/reporter/initial")}
+            >
+              ADD
+            </Button>
+          </div>
+        </div>
+      }
+
 
       {/* Nút điều hướng */}
       <div className="flex justify-end gap-4 mt-8">

@@ -13,6 +13,9 @@ export default function MultiStepForm() {
         phone: '',
         address: '',
         relationship: '',
+        relevantParties: typeof window !== 'undefined'
+            ? JSON.parse(sessionStorage.getItem('relevantParties') || '[]')
+            : []
     });
 
     const handleNext = (data: any) => {
@@ -25,13 +28,20 @@ export default function MultiStepForm() {
     const handleSubmit = () => {
         console.log('Submitted:', formData);
     };
+    const nextStep = (newData: any) => {
+        setFormData(prev => ({ ...prev, ...newData }))
+        setStep(prev => prev + 1)
+    }
 
+    const prevStep = () => {
+        setStep(prev => prev - 1)
+    }
     return (
         <div className="max-w-3xl mx-auto px-4 py-10">
             <StepIndicator currentStep={step} onStepChange={(n) => setStep(n)} />
             <div className="mt-10">
                 {step === 1 && <Step1 data={formData} onNext={handleNext} />}
-                {step === 2 && <Step2 data={formData} onNext={handleNext} onBack={handleBack} />}
+                {step === 2 && <Step2 data={formData} onNext={nextStep} onBack={prevStep} />}
                 {step === 3 && <Step3 data={formData} onBack={handleBack} onSubmit={handleSubmit} />}
             </div>
         </div>
