@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "lucide-react";
+import { DatetimePicker } from "@/components/features/phase2/DateTimePicker";
 import { SectionContainer } from "@/components/features/phase2/SectionContainer";
 import { DataTable } from "@/components/features/phase2/DataTable";
 import { ActionButtons } from "@/components/features/phase2/ActionButtons";
@@ -248,14 +248,7 @@ export default function Page() {
 						<label className="font-semibold text-md">
 							TIME OF DISPATCHING FORCES TO THE SCENE
 						</label>
-						<Button
-							size="sm"
-							variant="outline"
-							className="rounded-md bg-blue-100 flex items-center justify-center w-30 h-10"
-						>
-							Choose
-							<Calendar className="ml-1" />
-						</Button>
+						<DatetimePicker />
 					</div>
 				</div>
 

@@ -112,13 +112,13 @@ export default function LeftSidebar() {
                         <CollapsibleContent className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                             <div className="border-t border-gray-300 bg-white">
                                 <button
-                                    onClick={() => handleNavigation('/initial-response/dispatch-time')}
+                                    // onClick={() => handleNavigation('/initial-response/dispatch-time')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Time of dispatching forces to the scene
                                 </button>
                                 <button
-                                    onClick={() => handleNavigation('/initial-response/arrival-time')}
+                                    // onClick={() => handleNavigation('/initial-response/arrival-time')}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-900 cursor-pointer transition-colors duration-150"
                                 >
                                     Time of arrival at the scene
