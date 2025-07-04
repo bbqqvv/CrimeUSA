@@ -1,5 +1,5 @@
 //app/page.tsx
-import Header from "@/components/Header";
+import Header from "@/components/header";
 import ReportsTable from "@/components/ReportsTable";
 
 export default function Home() {

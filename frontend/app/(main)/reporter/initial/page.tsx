@@ -1,84 +1,169 @@
-
-
-'use client'
-
-import { useRef, useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+"use client";
+import { toast } from "sonner";
+import { useRef, useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Card, CardContent } from '@/components/ui/card'
+} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function RelevantPartiesForm() {
-  const [files, setFiles] = useState<File[]>([])
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+export default function InitialEvidenceForm() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [formData, setFormData] = useState({
+    evidenceType: "",
+    location: "",
+    description: "",
+  });
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const [form, setForm] = useState<any>({});
+
+  useEffect(() => {
+    if (id && typeof window !== "undefined") {
+      const data = JSON.parse(
+        sessionStorage.getItem("initialEvidence") || "[]"
+      );
+      const found = data.find((item: any) => String(item.id) === String(id));
+      if (found) setForm(found);
+    }
+  }, [id]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFiles([...files, ...Array.from(e.target.files)])
+      setFiles([...files, ...Array.from(e.target.files)]);
     }
-  }
+  };
 
   const removeFile = (index: number) => {
-    setFiles(files.filter((_, i) => i !== index))
-  }
+    setFiles(files.filter((_, i) => i !== index));
+  };
 
-  const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, evidenceType: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errors: string[] = [];
+
+    // Kiểm tra các trường rỗng
+    if (!formData.evidenceType) errors.push("Types of Evidence is required.");
+
+    if (errors.length > 0) {
+      toast.error("Please fill all required fields:", {
+        description: errors.join("\n"),
+      });
+      return;
+    }
+    // Lưu dữ liệu vào sessionStorage
+    const initialEvidence = JSON.parse(
+      sessionStorage.getItem("initialEvidence") || "[]"
+    );
+    const newEvidence = {
+      id: initialEvidence.length + 1,
+      ...formData,
+      attachments:
+        files.length > 0 ? `${files.length} files` : "No attachments",
+    };
+    sessionStorage.setItem(
+      "initialEvidence",
+      JSON.stringify([...initialEvidence, newEvidence])
+    );
+    router.push("/reporter"); // Quay lại trang chính reporter
+  };
+
+  const handleCancel = () => {
+    router.push("/reporter"); // Quay lại trang chính reporter
+  };
+
+  const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
   const formatDate = () =>
-    new Date().toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    })
+    new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
 
   return (
     <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
       <CardContent>
-        <h2 className="text-2xl font-bold text-center mb-2">Initial Evidence</h2>
+        <h2 className="text-2xl font-bold text-center mb-2">
+          Initial Evidence
+        </h2>
         <p className="text-sm text-muted-foreground text-center mb-6">
-          This form is used to document the roles and identities of all parties connected to the incident.
+          This form is used to document physical evidence collected at the
+          scene.
         </p>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="relation" className="mb-2 block">Types of Evidence *</Label>
-              <Select>
-                <SelectTrigger id="relation" className="w-full">
+              <Label htmlFor="evidenceType" className="mb-2 block">
+                Types of Evidence *
+              </Label>
+              <Select onValueChange={handleSelectChange}>
+                <SelectTrigger id="evidenceType" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="physical">Physical Evidence</SelectItem>
-                  <SelectItem value="biological">Biological Evidence</SelectItem>
+                  <SelectItem value="biological">
+                    Biological Evidence
+                  </SelectItem>
                   <SelectItem value="trace">Trace Evidence</SelectItem>
-                  <SelectItem value="documentary">Documentary Evidence</SelectItem>
+                  <SelectItem value="documentary">
+                    Documentary Evidence
+                  </SelectItem>
+                  <SelectItem value="digital">Digital Evidence</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label htmlFor="fullname" className="mb-2 block">Evidence Location</Label>
+              <Label htmlFor="location" className="mb-2 block">
+                Evidence Location *
+              </Label>
               <Input
-                id="fullname"
+                id="location"
+                name="location"
                 placeholder="E.g., At the scene, in the car..."
                 className="w-full"
+                value={formData.location}
+                onChange={handleInputChange}
+                required
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="description" className="mb-2 block">Evidence Description</Label>
+            <Label htmlFor="description" className="mb-2 block">
+              Evidence Description *
+            </Label>
             <Textarea
               id="description"
+              name="description"
               placeholder="Provide a clear and detailed description of the evidence (shape, material, identifying features...)"
               className="w-full"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
             />
           </div>
 
@@ -86,7 +171,7 @@ export default function RelevantPartiesForm() {
             <Label>Attachments</Label>
             <div className="border-2 border-dashed rounded-md p-6 text-center mt-2">
               <p className="text-sm mb-1">
-                Drag & drop files or{' '}
+                Drag & drop files or{" "}
                 <span
                   className="text-blue-600 underline cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
@@ -109,6 +194,7 @@ export default function RelevantPartiesForm() {
               <Button
                 type="button"
                 variant="secondary"
+                className="text-muted-foreground"
                 onClick={() => fileInputRef.current?.click()}
               >
                 Upload file
@@ -118,7 +204,8 @@ export default function RelevantPartiesForm() {
             {files.length > 0 && (
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {files.map((file, index) => {
-                  const ext = file.name.split('.').pop()?.toUpperCase() || 'FILE'
+                  const ext =
+                    file.name.split(".").pop()?.toUpperCase() || "FILE";
                   return (
                     <div
                       key={index}
@@ -148,14 +235,14 @@ export default function RelevantPartiesForm() {
                         ✕
                       </Button>
                     </div>
-                  )
+                  );
                 })}
               </div>
             )}
           </div>
 
           <div className="flex justify-end space-x-4 pt-4">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={handleCancel}>
               Cancel
             </Button>
             <Button type="submit">Create</Button>
@@ -163,5 +250,5 @@ export default function RelevantPartiesForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
