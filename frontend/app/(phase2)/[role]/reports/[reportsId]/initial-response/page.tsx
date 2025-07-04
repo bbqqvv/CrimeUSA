@@ -8,7 +8,7 @@ import { SectionContainer } from "@/components/features/phase2/SectionContainer"
 import { DataTable } from "@/components/features/phase2/DataTable";
 import { ActionButtons } from "@/components/features/phase2/ActionButtons";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 /**
  * INITIAL RESPONSE PAGE
@@ -63,18 +63,19 @@ const officersInit = [
 
 export default function Page() {
 	// State management for all data sections
-	// These states hold the current data for each table/section
 	const [statements, setStatements] = useState(initialStatementInit);
 	const [preservations, setPreservations] = useState(preservationInit);
 	const [medical, setMedical] = useState(medicalInit);
 	const [officers, setOfficers] = useState(officersInit);
+	const [isAM, setIsAM] = useState(true);
 
 	// State for controlling the delete modal
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [evidenceToDelete, setEvidenceToDelete] = useState<any>(null);
 
-	// Router
+	// Router and params
 	const router = useRouter();
+	const params = useParams(); // Get dynamic route parameters
 
 	/**
 	 * COLUMN CONFIGURATIONS
@@ -183,12 +184,13 @@ export default function Page() {
 		// TODO: Open medical detail modal or navigate to detail page
 	};
 
-    const handleViewDetails = (statement: any, index: number) => {
-        console.log("View details:", statement, index);
-        // Navigate to assessment detail page
-        router.push(`/dot2/initial-response/assessment`);
-    };
-
+	const handleViewDetails = (statement: any, index: number) => {
+		console.log("View details:", statement, index);
+		// Navigate to assessment detail page with dynamic parameters
+		router.push(
+			`/${params.role}/reports/${params.reportsId}/initial-response/assessment`
+		);
+	};
 
 	// Confirm deletion handler
 	const handleConfirmDelete = () => {
@@ -240,7 +242,7 @@ export default function Page() {
 			</h1>
 
 			{/* Main Content Container with gray background */}
-			<div className="bg-gray-300 rounded-b-lg shadow p-6 pt-10">
+			<div className="bg-gray-300 rounded-b-lg shadow p-6 pt-10" id="dispatch-time">
 				{/* TIME OF DISPATCHING SECTION */}
 				{/* Simple section with just a label and choose button */}
 				<div className="mb-6 bg-white p-4">
@@ -253,21 +255,40 @@ export default function Page() {
 				</div>
 
 				{/* TIME OF ARRIVAL SECTION */}
-				{/* Section with time input and AM/PM buttons */}
-				<div className="mb-6 bg-white p-4">
-					<label className="block font-semibold text-sm mb-2">
-						TIME OF ARRIVAL AT THE SCENE
-					</label>
-					<div className="flex items-center gap-2">
-						{/* Time input field */}
-						<Input className="w-20 rounded-full" value="09:32" readOnly />
-						{/* AM/PM toggle buttons */}
-						<Button variant="outline" size="sm" className="rounded-full">
-							AM
-						</Button>
-						<Button variant="outline" size="sm" className="rounded-full">
-							PM
-						</Button>
+				{/* Section with time input and AM/PM toggle */}
+				<div className="mb-6 bg-white p-4" id="arrival-time">
+					<div className="flex justify-between items-center">
+						<label className="font-semibold text-sm">
+							TIME OF ARRIVAL AT THE SCENE
+						</label>
+						<div className="flex items-center gap-2">
+							{/* Time input field */}
+							<Input className="w-20 rounded-md" value="09:32" readOnly />
+							{/* AM/PM toggle */}
+							<div className="flex items-center justify-center bg-gray-200 rounded-md w-24 h-8 px-1 relative">
+								<button
+									type="button"
+									className={`flex-1 h-6 rounded-md text-sm font-medium focus:outline-none transition-colors duration-200 ${isAM
+											? 'bg-white text-blue-900 shadow'
+											: 'text-gray-500 hover:text-gray-700'
+										}`}
+									style={{ marginRight: "2px" }}
+									onClick={() => setIsAM(true)}
+								>
+									AM
+								</button>
+								<button
+									type="button"
+									className={`flex-1 h-6 rounded-md text-sm font-medium focus:outline-none transition-colors duration-200 ${!isAM
+											? 'bg-white text-blue-900 shadow'
+											: 'text-gray-500 hover:text-gray-700'
+										}`}
+									onClick={() => setIsAM(false)}
+								>
+									PM
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -286,7 +307,7 @@ export default function Page() {
 								index={index}
 								onEdit={handleEditOfficer}
 								onDelete={handleDeleteOfficer}
-								// No onView prop = no view button will be rendered
+							// No onView prop = no view button will be rendered
 							/>
 						)}
 					/>
@@ -329,7 +350,7 @@ export default function Page() {
 								index={index}
 								onEdit={handleEditPreservation}
 								onDelete={handleDeletePreservation}
-								// No onView prop = no view button
+							// No onView prop = no view button
 							/>
 						)}
 					/>

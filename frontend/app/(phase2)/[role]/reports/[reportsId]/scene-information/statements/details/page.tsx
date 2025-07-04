@@ -4,67 +4,104 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Trash2, Upload, File } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ArrowLeft, Trash2 } from "lucide-react";
+import { useRouter, useParams } from "next/navigation";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
+import { FileUploadWithPreview, UploadedFile } from "@/components/features/phase2/FileUploadWithPreview";
 
 /**
  * WITNESS STATEMENT DETAIL PAGE
  * 
  * This page displays detailed information about a specific witness statement.
  * It shows comprehensive details including witness information, statement content, and evidence files.
- * This is a blank, editable version for creating new witness statements.
+ * Features edit toggle functionality similar to other detail pages.
  * 
  * FEATURES:
  * - Witness information form (name, date, contact, role)
  * - Detailed statement recording
- * - Evidence file upload and management
+ * - Evidence file upload and management with preview
+ * - Edit toggle functionality
  * - Navigation back to statements list
  * - Delete functionality with confirmation modal
- * - All fields editable by default
+ * - Blank field validation
  */
 
-// Blank data structure for new witness statement
-const blankWitnessData = {
-   witnessName: "",
-   date: "",
-   phoneNumber: "",
-   role: "",
-   detailedStatement: ""
+// Mock data structure for existing witness statement
+const witnessStatementData = {
+   witnessName: "Sarah Johnson",
+   date: "2024-07-03",
+   phoneNumber: "+1-555-0123",
+   role: "Witness",
+   detailedStatement: "I was walking down Main Street around 2:30 PM when I heard a loud crash. I turned around and saw two vehicles had collided at the intersection. The blue sedan ran the red light and hit the white SUV that was making a left turn. I immediately called 911 and stayed at the scene to provide assistance. The driver of the blue sedan appeared to be on their phone at the time of impact."
 };
-
-// Dummy evidence files
-const dummyFiles = [
-   { id: 1, name: "witness_audio_recording.mp3", type: "Audio", size: "2.4 MB" },
-   { id: 2, name: "witness_photo_evidence.jpg", type: "Image", size: "1.8 MB" },
-   { id: 3, name: "witness_document.pdf", type: "Document", size: "0.9 MB" }
-];
 
 export default function WitnessStatementDetailPage() {
    const router = useRouter();
-   const [witnessData, setWitnessData] = useState(blankWitnessData);
-   const [evidenceFiles, setEvidenceFiles] = useState(dummyFiles);
+   const params = useParams();
+   const [isEditing, setIsEditing] = useState(false);
+   const [editableData, setEditableData] = useState(witnessStatementData);
+   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
    
    // State for controlling the delete modal
    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+   // Check if data has content (not all blank)
+   const hasContent = () => {
+      return editableData.witnessName.trim() !== "" ||
+             editableData.date.trim() !== "" ||
+             editableData.phoneNumber.trim() !== "" ||
+             editableData.role.trim() !== "" ||
+             editableData.detailedStatement.trim() !== "" ||
+             uploadedFiles.length > 0;
+   };
+
    const handleBack = () => {
-      router.back(); // Navigate back to previous page
+      // Navigate back to scene information page with correct dynamic parameters
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information`);
+   };
+
+   const handleEdit = () => {
+      setIsEditing(!isEditing);
    };
 
    const handleSave = () => {
-      // TODO: Save new witness statement to database/API
-      console.log("Saving witness statement:", witnessData);
-      console.log("Evidence files:", evidenceFiles);
+      // TODO: Save witness statement to database/API
+      console.log("Saving witness statement:", editableData);
+      console.log("Evidence files:", uploadedFiles);
+      setIsEditing(false);
    };
 
    const handleCancel = () => {
-      // Reset to blank data
-      setWitnessData(blankWitnessData);
+      // Reset to original data and clean up preview URLs
+      uploadedFiles.forEach(uploadedFile => {
+         if (uploadedFile.preview) {
+            URL.revokeObjectURL(uploadedFile.preview);
+         }
+      });
+      setEditableData(witnessStatementData);
+      setUploadedFiles([]);
+      setIsEditing(false);
+   };
+
+   const handleClearAll = () => {
+      // Clear all data when in edit mode and clean up preview URLs
+      uploadedFiles.forEach(uploadedFile => {
+         if (uploadedFile.preview) {
+            URL.revokeObjectURL(uploadedFile.preview);
+         }
+      });
+      setEditableData({
+         witnessName: "",
+         date: "",
+         phoneNumber: "",
+         role: "",
+         detailedStatement: ""
+      });
+      setUploadedFiles([]);
    };
 
    const handleInputChange = (field: string, value: string) => {
-      setWitnessData(prev => ({
+      setEditableData(prev => ({
          ...prev,
          [field]: value
       }));
@@ -76,13 +113,18 @@ export default function WitnessStatementDetailPage() {
    };
 
    const handleConfirmDelete = () => {
-      // TODO: Delete witness statement from database/API
-      console.log("Deleting witness statement:", witnessData.witnessName);
+      console.log("Deleting witness statement:", editableData.witnessName);
       
-      // Navigate back to statements list after deletion
-      router.push('/dot2/scene-information');
+      // Clean up preview URLs
+      uploadedFiles.forEach(uploadedFile => {
+         if (uploadedFile.preview) {
+            URL.revokeObjectURL(uploadedFile.preview);
+         }
+      });
       
-      // Reset modal state
+      // Navigate back to scene information page after deletion
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information`);
+      
       setShowDeleteModal(false);
    };
 
@@ -90,23 +132,8 @@ export default function WitnessStatementDetailPage() {
       setShowDeleteModal(false);
    };
 
-   // File upload handler
-   const handleFileUpload = () => {
-      // TODO: Implement file upload logic
-      console.log("Upload file clicked");
-      // For now, just add a dummy file
-      const newFile = {
-         id: evidenceFiles.length + 1,
-         name: `uploaded_file_${Date.now()}.pdf`,
-         type: "Document",
-         size: "1.2 MB"
-      };
-      setEvidenceFiles(prev => [...prev, newFile]);
-   };
-
-   // File delete handler
-   const handleDeleteFile = (fileId: number) => {
-      setEvidenceFiles(prev => prev.filter(file => file.id !== fileId));
+   const handleFilesChange = (files: UploadedFile[]) => {
+      setUploadedFiles(files);
    };
 
    return (
@@ -114,7 +141,7 @@ export default function WitnessStatementDetailPage() {
          {/* Header */}
          <div className="mb-6">
             <h1 className="text-3xl font-bold text-center bg-blue-100 text-blue-900 px-4 py-2 rounded-t-lg shadow">
-               WITNESS STATEMENT DETAILS {witnessData.witnessName && `- ${witnessData.witnessName}`}
+               WITNESS STATEMENT DETAILS {editableData.witnessName && `- ${editableData.witnessName}`}
             </h1>
          </div>
 
@@ -127,42 +154,68 @@ export default function WitnessStatementDetailPage() {
                <div className="grid grid-cols-2 gap-4">
                   <div>
                      <label className="block text-sm font-medium text-gray-700 mb-1">Witness Name</label>
-                     <Input
-                        value={witnessData.witnessName}
-                        onChange={(e) => handleInputChange('witnessName', e.target.value)}
-                        placeholder="Enter witness name..."
-                        className="w-full rounded-lg"
-                     />
+                     {isEditing ? (
+                        <Input
+                           value={editableData.witnessName}
+                           onChange={(e) => handleInputChange('witnessName', e.target.value)}
+                           placeholder="Enter witness name..."
+                           className="w-full rounded-lg"
+                        />
+                     ) : (
+                        <div className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg leading-relaxed min-h-[2.5rem] flex items-center">
+                           {editableData.witnessName || <span className="text-gray-500 italic">No witness name specified</span>}
+                        </div>
+                     )}
                   </div>
                   <div>
                      <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                     <Input
-                        type="date"
-                        value={witnessData.date}
-                        onChange={(e) => handleInputChange('date', e.target.value)}
-                        className="w-full rounded-lg"
-                     />
+                     {isEditing ? (
+                        <Input
+                           type="date"
+                           value={editableData.date}
+                           onChange={(e) => handleInputChange('date', e.target.value)}
+                           className="w-full rounded-lg"
+                        />
+                     ) : (
+                        <div className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg leading-relaxed min-h-[2.5rem] flex items-center">
+                           {editableData.date ? new Date(editableData.date).toLocaleDateString() : <span className="text-gray-500 italic">No date specified</span>}
+                        </div>
+                     )}
                   </div>
                   <div>
                      <label className="block text-sm font-medium text-gray-700 mb-1">Contact Information (Phone Number)</label>
-                     <Input
-                        value={witnessData.phoneNumber}
-                        onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                        placeholder="Enter phone number..."
-                        className="w-full rounded-lg"
-                     />
+                     {isEditing ? (
+                        <Input
+                           value={editableData.phoneNumber}
+                           onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                           placeholder="Enter phone number..."
+                           className="w-full rounded-lg"
+                        />
+                     ) : (
+                        <div className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg leading-relaxed min-h-[2.5rem] flex items-center">
+                           {editableData.phoneNumber || <span className="text-gray-500 italic">No phone number specified</span>}
+                        </div>
+                     )}
                   </div>
                   <div>
                      <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                     <select
-                        value={witnessData.role}
-                        onChange={(e) => handleInputChange('role', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                     >
-                        <option value="">Select role...</option>
-                        <option value="Witness">Witness</option>
-                        <option value="Victim">Victim</option>
-                     </select>
+                     {isEditing ? (
+                        <select
+                           value={editableData.role}
+                           onChange={(e) => handleInputChange('role', e.target.value)}
+                           className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                           <option value="">Select role...</option>
+                           <option value="Witness">Witness</option>
+                           <option value="Victim">Victim</option>
+                           <option value="Bystander">Bystander</option>
+                           <option value="First Responder">First Responder</option>
+                        </select>
+                     ) : (
+                        <div className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg leading-relaxed min-h-[2.5rem] flex items-center">
+                           {editableData.role || <span className="text-gray-500 italic">No role specified</span>}
+                        </div>
+                     )}
                   </div>
                </div>
             </div>
@@ -170,66 +223,31 @@ export default function WitnessStatementDetailPage() {
             {/* DETAILED STATEMENT SECTION */}
             <div className="bg-white rounded-lg p-6">
                <h2 className="text-xl font-bold text-gray-900 mb-4">Detailed Statement</h2>
-               <Textarea
-                  value={witnessData.detailedStatement}
-                  onChange={(e) => handleInputChange('detailedStatement', e.target.value)}
-                  className="w-full rounded-lg border-gray-300"
-                  rows={8}
-                  placeholder="Enter detailed witness statement..."
-               />
+               {isEditing ? (
+                  <Textarea
+                     value={editableData.detailedStatement}
+                     onChange={(e) => handleInputChange('detailedStatement', e.target.value)}
+                     className="w-full rounded-lg border-gray-300"
+                     rows={8}
+                     placeholder="Enter detailed witness statement..."
+                  />
+               ) : (
+                  <div className="text-sm text-gray-900 bg-gray-50 p-4 rounded-lg leading-relaxed min-h-[12rem] whitespace-pre-line">
+                     {editableData.detailedStatement || <span className="text-gray-500 italic">No detailed statement provided</span>}
+                  </div>
+               )}
             </div>
 
-            {/* EVIDENCE FILES SECTION */}
-            <div className="bg-white rounded-lg p-6">
-               <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold text-gray-900">Evidence Files</h2>
-                  <Button
-                     onClick={handleFileUpload}
-                     className="flex items-center gap-2 rounded-lg"
-                  >
-                     <Upload className="w-4 h-4" />
-                     Upload File
-                  </Button>
-               </div>
-               
-               {/* File List */}
-               <div className="space-y-3">
-                  {evidenceFiles.map((file) => (
-                     <div key={file.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50">
-                        <div className="flex items-center gap-3">
-                           <File className="w-5 h-5 text-blue-600" />
-                           <div>
-                              <div className="font-medium text-gray-900">{file.name}</div>
-                              <div className="text-sm text-gray-500">{file.type} • {file.size}</div>
-                           </div>
-                        </div>
-                        <div className="flex gap-2">
-                           <Button
-                              variant="outline"
-                              size="sm"
-                              className="rounded-lg"
-                           >
-                              Download
-                           </Button>
-                           <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDeleteFile(file.id)}
-                              className="rounded-lg"
-                           >
-                              <Trash2 className="w-4 h-4" />
-                           </Button>
-                        </div>
-                     </div>
-                  ))}
-                  
-                  {evidenceFiles.length === 0 && (
-                     <div className="text-center py-8 text-gray-500">
-                        No evidence files uploaded yet.
-                     </div>
-                  )}
-               </div>
-            </div>
+            {/* EVIDENCE FILES SECTION - Using the reusable component */}
+            <FileUploadWithPreview
+               uploadedFiles={uploadedFiles}
+               onFilesChange={handleFilesChange}
+               isEditing={isEditing}
+               title="EVIDENCE FILES"
+               description="Supports: JPG, PNG, PDF, DOC, MP3, MP4, MOV files"
+               accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.mp3,.mp4,.mov,.wav"
+               maxFiles={15}
+            />
 
             {/* ACTION BUTTONS */}
             <div className="flex justify-between items-center bg-white p-4 rounded-lg">
@@ -240,23 +258,34 @@ export default function WitnessStatementDetailPage() {
                   className="flex items-center gap-2 rounded-full"
                >
                   <ArrowLeft className="w-4 h-4" />
-                  Back to Statements
+                  Back to Scene Information
                </Button>
 
-               {/* Save/Cancel and Delete Buttons - Right Side */}
+               {/* Edit/Save/Cancel and Delete Buttons - Right Side */}
                <div className="flex gap-4">
-                  <Button variant="outline" onClick={handleCancel} className="rounded-full">
-                     Clear All
-                  </Button>
-                  <Button onClick={handleSave} className="rounded-full">
-                     Save Statement
-                  </Button>
+                  {isEditing ? (
+                     <>
+                        <Button variant="outline" onClick={handleCancel} className="rounded-full">
+                           Cancel
+                        </Button>
+                        <Button variant="outline" onClick={handleClearAll} className="rounded-full text-red-600 hover:text-red-700">
+                           Clear All
+                        </Button>
+                        <Button onClick={handleSave} className="rounded-full">
+                           Save Statement
+                        </Button>
+                     </>
+                  ) : (
+                     <Button onClick={handleEdit} className="rounded-full">
+                        Edit Statement
+                     </Button>
+                  )}
 
                   <Button
                      variant="destructive"
                      onClick={handleDeleteClick}
                      className="flex items-center gap-2 rounded-full"
-                     disabled={!witnessData.witnessName} // Disable if no name entered
+                     disabled={!hasContent()} // Disable if no content
                   >
                      <Trash2 className="w-4 h-4" />
                      Delete
@@ -270,7 +299,7 @@ export default function WitnessStatementDetailPage() {
             isOpen={showDeleteModal}
             onClose={handleCloseModal}
             onConfirm={handleConfirmDelete}
-            evidenceName={witnessData.witnessName ? `Witness Statement - ${witnessData.witnessName}` : "this witness statement"}
+            evidenceName={editableData.witnessName ? `Witness Statement - ${editableData.witnessName}` : "this witness statement"}
          />
       </main>
    );
