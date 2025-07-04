@@ -37,7 +37,7 @@ export default function Step2({ data, onNext, onBack }: any) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const router = useRouter();
-
+  const [showForm, setShowForm] = useState(false);
   // Dữ liệu lấy từ props (database)
   //const relevantParties = data.relevantParties || [];
   //const initialEvidence = data.initialEvidence || [];
@@ -262,7 +262,8 @@ export default function Step2({ data, onNext, onBack }: any) {
             <Button
               variant="outline"
               className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-              onClick={() => router.push("/reporter/relevant")}
+               onClick={() => router.push("/reporter/relevant")}
+             // onClick={() => setShowForm(true)}
             >
               ADD
             </Button>
@@ -273,88 +274,7 @@ export default function Step2({ data, onNext, onBack }: any) {
       </div>
 
       {/* Initial Evidence */}
-      {/* <div className="my-8">
-        <div className="flex items-center mb-4">
-          <div className="flex-1 border-t border-gray-300" />
-          <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
-            Initial Evidence
-          </h2>
-          <div className="flex-1 border-t border-gray-300" />
-        </div>
-        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-[#F8F8F8]">
-                <TableHead className="text-center font-semibold">ID</TableHead>
-                <TableHead className="text-center font-semibold">
-                  Types of Evidence
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Location
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Description
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Attachments
-                </TableHead>
-                <TableHead className="text-center font-semibold">
-                  Action
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {initialEvidence.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center text-gray-400">
-                    No data
-                  </TableCell>
-                </TableRow>
-              ) : (
-                initialEvidence.map((evi: any) => (
-                  <TableRow key={evi.id} className="border-t border-gray-200">
-                    <TableCell className="text-center font-medium">
-                      #{evi.id}
-                    </TableCell>
-                    <TableCell className="text-center">{evi.type}</TableCell>
-                    <TableCell className="text-center text-gray-400">
-                      —
-                    </TableCell>
-                    <TableCell className="text-center text-gray-400">
-                      —
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <a href="#" className="text-[#3B82F6] underline">
-                        {evi.attachments}
-                      </a>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <button className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700">
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        className="inline-flex items-center text-[#F44336] hover:text-red-700"
-                        onClick={handleDelete}
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex justify-end mt-2">
-          <Button
-            variant="outline"
-            className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-            onClick={() => router.push("/reporter/initial")}
-          >
-            ADD
-          </Button>
-        </div>
-      </div> */
+      {
         <div className="my-8">
           <div className="flex items-center mb-4">
             <div className="flex-1 border-t border-gray-300" />
