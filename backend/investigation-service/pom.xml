@@ -6,7 +6,7 @@
 		<groupId>com.backend</groupId>
 		<artifactId>multi-module-project</artifactId>
 		<version>1.0.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath>../multi-module-project/pom.xml</relativePath>
 	</parent>
 	<artifactId>investigation-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
