@@ -1,5 +1,5 @@
 // Step1.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -36,20 +36,29 @@ export default function Step2({ data, onNext, onBack }: any) {
   const [open, setOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: number;
+    type: "relevant" | "initial";
+  } | null>(null);
+  const [relevantParties, setRelevantParties] = useState<any[]>([]);
+  const [initialEvidence, setInitialEvidence] = useState<any[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setRelevantParties(
+        JSON.parse(sessionStorage.getItem("relevantParties") || "[]")
+      );
+      setInitialEvidence(
+        JSON.parse(sessionStorage.getItem("initialEvidence") || "[]")
+      );
+    }
+  }, []);
 
   // Dữ liệu lấy từ props (database)
   //const relevantParties = data.relevantParties || [];
   //const initialEvidence = data.initialEvidence || [];
   // Lấy dữ liệu từ session
-
-  const relevantParties = typeof window !== 'undefined'
-    ? JSON.parse(sessionStorage.getItem('relevantParties') || '[]')
-    : [];
-  const initialEvidence = typeof window !== 'undefined'
-    ? JSON.parse(sessionStorage.getItem('initialEvidence') || '[]')
-    : []
-
 
   const handleChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -64,20 +73,35 @@ export default function Step2({ data, onNext, onBack }: any) {
     onNext(form);
   };
 
-  const handleDelete = () => {
+  const handleDeleteRelevant = (id: number) => {
+    setDeleteTarget({ id, type: "relevant" });
+    setShowDelete(true);
+  };
+
+  const handleDeleteEvidence = (id: number) => {
+    setDeleteTarget({ id, type: "initial" });
     setShowDelete(true);
   };
 
   const handleDeleteYes = () => {
+    if (!deleteTarget) return;
+    if (deleteTarget.type === "relevant") {
+      const updated = relevantParties.filter(
+        (item: any) => item.id !== deleteTarget.id
+      );
+      setRelevantParties(updated);
+      sessionStorage.setItem("relevantParties", JSON.stringify(updated));
+    } else {
+      const updated = initialEvidence.filter(
+        (item: any) => item.id !== deleteTarget.id
+      );
+      setInitialEvidence(updated);
+      sessionStorage.setItem("initialEvidence", JSON.stringify(updated));
+    }
     setShowDelete(false);
-    // Xử lý xoá thực tế ở đây nếu cần
+    setDeleteTarget(null);
+    // KHÔNG reload trang!
   };
-
-  const handleDeleteEvidence = (id: number) => {
-  const updatedEvidence = initialEvidence.filter((item: any) => item.id !== id)
-  sessionStorage.setItem('initialEvidence', JSON.stringify(updatedEvidence))
-  // Có thể cần thêm state để trigger re-render
-}
 
   return (
     <div className="w-full max-w-screen-md mx-auto py-8">
@@ -182,7 +206,6 @@ export default function Step2({ data, onNext, onBack }: any) {
       </div>
 
       <div className="w-full max-w-screen-md mx-auto py-8">
-
         {/* Relevant Parties */}
         <div className="my-8">
           <div className="flex items-center mb-4">
@@ -196,7 +219,9 @@ export default function Step2({ data, onNext, onBack }: any) {
             <Table>
               <TableHeader>
                 <TableRow className="bg-[#F8F8F8]">
-                  <TableHead className="text-center font-semibold">ID</TableHead>
+                  <TableHead className="text-center font-semibold">
+                    ID
+                  </TableHead>
                   <TableHead className="text-center font-semibold">
                     Relevant Role
                   </TableHead>
@@ -217,13 +242,19 @@ export default function Step2({ data, onNext, onBack }: any) {
               <TableBody>
                 {relevantParties.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-gray-400">
+                    <TableCell
+                      colSpan={6}
+                      className="text-center text-gray-400"
+                    >
                       No data
                     </TableCell>
                   </TableRow>
                 ) : (
                   relevantParties.map((party: any) => (
-                    <TableRow key={party.id} className="border-t border-gray-200">
+                    <TableRow
+                      key={party.id}
+                      className="border-t border-gray-200"
+                    >
                       <TableCell className="text-center font-medium">
                         #{party.id}
                       </TableCell>
@@ -231,10 +262,10 @@ export default function Step2({ data, onNext, onBack }: any) {
                         {party.relation}
                       </TableCell>
                       <TableCell className="text-center">
-                        {party.fullname || '—'}
+                        {party.fullname || "—"}
                       </TableCell>
                       <TableCell className="text-center max-w-xs truncate">
-                        {party.description || '—'}
+                        {party.description || "—"}
                       </TableCell>
                       <TableCell className="text-center">
                         <span className="text-[#3B82F6]">
@@ -242,12 +273,17 @@ export default function Step2({ data, onNext, onBack }: any) {
                         </span>
                       </TableCell>
                       <TableCell className="text-center">
-                        <button className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700">
+                        <button
+                          className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
+                          onClick={() =>
+                            router.push(`/reporter/relevant?id=${party.id}`)
+                          }
+                        >
                           <Edit size={18} />
                         </button>
                         <button
                           className="inline-flex items-center text-[#F44336] hover:text-red-700"
-                          onClick={handleDelete}
+                          onClick={() => handleDeleteRelevant(party.id)}
                         >
                           <Trash2 size={18} />
                         </button>
@@ -268,12 +304,11 @@ export default function Step2({ data, onNext, onBack }: any) {
             </Button>
           </div>
         </div>
-
-
       </div>
 
       {/* Initial Evidence */}
-      {/* <div className="my-8">
+      {
+        /* <div className="my-8">
         <div className="flex items-center mb-4">
           <div className="flex-1 border-t border-gray-300" />
           <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
@@ -367,7 +402,9 @@ export default function Step2({ data, onNext, onBack }: any) {
             <Table>
               <TableHeader>
                 <TableRow className="bg-[#F8F8F8]">
-                  <TableHead className="text-center font-semibold">ID</TableHead>
+                  <TableHead className="text-center font-semibold">
+                    ID
+                  </TableHead>
                   <TableHead className="text-center font-semibold">
                     Types of Evidence
                   </TableHead>
@@ -388,13 +425,19 @@ export default function Step2({ data, onNext, onBack }: any) {
               <TableBody>
                 {initialEvidence.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-gray-400">
+                    <TableCell
+                      colSpan={6}
+                      className="text-center text-gray-400"
+                    >
                       No data
                     </TableCell>
                   </TableRow>
                 ) : (
                   initialEvidence.map((evidence: any) => (
-                    <TableRow key={evidence.id} className="border-t border-gray-200">
+                    <TableRow
+                      key={evidence.id}
+                      className="border-t border-gray-200"
+                    >
                       <TableCell className="text-center font-medium">
                         #{evidence.id}
                       </TableCell>
@@ -413,7 +456,12 @@ export default function Step2({ data, onNext, onBack }: any) {
                         </span>
                       </TableCell>
                       <TableCell className="text-center">
-                        <button className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700">
+                        <button
+                          className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
+                          onClick={() =>
+                            router.push(`/reporter/initial?id=${evidence.id}`)
+                          }
+                        >
                           <Edit size={18} />
                         </button>
                         <button
@@ -440,7 +488,6 @@ export default function Step2({ data, onNext, onBack }: any) {
           </div>
         </div>
       }
-
 
       {/* Nút điều hướng */}
       <div className="flex justify-end gap-4 mt-8">
@@ -504,7 +551,13 @@ export default function Step2({ data, onNext, onBack }: any) {
               </div>
             </div>
             <div className="flex justify-end gap-4 mt-6">
-              <Button variant="outline" onClick={() => setShowDelete(false)}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowDelete(false);
+                  setDeleteTarget(null);
+                }}
+              >
                 Cancel
               </Button>
               <Button className="bg-black text-white" onClick={handleDeleteYes}>
