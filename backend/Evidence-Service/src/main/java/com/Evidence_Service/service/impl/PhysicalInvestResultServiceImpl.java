@@ -25,7 +25,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     @Override
     public PhysicalInvestResultDTO addPhysicalInvestResult(String evidenceId, PhysicalInvestResultDTO dto) {
-        if (!evidenceService.existedByEvidenceId(evidenceId))
+        if (!evidenceService.existsByEvidenceId(evidenceId))
             throw  new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND);
 
         PhysicalInvestResult result = PhysicalInvestResultMapper.toEntity(dto);

@@ -17,7 +17,7 @@ import java.util.*;
 @Component
 public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
-    @Value("${api-key}")
+    @Value("${internal.api-key}")
     private String EXPECTED_API_KEY;
 
     @Override

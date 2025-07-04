@@ -25,7 +25,7 @@ public class DigitalInvestResultServiceImpl implements DigitalInvestResultServic
 
     @Override
     public DigitalInvestResultDTO addDigitalInvestResult(String evidenceId, DigitalInvestResultDTO dto) {
-        if(evidenceService.existedByEvidenceId(evidenceId))
+        if(evidenceService.existsByEvidenceId(evidenceId))
             throw new AppException(ErrorCode.DIGITAL_INVEST_RESULT_NOT_FOUND);
 
         DigitalInvestResult result = DigitalInvestResultMapper.toEntity(dto);

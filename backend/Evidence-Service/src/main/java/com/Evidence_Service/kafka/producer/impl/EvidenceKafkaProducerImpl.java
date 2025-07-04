@@ -45,7 +45,7 @@ public class EvidenceKafkaProducerImpl implements EvidenceKafkaProducer {
 
     @Override
     public void sendEvidenceDeleted(String evidenceId) {
-        kafkaTemplate.send("evidence.deleted", new EvidenceDeletedEvent(evidenceId));
+        kafkaTemplate.send("evidence.deleted", new EvidenceDeletedEvent());
         log.info("Sent evidence.deleted: {}", evidenceId);
     }
 

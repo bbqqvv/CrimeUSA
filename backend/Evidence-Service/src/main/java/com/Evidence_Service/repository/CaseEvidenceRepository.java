@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface CaseEvidenceRepository extends JpaRepository<CaseEvidence, CaseEvidenceId> {
-    List<CaseEvidence> findByCaseIdAndDeletedFalse(String caseId);
+    List<CaseEvidence> findByCaseIdAndIsDeletedFalse(String caseId);
 }

@@ -1,13 +1,11 @@
 package com.Evidence_Service.repository;
 
 import com.Evidence_Service.model.Evidence;
-import jdk.jfr.Registered;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public interface EvidenceRepository extends JpaRepository<Evidence, String> {
@@ -21,11 +19,10 @@ public interface EvidenceRepository extends JpaRepository<Evidence, String> {
 
     List<Evidence> findByIsDeletedFalse();
 
-    boolean existedByEvidenceId(String evidenceId);
+    boolean existsByEvidenceId(String evidenceId);
 
     List<Evidence> findByDescriptionContainingIgnoreCase(String keyword);
 
     List<Evidence> findByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
 
-    List<Evidence> findByDateCollectedBetween(LocalDateTime start, LocalDateTime end);
 }

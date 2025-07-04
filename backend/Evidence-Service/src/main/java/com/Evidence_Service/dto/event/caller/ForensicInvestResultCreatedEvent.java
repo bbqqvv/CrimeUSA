@@ -26,7 +26,7 @@ public class ForensicInvestResultCreatedEvent {
                 dto.getLabName(),
                 dto.getReport(),
                 dto.getResultSummary(),
-                dto.getReceivedAt()
+                dto.getCreatedAt()
         );
     }
 }

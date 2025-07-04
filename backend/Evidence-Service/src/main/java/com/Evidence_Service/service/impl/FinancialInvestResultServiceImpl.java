@@ -25,7 +25,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @Override
     public FinancialInvestResultDTO addFinancialInvestResult(String evidenceId, FinancialInvestResultDTO dto) {
-        if (!evidenceService.existedByEvidenceId(evidenceId))
+        if (!evidenceService.existsByEvidenceId(evidenceId))
             throw  new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND);
 
         FinancialInvestResult result = FinancialInvestResultMapper.toEntity(dto);

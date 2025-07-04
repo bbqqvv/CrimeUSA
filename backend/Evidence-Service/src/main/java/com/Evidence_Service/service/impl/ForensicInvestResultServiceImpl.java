@@ -25,7 +25,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @Override
     public ForensicInvestResultDTO addForensicInvestResult(String evidenceId, ForensicInvestResultDTO dto) {
-        if (!evidenceService.existedByEvidenceId(evidenceId))
+        if (!evidenceService.existsByEvidenceId(evidenceId))
             throw new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND);
 
         ForensicInvestResult result = ForensicInvestResultMapper.toEntity(dto);

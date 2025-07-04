@@ -32,5 +32,7 @@ public interface EvidenceService {
     void assignSuspectToEvidence(String evidenceId, String suspectId, LocalDateTime assignedAt);
     void assignCaseToEvidence(String evidenceId, String caseId, LocalDateTime assignedAt);
 
+    boolean existsByEvidenceId(String evidenceId);
+
     List<EvidenceDTO> getByCaseOrSuspect(String caseId, String suspectId);
 }

@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface WarrantEvidenceRepository extends JpaRepository<WarrantEvidence, WarrantEvidenceId> {
-    List<WarrantEvidence> findByEvidenceIdAndDeletedFalse(String evidenceId);
+    List<WarrantEvidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
 }

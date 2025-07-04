@@ -1,6 +1,5 @@
 package com.Evidence_Service.repository;
 
-import com.Evidence_Service.model.Evidence;
 import com.Evidence_Service.model.SuspectEvidence;
 import com.Evidence_Service.model.id.SuspectEvidenceId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +14,7 @@ public interface SuspectEvidenceRepository extends JpaRepository<SuspectEvidence
 
     boolean existsBySuspectIdAndEvidenceId(String suspectId, String evidenceId);
 
-    List<SuspectEvidence> findBySuspectIdAndDeletedFalse(String suspectId);
-    List<SuspectEvidence> findByEvidenceIdAndDeletedFalse(String evidenceId);
+    List<SuspectEvidence> findBySuspectIdAndIsDeletedFalse(String suspectId);
+    List<SuspectEvidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
     void deleteBySuspectIdAndEvidenceId(String suspectId, String evidenceId);
 }

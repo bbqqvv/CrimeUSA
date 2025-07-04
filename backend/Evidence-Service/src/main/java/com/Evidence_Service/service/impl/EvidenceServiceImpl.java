@@ -103,8 +103,9 @@ public class EvidenceServiceImpl implements EvidenceService {
         return EvidenceMapper.toDTO(getEvidenceOrThrow(id));
     }
 
-    public boolean existedByEvidenceId(String evidenceId) {
-        return evidenceRepository.existedByEvidenceId(evidenceId);
+    @Override
+    public boolean existsByEvidenceId(String evidenceId) {
+        return evidenceRepository.existsByEvidenceId(evidenceId);
     }
 
     @Cacheable(value = "evidenceByCaseSuspect", key = "#caseId != null && #suspectId != null ? #caseId + '_' + #suspectId : (#caseId != null ? #caseId : #suspectId)")
@@ -114,13 +115,13 @@ public class EvidenceServiceImpl implements EvidenceService {
 
         if (caseId != null && suspectId != null) {
             List<String> evidenceIdsByCase = caseEvidenceRepository
-                    .findByCaseIdAndDeletedFalse(caseId)
+                    .findByCaseIdAndIsDeletedFalse(caseId)
                     .stream()
                     .map(CaseEvidence::getEvidenceId)
                     .toList();
 
             List<String> evidenceIdsBySuspect = suspectEvidenceRepository
-                    .findBySuspectIdAndDeletedFalse(suspectId)
+                    .findBySuspectIdAndIsDeletedFalse(suspectId)
                     .stream()
                     .map(SuspectEvidence::getEvidenceId)
                     .toList();
@@ -132,14 +133,14 @@ public class EvidenceServiceImpl implements EvidenceService {
             );
         } else if (caseId != null) {
             List<String> evidenceIds = caseEvidenceRepository
-                    .findByCaseIdAndDeletedFalse(caseId)
+                    .findByCaseIdAndIsDeletedFalse(caseId)
                     .stream()
                     .map(CaseEvidence::getEvidenceId)
                     .toList();
             evidences = evidenceRepository.findAllById(evidenceIds);
         } else if (suspectId != null) {
             List<String> evidenceIds = suspectEvidenceRepository
-                    .findBySuspectIdAndDeletedFalse(suspectId)
+                    .findBySuspectIdAndIsDeletedFalse(suspectId)
                     .stream()
                     .map(SuspectEvidence::getEvidenceId)
                     .toList();
@@ -161,7 +162,7 @@ public class EvidenceServiceImpl implements EvidenceService {
 
     @Override
     public List<String> getSuspectsByEvidence(String evidenceId) {
-        return suspectEvidenceRepository.findByEvidenceIdAndDeletedFalse(evidenceId)
+        return suspectEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .stream()
                 .map(SuspectEvidence::getSuspectId)
                 .toList();
@@ -169,7 +170,7 @@ public class EvidenceServiceImpl implements EvidenceService {
 
     @Override
     public List<String> getWarrantsByEvidence(String evidenceId) {
-        return warrantEvidenceRepository.findByEvidenceIdAndDeletedFalse(evidenceId)
+        return warrantEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .stream()
                 .map(WarrantEvidence::getWarrantId)
                 .toList();
@@ -177,7 +178,7 @@ public class EvidenceServiceImpl implements EvidenceService {
 
     @Override
     public void removeSuspectFromEvidence(String suspectId) {
-        List<SuspectEvidence> suspectEvidenceList = suspectEvidenceRepository.findBySuspectIdAndDeletedFalse(suspectId);
+        List<SuspectEvidence> suspectEvidenceList = suspectEvidenceRepository.findBySuspectIdAndIsDeletedFalse(suspectId);
         suspectEvidenceList.forEach(suspectEvidence -> {
             suspectEvidence.setDeleted(true);
             suspectEvidence.setDetachedAt(LocalDateTime.now());
