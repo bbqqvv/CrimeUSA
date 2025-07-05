@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface CaseEvidenceRepository extends JpaRepository<CaseEvidence, CaseEvidenceId> {
     List<CaseEvidence> findByCaseIdAndIsDeletedFalse(String caseId);
+    List<CaseEvidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
+    boolean existsByCaseIdAndIsDeletedFalse(String caseId);
 }

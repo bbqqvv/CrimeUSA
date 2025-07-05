@@ -10,11 +10,11 @@ import com.Evidence_Service.service.RecordInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,27 +31,31 @@ public class RecordInfoServiceImpl implements RecordInfoService {
         return recordInfoMapper.toDTO(recordInfoRepository.save(entity));
     }
 
-    @Cacheable(value = "recordInfo", key = "#id")
     @Override
-    public RecordInfoDTO getRecordInfoByRecordInfoId(String id) {
-        return recordInfoRepository.findById(id)
+    public Page<RecordInfoDTO> getAllRecordInfo(Pageable pageable) {
+        return recordInfoRepository.findByIsDeletedFalse(pageable)
+                .map(recordInfoMapper::toDTO);
+    }
+
+    @Cacheable(value = "recordInfo", key = "#recordInfoId")
+    @Override
+    public RecordInfoDTO getRecordInfoByRecordInfoId(String recordInfoId) {
+        return recordInfoRepository.findByRecordInfoIdAndIsDeletedFalse(recordInfoId)
                 .map(recordInfoMapper::toDTO)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_INFO_NOT_FOUND));
     }
 
     @Cacheable(value = "recordInfoByEvidence", key = "#evidenceId")
     @Override
-    public List<RecordInfoDTO> getRecordInfoByEvidenceId(String evidenceId) {
-        return recordInfoRepository.findByEvidenceId(evidenceId)
-                .stream()
-                .map(recordInfoMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<RecordInfoDTO> getRecordInfoByEvidenceId(String evidenceId, Pageable pageable) {
+        return recordInfoRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
+                .map(recordInfoMapper::toDTO);
     }
 
     @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
-    public RecordInfoDTO updateRecordInfo(String id, RecordInfoDTO dto) {
-        var entity = recordInfoRepository.findById(id)
+    public RecordInfoDTO updateRecordInfo(String recordInfoId, RecordInfoDTO dto) {
+        var entity = recordInfoRepository.findByRecordInfoIdAndIsDeletedFalse(recordInfoId)
                 .orElseThrow(() -> new AppException(ErrorCode.RECORD_INFO_NOT_FOUND));
         entity = recordInfoMapper.toEntity(dto);
         return recordInfoMapper.toDTO(recordInfoRepository.save(entity));
@@ -59,10 +63,10 @@ public class RecordInfoServiceImpl implements RecordInfoService {
 
     @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
-    public void deleteRecordInfoByRecordInfoId(String id) {
-        if (!recordInfoRepository.existsById(id)) {
+    public void deleteRecordInfoByRecordInfoId(String recordInfoId) {
+        if (!recordInfoRepository.existsByRecordInfoIdAndIsDeletedFalse(recordInfoId)) {
             throw new AppException(ErrorCode.RECORD_INFO_NOT_FOUND);
         }
-        recordInfoRepository.deleteById(id);
+        recordInfoRepository.deleteById(recordInfoId);
     }
 }

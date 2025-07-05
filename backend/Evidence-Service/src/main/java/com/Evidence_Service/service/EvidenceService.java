@@ -1,12 +1,11 @@
 package com.Evidence_Service.service;
 
-import com.Evidence_Service.dto.AssignCaseDTO;
-import com.Evidence_Service.dto.AssignSuspectDTO;
-import com.Evidence_Service.dto.AssignWarrantDTO;
-import com.Evidence_Service.dto.EvidenceDTO;
+import com.Evidence_Service.dto.*;
 import com.Evidence_Service.dto.event.listener.AnalysisResultEvent;
 import com.Evidence_Service.dto.event.caller.EvidenceCreatedEvent;
-import com.Evidence_Service.model.Evidence;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,21 +17,44 @@ public interface EvidenceService {
     EvidenceDTO getByEvidenceId(String evidenceId);
     EvidenceDTO updateEvidence(EvidenceDTO dto);
 
-    void deleteByEvidenceId(String id);
+    void deleteByEvidenceId(String evidenceId);
 
-    EvidenceDTO assignCase(String id, AssignCaseDTO dto);
-    EvidenceDTO assignSuspect(String id, AssignSuspectDTO dto);
-    EvidenceDTO assignWarrant(String id, AssignWarrantDTO dto);
-    List<String> getSuspectsByEvidence(String evidenceId);
-    List<String> getWarrantsByEvidence(String evidenceId);
+    EvidenceDTO assignCase(String evidenceId, CaseDTO dto);
+    EvidenceDTO assignSuspect(String evidenceId, SuspectDTO dto);
+    EvidenceDTO assignWarrant(String evidenceId, WarrantDTO dto);
+    List<SuspectDTO> getSuspectsByEvidence(String evidenceId);
+    List<WarrantDTO> getWarrantsByEvidence(String evidenceId);
+    List<CaseDTO> getCasesByEvidence(String evidenceId);
+    List<ReportDTO> getReportsByEvidence(String evidenceId);
+
 
     void removeSuspectFromEvidence(String suspectId);
     void saveEvidenceFromEvent(EvidenceCreatedEvent event);
     void updateAnalysisResult(AnalysisResultEvent event);
-    void assignSuspectToEvidence(String evidenceId, String suspectId, LocalDateTime assignedAt);
-    void assignCaseToEvidence(String evidenceId, String caseId, LocalDateTime assignedAt);
+    void assignSuspectToEvidence(String evidenceId, String suspectId);
+    void assignCaseToEvidence(String evidenceId, String caseId);
+    void assignWarrantToEvidence(String evidenceId, String caseId);
+
+    void assignReportToEvidence(String evidenceId, String caseId);
+
+
+    boolean existsByReportId(String reportId);
+
+    boolean existsByCaseId(String caseId);
+
+    boolean existsBySuspectId(String suspectId);
+
+    boolean existsByWarrantId(String warrantId);
 
     boolean existsByEvidenceId(String evidenceId);
 
-    List<EvidenceDTO> getByCaseOrSuspect(String caseId, String suspectId);
+    void deleteByReportId(String reportId);
+
+    void deleteByCaseId(String caseId);
+
+    void deleteByWarrantId(String warrantId);
+
+    void deleteBySuspectId(String suspectId);
+
+    Page<EvidenceDTO> getAllEvidence(Pageable pageable);
 }

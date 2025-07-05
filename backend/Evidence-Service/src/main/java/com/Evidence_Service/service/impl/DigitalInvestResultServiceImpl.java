@@ -10,6 +10,8 @@ import com.Evidence_Service.model.DigitalInvestResult;
 import com.Evidence_Service.repository.DigitalInvestResultRepository;
 import com.Evidence_Service.service.DigitalInvestResultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class DigitalInvestResultServiceImpl implements DigitalInvestResultServic
 
     @Override
     public DigitalInvestResultDTO addDigitalInvestResult(String evidenceId, DigitalInvestResultDTO dto) {
-        if(evidenceService.existsByEvidenceId(evidenceId))
+        if(digitalInvestResultRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId))
             throw new AppException(ErrorCode.DIGITAL_INVEST_RESULT_NOT_FOUND);
 
         DigitalInvestResult result = DigitalInvestResultMapper.toEntity(dto);
@@ -38,16 +40,18 @@ public class DigitalInvestResultServiceImpl implements DigitalInvestResultServic
     }
 
     @Override
-    public DigitalInvestResultDTO getDigitalInvestById(String id) {
-        return digitalInvestResultRepository.findById(id)
-                .map(DigitalInvestResultMapper::toDTO)
-                .orElseThrow(() -> new AppException(ErrorCode.DIGITAL_INVEST_RESULT_NOT_FOUND));
+    public DigitalInvestResultDTO getDigitalInvestByResultId(String resultId) {
+        return DigitalInvestResultMapper.toDTO(
+                digitalInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId)
+                        .orElseThrow(() -> new AppException(ErrorCode.DIGITAL_INVEST_RESULT_NOT_FOUND))
+                );
+
     }
 
     @Override
-    public List<DigitalInvestResultDTO> getAllDigitalInvestByEvidenceId(String evidenceId) {
-        return digitalInvestResultRepository.findByEvidenceId(evidenceId)
-                .stream().map(DigitalInvestResultMapper::toDTO).collect(Collectors.toList());
+    public Page<DigitalInvestResultDTO> getAllDigitalInvestByEvidenceId(String evidenceId, Pageable pageable) {
+        return digitalInvestResultRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
+                .map(DigitalInvestResultMapper::toDTO);
     }
 
     @Override
@@ -59,10 +63,11 @@ public class DigitalInvestResultServiceImpl implements DigitalInvestResultServic
     }
 
     @Override
-    public void deleteDigitalInvest(String id) {
-        if (!digitalInvestResultRepository.existsById(id))
-            throw new AppException(ErrorCode.DIGITAL_INVEST_RESULT_NOT_FOUND);
-        digitalInvestResultRepository.deleteById(id);
+    public void deleteDigitalInvest(String resultId) {
+        DigitalInvestResult digitalInvestResult = digitalInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId)
+                .orElseThrow(() -> new AppException(ErrorCode.DIGITAL_INVEST_RESULT_NOT_FOUND));
+        digitalInvestResult.setDeleted(true);
+        digitalInvestResultRepository.save(digitalInvestResult);
     }
 }
 

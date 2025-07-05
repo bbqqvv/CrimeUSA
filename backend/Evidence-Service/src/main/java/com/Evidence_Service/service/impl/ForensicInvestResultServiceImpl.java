@@ -10,22 +10,20 @@ import com.Evidence_Service.model.ForensicInvestResult;
 import com.Evidence_Service.repository.ForensicInvestResultRepository;
 import com.Evidence_Service.service.ForensicInvestResultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ForensicInvestResultServiceImpl implements ForensicInvestResultService {
 
-    private final EvidenceServiceImpl evidenceService;
     private final ForensicInvestResultRepository forensicInvestResultRepository;
     private final KafkaEventPublisher publisher;
 
     @Override
     public ForensicInvestResultDTO addForensicInvestResult(String evidenceId, ForensicInvestResultDTO dto) {
-        if (!evidenceService.existsByEvidenceId(evidenceId))
+        if (!forensicInvestResultRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId))
             throw new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND);
 
         ForensicInvestResult result = ForensicInvestResultMapper.toEntity(dto);
@@ -38,31 +36,38 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
     }
 
     @Override
-    public ForensicInvestResultDTO getForensicInvestById(String id) {
-        return forensicInvestResultRepository.findById(id)
+    public ForensicInvestResultDTO getForensicInvestById(String resultId) {
+        return forensicInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId)
                 .map(ForensicInvestResultMapper::toDTO)
                 .orElseThrow(() -> new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND));
     }
 
     @Override
-    public List<ForensicInvestResultDTO> getAllForensicInvestByEvidenceId(String evidenceId) {
-        return forensicInvestResultRepository.findByEvidenceId(evidenceId)
-                .stream().map(ForensicInvestResultMapper::toDTO).collect(Collectors.toList());
+    public Page<ForensicInvestResultDTO> getAllForensicInvestByEvidenceId(String evidenceId, Pageable pageable) {
+        return forensicInvestResultRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
+                .map(ForensicInvestResultMapper::toDTO);
+    }
+
+    @Override
+    public Page<ForensicInvestResultDTO> getAllForensicInvestByInvestigationId(String investigationId, Pageable pageable) {
+        return forensicInvestResultRepository.findByInvestigationPlanIdAndIsDeletedFalse(investigationId, pageable)
+                .map(ForensicInvestResultMapper::toDTO);
     }
 
     @Override
     public ForensicInvestResultDTO updateForensicInvest(String evidenceId, String resultId, ForensicInvestResultDTO dto) {
-        var entity = forensicInvestResultRepository.findById(resultId)
+        var entity = forensicInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId)
                 .orElseThrow(() -> new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND));
         entity = ForensicInvestResultMapper.toEntity(dto);
         return ForensicInvestResultMapper.toDTO(forensicInvestResultRepository.save(entity));
     }
 
     @Override
-    public void deleteForensicInvest(String id) {
-        if (!forensicInvestResultRepository.existsById(id))
-            throw new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND);
-        forensicInvestResultRepository.deleteById(id);
+    public void deleteForensicInvest(String resultId) {
+         ForensicInvestResult forensicInvestResult = forensicInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId)
+                 .orElseThrow(() -> new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND));
+        forensicInvestResult.setDeleted(true);
+        forensicInvestResultRepository.save(forensicInvestResult);
     }
 }
 

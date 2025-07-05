@@ -8,6 +8,9 @@ import com.Evidence_Service.service.impl.RecordInfoServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,41 +37,45 @@ public class RecordInfoController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('VIEW_RECORD_INFO')")
     @Operation(summary = "Get record info by ID")
-    public ApiResponse<RecordInfoDTO> getRecordInfoById(@PathVariable String id) {
+    public ApiResponse<RecordInfoDTO> getRecordInfoById(@PathVariable String recordInfoId) {
         return ApiResponse.<RecordInfoDTO>builder()
                 .code(200)
                 .message("Fetched record info")
-                .data(recordInfoService.getRecordInfoByRecordInfoId(id))
+                .data(recordInfoService.getRecordInfoByRecordInfoId(recordInfoId))
                 .build();
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_RECORD_INFO')")
     @Operation(summary = "Get all record info by evidence ID")
-    public ApiResponse<List<RecordInfoDTO>> getAllRecordInfoByEvidenceId(@RequestParam String evidenceId) {
-        return ApiResponse.<List<RecordInfoDTO>>builder()
+    public ApiResponse<Page<RecordInfoDTO>> getAllRecordInfoByEvidenceId(@RequestParam String evidenceId,
+                                                                         @RequestParam(defaultValue = "0", required = false) int page,
+                                                                         @RequestParam(defaultValue = "10", required = false) int size) {
+        Pageable pageable = PageRequest.of(size, page);
+        Page<RecordInfoDTO> result = recordInfoService.getRecordInfoByEvidenceId(evidenceId, pageable);
+        return ApiResponse.<Page<RecordInfoDTO>>builder()
                 .code(200)
                 .message("Fetched all record info")
-                .data(recordInfoService.getRecordInfoByEvidenceId(evidenceId))
+                .data(result)
                 .build();
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EDIT_RECORD_INFO')")
     @Operation(summary = "Update record info")
-    public ApiResponse<RecordInfoDTO> updateRecordInfo(@PathVariable String id, @RequestBody RecordInfoDTO dto) {
+    public ApiResponse<RecordInfoDTO> updateRecordInfo(@PathVariable String recordInfoId, @RequestBody RecordInfoDTO dto) {
         return ApiResponse.<RecordInfoDTO>builder()
                 .code(200)
                 .message("Record info updated")
-                .data(recordInfoService.updateRecordInfo(id, dto))
+                .data(recordInfoService.updateRecordInfo(recordInfoId, dto))
                 .build();
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('DELETE_RECORD_INFO')")
     @Operation(summary = "Delete record info")
-    public ApiResponse<Void> deleteRecordInfo(@PathVariable String id) {
-        recordInfoService.deleteRecordInfoByRecordInfoId(id);
+    public ApiResponse<Void> deleteRecordInfo(@PathVariable String recordInfoId) {
+        recordInfoService.deleteRecordInfoByRecordInfoId(recordInfoId);
         return ApiResponse.<Void>builder()
                 .code(200)
                 .message("Record info deleted")

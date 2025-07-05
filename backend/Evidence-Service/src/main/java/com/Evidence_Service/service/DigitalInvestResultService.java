@@ -1,17 +1,19 @@
 package com.Evidence_Service.service;
 
 import com.Evidence_Service.dto.DigitalInvestResultDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface DigitalInvestResultService {
     DigitalInvestResultDTO addDigitalInvestResult(String evidenceId, DigitalInvestResultDTO dto);
 
-    DigitalInvestResultDTO getDigitalInvestById(String id);
+    DigitalInvestResultDTO getDigitalInvestByResultId(String resultId);
 
-    List<DigitalInvestResultDTO> getAllDigitalInvestByEvidenceId(String evidenceId);
+    Page<DigitalInvestResultDTO> getAllDigitalInvestByEvidenceId(String evidenceId, Pageable pageable);
 
     DigitalInvestResultDTO updateDigitalInvest(String evidenceId, String resultId, DigitalInvestResultDTO dto);
 
-    void deleteDigitalInvest(String id);
+    void deleteDigitalInvest(String resultId);
 }

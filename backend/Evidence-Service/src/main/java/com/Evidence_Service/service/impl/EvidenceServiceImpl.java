@@ -1,5 +1,9 @@
 package com.Evidence_Service.service.impl;
 
+import com.Evidence_Service.client.ReportClient;
+import com.Evidence_Service.client.CaseClient;
+import com.Evidence_Service.client.SuspectClient;
+import com.Evidence_Service.client.WarrantClient;
 import com.Evidence_Service.dto.*;
 import com.Evidence_Service.dto.event.caller.*;
 import com.Evidence_Service.dto.event.listener.*;
@@ -13,7 +17,10 @@ import com.Evidence_Service.service.EvidenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +36,11 @@ public class EvidenceServiceImpl implements EvidenceService {
     private final WarrantEvidenceRepository warrantEvidenceRepository;
     private final SuspectEvidenceRepository suspectEvidenceRepository;
     private final CaseEvidenceRepository caseEvidenceRepository;
+    private final ReportEvidenceRepository reportEvidenceRepository;
+    private final ReportClient reportClient;
+    private final CaseClient caseClient;
+    private final WarrantClient warrantClient;
+    private final SuspectClient suspectClient;
     private final EventPublisher eventPublisher;
 
     @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
@@ -52,18 +64,18 @@ public class EvidenceServiceImpl implements EvidenceService {
 
     @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
-    public EvidenceDTO assignCase(String id, AssignCaseDTO dto) {
-        Evidence evidence = getEvidenceOrThrow(id);
+    public EvidenceDTO assignCase(String evidenceId, CaseDTO dto) {
+        Evidence evidence = getEvidenceOrThrow(evidenceId);
         evidence.setCaseId(dto.getCaseId());
         evidence.setStatus(EvidenceStatus.ASSIGNED);
         evidenceRepository.save(evidence);
-        eventPublisher.send("case.assigned", new CaseAssignedEvent(id, dto.getCaseId(), LocalDateTime.now()));
+        eventPublisher.send("case.assigned", new CaseAssignedEvent(evidenceId, dto.getCaseId(), LocalDateTime.now()));
         return toDTO(evidence);
     }
 
     @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
-    public EvidenceDTO assignSuspect(String evidenceId, AssignSuspectDTO dto) {
+    public EvidenceDTO assignSuspect(String evidenceId, SuspectDTO dto) {
         Evidence evidence = getEvidenceOrThrow(evidenceId);
 
         SuspectEvidence se = new SuspectEvidence();
@@ -77,7 +89,7 @@ public class EvidenceServiceImpl implements EvidenceService {
 
     @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
-    public EvidenceDTO assignWarrant(String evidenceId, AssignWarrantDTO dto) {
+    public EvidenceDTO assignWarrant(String evidenceId, WarrantDTO dto) {
         Evidence evidence = getEvidenceOrThrow(evidenceId);
 
         WarrantEvidence we = new WarrantEvidence();
@@ -99,82 +111,86 @@ public class EvidenceServiceImpl implements EvidenceService {
     }
 
     @Cacheable(value = "evidence", key = "#id")
-    public EvidenceDTO getByEvidenceId(String id) {
-        return EvidenceMapper.toDTO(getEvidenceOrThrow(id));
+    public EvidenceDTO getByEvidenceId(String evidenceId) {
+        return EvidenceMapper.toDTO(getEvidenceOrThrow(evidenceId));
     }
 
     @Override
     public boolean existsByEvidenceId(String evidenceId) {
-        return evidenceRepository.existsByEvidenceId(evidenceId);
+        return evidenceRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId);
     }
 
-    @Cacheable(value = "evidenceByCaseSuspect", key = "#caseId != null && #suspectId != null ? #caseId + '_' + #suspectId : (#caseId != null ? #caseId : #suspectId)")
     @Override
-    public List<EvidenceDTO> getByCaseOrSuspect(String caseId, String suspectId) {
-        List<Evidence> evidences;
-
-        if (caseId != null && suspectId != null) {
-            List<String> evidenceIdsByCase = caseEvidenceRepository
-                    .findByCaseIdAndIsDeletedFalse(caseId)
-                    .stream()
-                    .map(CaseEvidence::getEvidenceId)
-                    .toList();
-
-            List<String> evidenceIdsBySuspect = suspectEvidenceRepository
-                    .findBySuspectIdAndIsDeletedFalse(suspectId)
-                    .stream()
-                    .map(SuspectEvidence::getEvidenceId)
-                    .toList();
-
-            evidences = evidenceRepository.findAllById(
-                    evidenceIdsByCase.stream()
-                            .filter(evidenceIdsBySuspect::contains)
-                            .toList()
-            );
-        } else if (caseId != null) {
-            List<String> evidenceIds = caseEvidenceRepository
-                    .findByCaseIdAndIsDeletedFalse(caseId)
-                    .stream()
-                    .map(CaseEvidence::getEvidenceId)
-                    .toList();
-            evidences = evidenceRepository.findAllById(evidenceIds);
-        } else if (suspectId != null) {
-            List<String> evidenceIds = suspectEvidenceRepository
-                    .findBySuspectIdAndIsDeletedFalse(suspectId)
-                    .stream()
-                    .map(SuspectEvidence::getEvidenceId)
-                    .toList();
-            evidences = evidenceRepository.findAllById(evidenceIds);
-        } else {
-            evidences = evidenceRepository.findAll();
-        }
-
-        return evidences.stream()
-                .filter(e -> !e.isDeleted())
-                .map(EvidenceMapper::toDTO)
-                .toList();
+    public void deleteByReportId(String reportId) {
+        List<ReportEvidence> reportEvidences = reportEvidenceRepository.findByReportIdAndIsDeletedFalse(reportId);
+        reportEvidences.forEach(reportEvidence -> reportEvidence.setDeleted(true));
     }
 
-    private Evidence getEvidenceOrThrow(String id) {
-        return evidenceRepository.findById(id)
+    @Override
+    public void deleteByCaseId(String caseId) {
+        List<CaseEvidence> caseEvidences = caseEvidenceRepository.findByCaseIdAndIsDeletedFalse(caseId);
+        caseEvidences.forEach(caseEvidence -> caseEvidence.setDeleted(true));
+    }
+
+    @Override
+    public void deleteByWarrantId(String warrantId) {
+        List<WarrantEvidence> warrantEvidences = warrantEvidenceRepository.findByWarrantIdAndIsDeletedFalse(warrantId);
+        warrantEvidences.forEach(warrantEvidence -> warrantEvidence.setDeleted(true));
+    }
+
+    @Override
+    public void deleteBySuspectId(String suspectId) {
+        List<SuspectEvidence> suspectEvidences = suspectEvidenceRepository.findBySuspectIdAndIsDeletedFalse(suspectId);
+        suspectEvidences.forEach(suspectEvidence -> suspectEvidence.setDeleted(true));
+    }
+
+    @Override
+    @Cacheable(value = "evidences", key = "#evidenceIds")
+    public Page<EvidenceDTO> getAllEvidence(Pageable pageable) {
+        return evidenceRepository.findAllNotDeleted(pageable)
+                .map(EvidenceMapper::toDTO);
+    }
+
+    private Evidence getEvidenceOrThrow(String evidenceId) {
+        return evidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .orElseThrow(() -> new AppException(ErrorCode.EVIDENCE_NOT_FOUND));
     }
 
     @Override
-    public List<String> getSuspectsByEvidence(String evidenceId) {
-        return suspectEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
+    public List<SuspectDTO> getSuspectsByEvidence(String evidenceId) {
+        List<String> suspectIds = suspectEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .stream()
                 .map(SuspectEvidence::getSuspectId)
                 .toList();
+        return suspectClient.getSuspectByIds(suspectIds);
     }
 
     @Override
-    public List<String> getWarrantsByEvidence(String evidenceId) {
-        return warrantEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
+    public List<WarrantDTO> getWarrantsByEvidence(String evidenceId) {
+        List<String> warrantIds = warrantEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .stream()
                 .map(WarrantEvidence::getWarrantId)
                 .toList();
+        return warrantClient.getWarrantByIds(warrantIds);
     }
+    @Override
+    public List<CaseDTO> getCasesByEvidence(String evidenceId) {
+        List<String> caseIds = caseEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
+                .stream()
+                .map(CaseEvidence::getCaseId)
+                .toList();
+        return caseClient.getCasesByIds(caseIds);
+    }
+
+    @Override
+    public List<ReportDTO> getReportsByEvidence(String evidenceId) {
+        List<String> reportIds = reportEvidenceRepository.findByReportIdAndIsDeletedFalse(evidenceId)
+                .stream()
+                .map(ReportEvidence::getReportId)
+                .toList();
+        return reportClient.getReportsByIds(reportIds);
+    }
+
 
     @Override
     public void removeSuspectFromEvidence(String suspectId) {
@@ -206,7 +222,7 @@ public class EvidenceServiceImpl implements EvidenceService {
     }
 
     @Override
-    public void assignSuspectToEvidence(String evidenceId, String suspectId, LocalDateTime assignedAt) {
+    public void assignSuspectToEvidence(String evidenceId, String suspectId) {
         SuspectEvidence suspectEvidence = new SuspectEvidence();
         suspectEvidence.setEvidenceId(evidenceId);
         suspectEvidence.setSuspectId(suspectId);
@@ -214,10 +230,47 @@ public class EvidenceServiceImpl implements EvidenceService {
     }
 
     @Override
-    public void assignCaseToEvidence(String evidenceId, String caseId, LocalDateTime assignedAt) {
+    public void assignCaseToEvidence(String evidenceId, String caseId) {
         CaseEvidence caseEvidence = new CaseEvidence();
         caseEvidence.setEvidenceId(evidenceId);
         caseEvidence.setCaseId(caseId);
         caseEvidenceRepository.save(caseEvidence);
+    }
+
+    @Override
+    public void assignWarrantToEvidence(String evidenceId, String warrantId) {
+        WarrantEvidence warrantEvidence = new WarrantEvidence();
+        warrantEvidence.setEvidenceId(evidenceId);
+        warrantEvidence.setWarrantId(warrantId);
+        warrantEvidenceRepository.save(warrantEvidence);
+    }
+
+    @Override
+    public void assignReportToEvidence(String evidenceId, String reportId) {
+        ReportEvidence reportEvidence = new ReportEvidence();
+        reportEvidence.setEvidenceId(evidenceId);
+        reportEvidence.setReportId(reportId);
+        reportEvidenceRepository.save(reportEvidence);
+    }
+
+    @Override
+    public boolean existsByReportId(String reportId) {
+        return reportEvidenceRepository.existsByReportIdAndIsDeletedFalse(reportId);
+    }
+
+    @Override
+    public boolean existsByCaseId(String caseId) {
+        return caseEvidenceRepository.existsByCaseIdAndIsDeletedFalse(caseId);
+    }
+
+    @Override
+    public boolean existsBySuspectId(String suspectId) {
+        return suspectEvidenceRepository.existsBySuspectIdAndIsDeletedFalse(suspectId);
+
+    }
+
+    @Override
+    public boolean existsByWarrantId(String warrantId) {
+        return warrantEvidenceRepository.existsByWarrantIdAndIsDeletedFalse(warrantId);
     }
 }

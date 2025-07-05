@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CaseCreatedEvent {
-    private String caseId;
-    private String caseNumber;
-    private String evidenceId;
+public class ReportDeletedEvent {
+    private String reportId;
 }

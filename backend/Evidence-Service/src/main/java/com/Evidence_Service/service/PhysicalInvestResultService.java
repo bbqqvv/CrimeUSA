@@ -1,17 +1,20 @@
 package com.Evidence_Service.service;
 
 import com.Evidence_Service.dto.PhysicalInvestResultDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface PhysicalInvestResultService {
     PhysicalInvestResultDTO addPhysicalInvestResult(String evidenceId, PhysicalInvestResultDTO dto);
 
-    PhysicalInvestResultDTO getPhysicalInvestById(String id);
+    PhysicalInvestResultDTO getPhysicalInvestByResultId(String resultId);
 
-    List<PhysicalInvestResultDTO> getAllPhysicalInvestByEvidenceId(String evidenceId);
+    Page<PhysicalInvestResultDTO> getAllPhysicalInvestByEvidenceId(String evidenceId, Pageable pageable);
+    Page<PhysicalInvestResultDTO> getAllPhysicalInvestByInvestigationId(String investigationId, Pageable pageable);
 
     PhysicalInvestResultDTO updatePhysicalInvest(String evidenceId, String resultId, PhysicalInvestResultDTO dto);
 
-    void deletePhysicalInvest(String id);
+    void deletePhysicalInvest(String resultId);
 }

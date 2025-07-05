@@ -13,6 +13,7 @@ public interface SuspectEvidenceRepository extends JpaRepository<SuspectEvidence
     List<SuspectEvidence> findByEvidenceId(String evidenceId);
 
     boolean existsBySuspectIdAndEvidenceId(String suspectId, String evidenceId);
+    boolean existsBySuspectIdAndIsDeletedFalse(String suspectId);
 
     List<SuspectEvidence> findBySuspectIdAndIsDeletedFalse(String suspectId);
     List<SuspectEvidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);

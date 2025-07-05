@@ -8,6 +8,9 @@ import com.Evidence_Service.service.impl.FinancialInvestResultServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/evidences/{id}/financial-invest")
+@RequestMapping("/api/v1/evidences/{evidenceId}/financial-invest")
 @Tag(name = "Financial Investigation", description = "Financial investigation results")
 @RequiredArgsConstructor
 public class FinancialInvestResultController {
@@ -24,35 +27,43 @@ public class FinancialInvestResultController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_FINANCIAL_RESULT')")
     @Operation(summary = "Create financial investigation result")
-    public ApiResponse<FinancialInvestResultDTO> createFinancialInvestResult(@PathVariable String id, @RequestBody FinancialInvestResultDTO dto) {
-        return ApiResponse.<FinancialInvestResultDTO>builder().code(201).message("Created").data(financialInvestResultService.addFinancialInvestResult(id, dto)).build();
+    public ApiResponse<FinancialInvestResultDTO> createFinancialInvestResult(@PathVariable String evidenceId, @RequestBody FinancialInvestResultDTO dto) {
+        return ApiResponse.<FinancialInvestResultDTO>builder().code(201).message("Created").data(financialInvestResultService.addFinancialInvestResult(evidenceId, dto)).build();
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_FINANCIAL_RESULT')")
     @Operation(summary = "Get all financial investigation results")
-    public ApiResponse<List<FinancialInvestResultDTO>> getAllFinancialInvestResults(@PathVariable String id) {
-        return ApiResponse.<List<FinancialInvestResultDTO>>builder().code(200).message("Fetched").data(financialInvestResultService.getAllFinancialInvestByEvidenceId(id)).build();
+    public ApiResponse<Page<FinancialInvestResultDTO>> getAllFinancialInvestResults(@PathVariable String evidenceId,
+                                                                                    @RequestParam(defaultValue = "0", required = false) int page,
+                                                                                    @RequestParam(defaultValue = "10", required = false) int size ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<FinancialInvestResultDTO> result = financialInvestResultService.getAllFinancialInvestByEvidenceId(evidenceId, pageable);
+        return ApiResponse.<Page<FinancialInvestResultDTO>>builder()
+                .code(200)
+                .message("Financial Invest Fetched")
+                .data(result)
+                .build();
     }
 
     @GetMapping("/{resultId}")
     @PreAuthorize("hasAuthority('VIEW_FINANCIAL_RESULT')")
-    @Operation(summary = "Get financial investigation result by ID")
-    public ApiResponse<FinancialInvestResultDTO> getFinancialInvestResultById(@PathVariable String id, @PathVariable String resultId) {
+    @Operation(summary = "Get financial investigation result by resultId")
+    public ApiResponse<FinancialInvestResultDTO> getFinancialInvestResultById(@PathVariable String resultId) {
         return ApiResponse.<FinancialInvestResultDTO>builder().code(200).message("Fetched").data(financialInvestResultService.getFinancialInvestById(resultId)).build();
     }
 
     @PutMapping("/{resultId}")
     @PreAuthorize("hasAuthority('EDIT_FINANCIAL_RESULT')")
     @Operation(summary = "Update financial investigation result")
-    public ApiResponse<FinancialInvestResultDTO> updateFinancialInvestResult(@PathVariable String id, @PathVariable String resultId, @RequestBody FinancialInvestResultDTO dto) {
-        return ApiResponse.<FinancialInvestResultDTO>builder().code(200).message("Updated").data(financialInvestResultService.updateFinancialInvest(id, resultId, dto)).build();
+    public ApiResponse<FinancialInvestResultDTO> updateFinancialInvestResult(@PathVariable String evidenceId, @PathVariable String resultId, @RequestBody FinancialInvestResultDTO dto) {
+        return ApiResponse.<FinancialInvestResultDTO>builder().code(200).message("Updated").data(financialInvestResultService.updateFinancialInvest(evidenceId, resultId, dto)).build();
     }
 
     @DeleteMapping("/{resultId}")
     @PreAuthorize("hasAuthority('DELETE_FINANCIAL_RESULT')")
     @Operation(summary = "Delete financial investigation result")
-    public ApiResponse<Void> deleteFinancialInvestResult(@PathVariable String id, @PathVariable String resultId) {
+    public ApiResponse<Void> deleteFinancialInvestResult(@PathVariable String resultId) {
         financialInvestResultService.deleteFinancialInvest(resultId);
         return ApiResponse.<Void>builder().code(200).message("Deleted").build();
     }

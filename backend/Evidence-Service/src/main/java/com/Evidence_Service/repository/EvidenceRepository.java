@@ -1,27 +1,41 @@
 package com.Evidence_Service.repository;
 
 import com.Evidence_Service.model.Evidence;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EvidenceRepository extends JpaRepository<Evidence, String> {
+    @Query("SELECT e FROM Evidence e WHERE e.Id IN :ids AND e.isDeleted = false")
+    Page<Evidence> findByEvidenceIdInAndNotDeleted(@Param("ids") List<String> ids, Pageable pageable);
+
+    @Query("SELECT e FROM Evidence e WHERE e.isDeleted = false")
+    Page<Evidence> findAllNotDeleted(Pageable pageable);
+
+
     List<Evidence> findByInvestigationPlanId(String investigationPlanId);
 
-    List<Evidence> findByReportId(String reportId);
+    List<Evidence> findByReportIdAndIsDeletedFalse(String reportId);
 
-    List<Evidence> findByCollectorUsername(String collectorUsername);
+    List<Evidence> findByCollectorUsernameAndIsDeletedFalse(String collectorUsername);
 
-    List<Evidence> findByMeasureSurveyId(String measureSurveyId);
+    List<Evidence> findByMeasureSurveyIdAndIsDeletedFalse(String measureSurveyId);
 
     List<Evidence> findByIsDeletedFalse();
 
-    boolean existsByEvidenceId(String evidenceId);
+    Optional<Evidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
 
-    List<Evidence> findByDescriptionContainingIgnoreCase(String keyword);
+    boolean existsByEvidenceIdAndIsDeletedFalse(String evidenceId);
+
+    List<Evidence> findByDescriptionContainingIgnoreCaseAndIsDeletedFalse(String keyword);
 
     List<Evidence> findByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
 

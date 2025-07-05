@@ -10,6 +10,8 @@ import com.Evidence_Service.model.PhysicalInvestResult;
 import com.Evidence_Service.repository.PhysicalInvestResultRepository;
 import com.Evidence_Service.service.PhysicalInvestResultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,16 +40,21 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     }
 
     @Override
-    public PhysicalInvestResultDTO getPhysicalInvestById(String id) {
-        return physicalInvestResultRepository.findById(id)
+    public PhysicalInvestResultDTO getPhysicalInvestByResultId(String resultId) {
+        return physicalInvestResultRepository.findById(resultId)
                 .map(PhysicalInvestResultMapper::toDTO)
                 .orElseThrow(() -> new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND));
     }
 
     @Override
-    public List<PhysicalInvestResultDTO> getAllPhysicalInvestByEvidenceId(String evidenceId) {
-        return physicalInvestResultRepository.findByEvidenceId(evidenceId)
-                .stream().map(PhysicalInvestResultMapper::toDTO).collect(Collectors.toList());
+    public Page<PhysicalInvestResultDTO> getAllPhysicalInvestByEvidenceId(String evidenceId, Pageable pageable) {
+        return physicalInvestResultRepository.findByEvidenceId(evidenceId, pageable)
+                .map(PhysicalInvestResultMapper::toDTO);
+    }
+
+    @Override
+    public Page<PhysicalInvestResultDTO> getAllPhysicalInvestByInvestigationId(String investigationId, Pageable pageable) {
+        return null;
     }
 
     @Override
@@ -59,11 +66,12 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     }
 
     @Override
-    public void deletePhysicalInvest(String id) {
-        if (!physicalInvestResultRepository.existsById(id))
+    public void deletePhysicalInvest(String resultId) {
+        PhysicalInvestResult physicalInvestResult = physicalInvestResultRepository.findByResultId(resultId);
+        if (physicalInvestResult == null)
             throw new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND);
-        physicalInvestResultRepository.deleteById(id);
+        physicalInvestResult.setDeleted(true);
+        physicalInvestResultRepository.save(physicalInvestResult);
     }
-
 }
 

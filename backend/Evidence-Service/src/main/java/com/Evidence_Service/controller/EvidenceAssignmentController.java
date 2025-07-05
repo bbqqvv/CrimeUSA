@@ -1,20 +1,20 @@
 package com.Evidence_Service.controller;
-import com.Evidence_Service.dto.AssignCaseDTO;
-import com.Evidence_Service.dto.AssignSuspectDTO;
-import com.Evidence_Service.dto.AssignWarrantDTO;
+
+import com.Evidence_Service.dto.CaseDTO;
+import com.Evidence_Service.dto.SuspectDTO;
+import com.Evidence_Service.dto.WarrantDTO;
 import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.EvidenceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/evidences/{id}")
+@RequestMapping("/api/v1/evidences/{evidenceId}")
 @Tag(name = "Evidence Assignment", description = "Seizing evidence with the suspect, the case, warrant.")
 @RequiredArgsConstructor
 public class EvidenceAssignmentController {
@@ -23,51 +23,60 @@ public class EvidenceAssignmentController {
 
     @PutMapping("/assign-suspect")
     @PreAuthorize("hasAuthority('ASSIGN_SUSPECT')")
-    public ApiResponse<EvidenceDTO> assignSuspect(@PathVariable String id, @RequestBody AssignSuspectDTO dto) {
+    public ApiResponse<EvidenceDTO> assignSuspect(@PathVariable String evidenceId, @RequestBody SuspectDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Assigned suspect")
-                .data(evidenceService.assignSuspect(id, dto))
+                .data(evidenceService.assignSuspect(evidenceId, dto))
                 .build();
     }
 
     @PutMapping("/assign-case")
     @PreAuthorize("hasAuthority('ASSIGN_CASE')")
-    public ApiResponse<EvidenceDTO> assignCase(@PathVariable String id, @RequestBody AssignCaseDTO dto) {
+    public ApiResponse<EvidenceDTO> assignCase(@PathVariable String evidenceId, @RequestBody CaseDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Assigned case")
-                .data(evidenceService.assignCase(id, dto))
+                .data(evidenceService.assignCase(evidenceId, dto))
                 .build();
     }
 
     @PutMapping("/assign-warrant")
     @PreAuthorize("hasAuthority('ASSIGN_WARRANT')")
-    public ApiResponse<EvidenceDTO> assignWarrant(@PathVariable String id, @RequestBody AssignWarrantDTO dto) {
+    public ApiResponse<EvidenceDTO> assignWarrant(@PathVariable String evidenceId, @RequestBody WarrantDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Assigned warrant")
-                .data(evidenceService.assignWarrant(id, dto))
+                .data(evidenceService.assignWarrant(evidenceId, dto))
                 .build();
     }
 
     @GetMapping("/suspects")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<List<String>> getSuspectsByEvidence(@PathVariable String id) {
-        return ApiResponse.<List<String>>builder()
+    public ApiResponse<List<SuspectDTO>> getSuspectsByEvidence(@PathVariable String evidenceId) {
+        return ApiResponse.<List<SuspectDTO>>builder()
                 .code(200)
                 .message("Suspects fetched")
-                .data(evidenceService.getSuspectsByEvidence(id))
+                .data(evidenceService.getSuspectsByEvidence(evidenceId))
                 .build();
     }
 
     @GetMapping("/warrants")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<List<String>> getWarrantsByEvidence(@PathVariable String id) {
-        return ApiResponse.<List<String>>builder()
+    public ApiResponse<List<WarrantDTO>> getWarrantsByEvidence(@PathVariable String evidenceId) {
+        return ApiResponse.<List<WarrantDTO>>builder()
                 .code(200)
                 .message("Warrants fetched")
-                .data(evidenceService.getWarrantsByEvidence(id))
+                .data(evidenceService.getWarrantsByEvidence(evidenceId))
+                .build();
+    }
+    @GetMapping("/cases")
+    @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
+    public ApiResponse<List<CaseDTO>> getCasesByEvidence(@PathVariable String evidenceId) {
+        return ApiResponse.<List<CaseDTO>>builder()
+                .code(200)
+                .message("Cases fetched")
+                .data(evidenceService.getCasesByEvidence(evidenceId))
                 .build();
     }
 }

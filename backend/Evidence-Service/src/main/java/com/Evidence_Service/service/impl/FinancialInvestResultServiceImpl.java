@@ -10,6 +10,8 @@ import com.Evidence_Service.model.FinancialInvestResult;
 import com.Evidence_Service.repository.FinancialInvestResultRepository;
 import com.Evidence_Service.service.FinancialInvestResultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,16 +40,16 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
     }
 
     @Override
-    public FinancialInvestResultDTO getFinancialInvestById(String id) {
-        return financialInvestResultRepository.findById(id)
+    public FinancialInvestResultDTO getFinancialInvestById(String resultId) {
+        return financialInvestResultRepository.findById(resultId)
                 .map(FinancialInvestResultMapper::toDTO)
                 .orElseThrow(() -> new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND));
     }
 
     @Override
-    public List<FinancialInvestResultDTO> getAllFinancialInvestByEvidenceId(String evidenceId) {
-        return financialInvestResultRepository.findByEvidenceId(evidenceId)
-                .stream().map(FinancialInvestResultMapper::toDTO).collect(Collectors.toList());
+    public Page<FinancialInvestResultDTO> getAllFinancialInvestByEvidenceId(String evidenceId, Pageable pageable) {
+        return financialInvestResultRepository.findByEvidenceId(evidenceId, pageable)
+                .map(FinancialInvestResultMapper::toDTO);
     }
 
     @Override
@@ -59,10 +61,12 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
     }
 
     @Override
-    public void deleteFinancialInvest(String id) {
-        if (!financialInvestResultRepository.existsById(id))
+    public void deleteFinancialInvest(String resultId) {
+        FinancialInvestResult financialInvestResult = financialInvestResultRepository.findByResultId(resultId);
+        if (financialInvestResult == null)
             throw new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND);
-        financialInvestResultRepository.deleteById(id);
+        financialInvestResult.setDeleted(true);
+        financialInvestResultRepository.save(financialInvestResult);
     }
 }
 

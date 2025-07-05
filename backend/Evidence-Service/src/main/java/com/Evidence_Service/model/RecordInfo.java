@@ -16,6 +16,7 @@ import java.util.UUID;
 @SuperBuilder
 public class RecordInfo extends BaseClass {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "record_info_id")
     private String recordInfoId;
 

@@ -7,6 +7,9 @@ import com.Evidence_Service.service.impl.DigitalInvestResultServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/evidences/{id}/digital-invest")
+@RequestMapping("/api/v1/evidences/{evidenceId}/digital-invest")
 @Tag(name = "Digital Investigation", description = "Digital investigation results management")
 @RequiredArgsConstructor
 public class DigitalInvestResultController {
@@ -24,51 +27,56 @@ public class DigitalInvestResultController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_DIGITAL_RESULT')")
     @Operation(summary = "Create digital investigation result")
-    public ApiResponse<DigitalInvestResultDTO> createDigitalInvestResult(@PathVariable String id, @RequestBody DigitalInvestResultDTO dto) {
+    public ApiResponse<DigitalInvestResultDTO> createDigitalInvestResult(@PathVariable String evidenceId, @RequestBody DigitalInvestResultDTO dto) {
         return ApiResponse.<DigitalInvestResultDTO>builder()
                 .code(201)
                 .message("Digital investigation result created")
-                .data(digitalInvestResultService.addDigitalInvestResult(id, dto))
+                .data(digitalInvestResultService.addDigitalInvestResult(evidenceId, dto))
                 .build();
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_DIGITAL_RESULT')")
     @Operation(summary = "Get all digital investigation results")
-    public ApiResponse<List<DigitalInvestResultDTO>> getAllDigitalInvestResults(@PathVariable String id) {
-        return ApiResponse.<List<DigitalInvestResultDTO>>builder()
+    public ApiResponse<Page<DigitalInvestResultDTO>> getAllDigitalInvestResults(@PathVariable String evidenceId,
+                                                                                @RequestParam(defaultValue = "0", required = false) int page,
+                                                                                @RequestParam(defaultValue = "10", required = false) int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DigitalInvestResultDTO> result = digitalInvestResultService.getAllDigitalInvestByEvidenceId(evidenceId, pageable);
+
+        return ApiResponse.<Page<DigitalInvestResultDTO>>builder()
                 .code(200)
                 .message("Fetched digital investigation results")
-                .data(digitalInvestResultService.getAllDigitalInvestByEvidenceId(id))
+                .data(result)
                 .build();
     }
 
     @GetMapping("/{resultId}")
     @PreAuthorize("hasAuthority('VIEW_DIGITAL_RESULT')")
-    @Operation(summary = "Get digital investigation result by id")
-    public ApiResponse<DigitalInvestResultDTO> getDigitalInvestResultById(@PathVariable String id, @PathVariable String resultId) {
+    @Operation(summary = "Get digital investigation result by resultId")
+    public ApiResponse<DigitalInvestResultDTO> getDigitalInvestResultByResultId(@PathVariable String resultId) {
         return ApiResponse.<DigitalInvestResultDTO>builder()
                 .code(200)
                 .message("Fetched digital investigation result")
-                .data(digitalInvestResultService.getDigitalInvestById(resultId))
+                .data(digitalInvestResultService.getDigitalInvestByResultId(resultId))
                 .build();
     }
 
     @PutMapping("/{resultId}")
     @PreAuthorize("hasAuthority('EDIT_DIGITAL_RESULT')")
     @Operation(summary = "Update digital investigation result")
-    public ApiResponse<DigitalInvestResultDTO> updateDigitalInvestResult(@PathVariable String id, @PathVariable String resultId, @RequestBody DigitalInvestResultDTO dto) {
+    public ApiResponse<DigitalInvestResultDTO> updateDigitalInvestResult(@PathVariable String evidenceId, @PathVariable String resultId, @RequestBody DigitalInvestResultDTO dto) {
         return ApiResponse.<DigitalInvestResultDTO>builder()
                 .code(200)
                 .message("Digital investigation result updated")
-                .data(digitalInvestResultService.updateDigitalInvest(id, resultId, dto))
+                .data(digitalInvestResultService.updateDigitalInvest(evidenceId, resultId, dto))
                 .build();
     }
 
     @DeleteMapping("/{resultId}")
     @PreAuthorize("hasAuthority('DELETE_DIGITAL_RESULT')")
     @Operation(summary = "Delete digital investigation result")
-    public ApiResponse<Void> deleteDigitalInvestResult(@PathVariable String id, @PathVariable String resultId) {
+    public ApiResponse<Void> deleteDigitalInvestResult(@PathVariable String resultId) {
         digitalInvestResultService.deleteDigitalInvest(resultId);
         return ApiResponse.<Void>builder()
                 .code(200)

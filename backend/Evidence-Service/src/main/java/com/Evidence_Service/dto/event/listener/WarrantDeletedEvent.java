@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CaseCreatedEvent {
-    private String caseId;
-    private String caseNumber;
-    private String evidenceId;
+public class WarrantDeletedEvent {
+    private String warrantResultId;
 }
+
