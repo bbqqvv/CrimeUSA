@@ -60,11 +60,13 @@ export default function InitialEvidenceForm() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const errors: string[] = [];
+    e.preventDefault()
+    const errors: string[] = []
 
     // Kiểm tra các trường rỗng
-    if (!formData.evidenceType) errors.push("Types of Evidence is required.");
+    if (!formData.evidenceType) errors.push('Types of Evidence is required.')
+
+
 
     if (errors.length > 0) {
       toast.error("Please fill all required fields:", {
@@ -79,19 +81,19 @@ export default function InitialEvidenceForm() {
     const newEvidence = {
       id: initialEvidence.length + 1,
       ...formData,
-      attachments:
-        files.length > 0 ? `${files.length} files` : "No attachments",
-    };
-    sessionStorage.setItem(
-      "initialEvidence",
-      JSON.stringify([...initialEvidence, newEvidence])
-    );
-    router.push("/reporter"); // Quay lại trang chính reporter
-  };
+      attachments: files.length > 0 ? `${files.length} files` : 'No attachments'
+    }
+    sessionStorage.setItem('initialEvidence', JSON.stringify([...initialEvidence, newEvidence]))
+    // router.push('/reporter') // Quay lại trang chính reporter
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    router.push('/reporter')                 
+  }
 
   const handleCancel = () => {
-    router.push("/reporter"); // Quay lại trang chính reporter
-  };
+    // router.push('/reporter') // Quay lại trang chính reporter
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+    router.push('/reporter')
+  }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
   const formatDate = () =>

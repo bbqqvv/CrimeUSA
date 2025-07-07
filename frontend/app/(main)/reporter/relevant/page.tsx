@@ -67,9 +67,9 @@ export default function RelevantPartiesForm() {
     const errors: string[] = [];
 
     // Kiểm tra các trường rỗng
-    if (!formData.relation)
-      errors.push("Relationship to the incident is required.");
-    if (!formData.gender) errors.push("Gender is required.");
+    if (!formData.relation) errors.push('Relationship to the incident is required.')
+    if (!formData.gender) errors.push('Gender is required.')
+
 
     if (errors.length > 0) {
       toast.error("Please fill all required fields:", {
@@ -83,19 +83,19 @@ export default function RelevantPartiesForm() {
     const newParty = {
       id: relevantParties.length + 1,
       ...formData,
-      attachments:
-        files.length > 0 ? `${files.length} files` : "No attachments",
-    };
-    sessionStorage.setItem(
-      "relevantParties",
-      JSON.stringify([...relevantParties, newParty])
-    );
-    router.push("/reporter"); // Quay lại trang chính reporter
-  };
+      attachments: files.length > 0 ? `${files.length} files` : 'No attachments'
+    }
+    sessionStorage.setItem('relevantParties', JSON.stringify([...relevantParties, newParty]))
+    // router.push('/reporter') // Quay lại trang chính reporter
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    router.push('/reporter')                  //  Quay lại MultiStepForm
+  }
 
   const handleCancel = () => {
-    router.push("/reporter"); // Điều hướng trở lại reporter
-  };
+    // router.push('/reporter') // Điều hướng trở lại reporter
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+    router.push('/reporter')
+  }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
   const formatDate = () =>
