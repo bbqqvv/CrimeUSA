@@ -6,12 +6,14 @@
 
 package com.backend.investigationservice.repository;
 
+import com.backend.investigationservice.model.Question;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-/*
- * @description
- * @author: Khuong Pham
- * @date:   7/3/2025
- * @version:    1.0
- */
-public interface QuestionRepository {
+import java.util.List;
+import java.util.UUID;
+
+public interface QuestionRepository extends JpaRepository<Question, UUID>, JpaSpecificationExecutor<Question> {
+    List<Question> findByInterview_InterviewId(UUID interviewId);
+    List<Question> findByIsDeletedFalse();
 }
