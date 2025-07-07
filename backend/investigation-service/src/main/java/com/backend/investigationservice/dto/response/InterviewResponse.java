@@ -1,0 +1,45 @@
+package com.backend.investigationservice.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class InterviewResponse {
+    @JsonProperty("interview_id")
+    private UUID interviewId;
+
+    @JsonProperty("investigation_plan_id")
+    private UUID investigationPlanId;
+
+    @JsonProperty("location")
+    private String location;
+
+    @JsonProperty("attached_file")
+    private String attachedFile;
+
+    @JsonProperty("start_time")
+    private LocalDateTime startTime;
+
+    @JsonProperty("end_time")
+    private LocalDateTime endTime;
+
+    @JsonProperty("holiday_conflict")
+    private String holidayConflict;
+
+    @JsonProperty("holiday_id")
+    private String holidayId;
+
+    @JsonProperty("deleted")
+    private boolean deleted;
+
+    @JsonProperty("questions")
+    private List<QuestionResponse> questions;
+}
