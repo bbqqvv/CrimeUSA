@@ -51,7 +51,8 @@ public class EvidenceKafkaProducerImpl implements EvidenceKafkaProducer {
 
     @Override
     public void sendWarrantAssigned(WarrantAssignedEvent event) {
-
+        kafkaTemplate.send("warrant.case-assigned", new WarrantAssignedEvent());
+        log.info("Sent warrant.case-assigned: {}", event);
     }
 }
 
