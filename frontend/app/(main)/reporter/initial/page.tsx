@@ -85,13 +85,13 @@ export default function InitialEvidenceForm() {
     }
     sessionStorage.setItem('initialEvidence', JSON.stringify([...initialEvidence, newEvidence]))
     // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') // ✅ Ghi nhớ cần quay lại Step 2
-    router.push('/reporter')                  // ✅ Quay lại MultiStepForm
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    router.push('/reporter')                 
   }
 
   const handleCancel = () => {
     // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') // ✅ Ghi nhớ cần quay lại step 2
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
     router.push('/reporter')
   }
 
