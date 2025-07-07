@@ -1,5 +1,8 @@
 // Step1.tsx
+'use client'
 import { useState } from 'react';
+import Image from 'next/image';
+import { ReviewReportTable } from '../reivew-report-table';
 
 export default function Step3({ data, onNext }: any) {
     const [form, setForm] = useState(data);
@@ -14,34 +17,27 @@ export default function Step3({ data, onNext }: any) {
 
     return (
         <div>
-            <h2 className="text-xl font-bold mb-4">Reporter Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input name="fullName" value={form.fullName} onChange={handleChange} placeholder="Full name" />
-                <input name="email" value={form.email} onChange={handleChange} placeholder="Email" />
-                <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone number" />
-                <input name="address" value={form.address} onChange={handleChange} placeholder="Address" />
+            <main className="container mx-auto px-4 pb-8">
+            <div className="flex flex-col justify-center items-center">
+                <Image
+                className="mt-10 mb-10 ml-10"
+                src="/images/image 11.svg"
+                alt="image"
+                width={160}
+                height={160}
+                />
+                <div className="w-100 h-10 text-center mb-30">
+                <p className="text-wrap">
+                    Your report will be reviewed within 5–10 working days.
+                    Please check the status regularly for updates.
+                    Thank you for your submission.
+                </p>
+                </div>
+                <div className="mb-50">
+                <ReviewReportTable></ReviewReportTable>
+                </div>
             </div>
-
-            {/* Relationship radio group */}
-            <div className="mt-4">
-                <p className="mb-2">Relationship to the incident *</p>
-                {['Victim', 'Witness', 'Offender', 'Anonymous'].map((r) => (
-                    <label key={r} className="block">
-                        <input
-                            type="radio"
-                            name="relationship"
-                            value={r}
-                            checked={form.relationship === r}
-                            onChange={handleChange}
-                        />{' '}
-                        {r}
-                    </label>
-                ))}
-            </div>
-
-            <button onClick={handleSubmit} className="mt-6 px-4 py-2 bg-black text-white rounded">
-                Next
-            </button>
+            </main>
         </div>
     );
 }

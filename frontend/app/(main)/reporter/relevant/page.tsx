@@ -1,104 +1,127 @@
-
-
-'use client'
-import { toast } from 'sonner'
-import { useRef, useState } from 'react'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+"use client";
+import { toast } from "sonner";
+import { useRef, useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Card, CardContent } from '@/components/ui/card'
-import { useRouter } from 'next/navigation'
+} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RelevantPartiesForm() {
-  const [files, setFiles] = useState<File[]>([])
+  const [files, setFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState({
-    fullname: '',
-    relation: '',
-    gender: '',
-    nationality: '',
-    description: ''
-  })
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const router = useRouter()
+    fullname: "",
+    relation: "",
+    gender: "",
+    nationality: "",
+    description: "",
+  });
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const [form, setForm] = useState<any>({});
+
+  useEffect(() => {
+    if (id && typeof window !== "undefined") {
+      const data = JSON.parse(
+        sessionStorage.getItem("relevantParties") || "[]"
+      );
+      const found = data.find((item: any) => String(item.id) === String(id));
+      if (found) setForm(found);
+    }
+  }, [id]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFiles([...files, ...Array.from(e.target.files)])
+      setFiles([...files, ...Array.from(e.target.files)]);
     }
-  }
+  };
 
   const removeFile = (index: number) => {
-    setFiles(files.filter((_, i) => i !== index))
-  }
+    setFiles(files.filter((_, i) => i !== index));
+  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Lưu dữ liệu vào sessionStorage (tạm thời)
-    const errors: string[] = []
+    const errors: string[] = [];
 
     // Kiểm tra các trường rỗng
     if (!formData.relation) errors.push('Relationship to the incident is required.')
     if (!formData.gender) errors.push('Gender is required.')
-    
+
 
     if (errors.length > 0) {
-      toast.error('Please fill all required fields:', {
-        description: errors.join('\n'),
-      })
-      return
+      toast.error("Please fill all required fields:", {
+        description: errors.join("\n"),
+      });
+      return;
     }
-    const relevantParties = JSON.parse(sessionStorage.getItem('relevantParties') || '[]')
+    const relevantParties = JSON.parse(
+      sessionStorage.getItem("relevantParties") || "[]"
+    );
     const newParty = {
       id: relevantParties.length + 1,
       ...formData,
       attachments: files.length > 0 ? `${files.length} files` : 'No attachments'
     }
     sessionStorage.setItem('relevantParties', JSON.stringify([...relevantParties, newParty]))
-    router.push('/reporter') // Quay lại trang chính reporter
+    // router.push('/reporter') // Quay lại trang chính reporter
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    router.push('/reporter')                  //  Quay lại MultiStepForm
   }
 
   const handleCancel = () => {
-    router.push('/reporter') // Điều hướng trở lại reporter
+    // router.push('/reporter') // Điều hướng trở lại reporter
+    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+    router.push('/reporter')
   }
 
-  const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`
+  const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
   const formatDate = () =>
-    new Date().toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    })
+    new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
 
   return (
     <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
       <CardContent>
-        <h2 className="text-2xl font-bold text-center mb-2">Relevant Parties</h2>
+        <h2 className="text-2xl font-bold text-center mb-2">
+          Relevant Parties
+        </h2>
         <p className="text-sm text-muted-foreground text-center mb-6">
-          This form is used to document the roles and identities of all parties connected to the incident.
+          This form is used to document the roles and identities of all parties
+          connected to the incident.
         </p>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="fullname" className="mb-2 block">Full name</Label>
+              <Label htmlFor="fullname" className="mb-2 block">
+                Full name
+              </Label>
               <Input
                 id="fullname"
                 name="fullname"
@@ -111,8 +134,12 @@ export default function RelevantPartiesForm() {
             </div>
 
             <div>
-              <Label htmlFor="relation" className="mb-2 block">Relationship to the incident *</Label>
-              <Select onValueChange={(value) => handleSelectChange('relation', value)}>
+              <Label htmlFor="relation" className="mb-2 block">
+                Relationship to the incident *
+              </Label>
+              <Select
+                onValueChange={(value) => handleSelectChange("relation", value)}
+              >
                 <SelectTrigger id="relation" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
@@ -126,8 +153,12 @@ export default function RelevantPartiesForm() {
             </div>
 
             <div>
-              <Label htmlFor="gender" className="mb-2 block">Gender</Label>
-              <Select onValueChange={(value) => handleSelectChange('gender', value)}>
+              <Label htmlFor="gender" className="mb-2 block">
+                Gender
+              </Label>
+              <Select
+                onValueChange={(value) => handleSelectChange("gender", value)}
+              >
                 <SelectTrigger id="gender" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
@@ -140,7 +171,9 @@ export default function RelevantPartiesForm() {
             </div>
 
             <div>
-              <Label htmlFor="nationality" className="mb-2 block">Nationality</Label>
+              <Label htmlFor="nationality" className="mb-2 block">
+                Nationality
+              </Label>
               <Input
                 id="nationality"
                 name="nationality"
@@ -154,7 +187,9 @@ export default function RelevantPartiesForm() {
           </div>
 
           <div>
-            <Label htmlFor="description" className="mb-2 block">Statement / Description</Label>
+            <Label htmlFor="description" className="mb-2 block">
+              Statement / Description
+            </Label>
             <Textarea
               id="description"
               name="description"
@@ -170,7 +205,7 @@ export default function RelevantPartiesForm() {
             <Label>Attachments</Label>
             <div className="border-2 border-dashed rounded-md p-6 text-center mt-2">
               <p className="text-sm mb-1">
-                Drag & drop files or{' '}
+                Drag & drop files or{" "}
                 <span
                   className="text-blue-600 underline cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
@@ -203,7 +238,8 @@ export default function RelevantPartiesForm() {
             {files.length > 0 && (
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {files.map((file, index) => {
-                  const ext = file.name.split('.').pop()?.toUpperCase() || 'FILE'
+                  const ext =
+                    file.name.split(".").pop()?.toUpperCase() || "FILE";
                   return (
                     <div
                       key={index}
@@ -233,7 +269,7 @@ export default function RelevantPartiesForm() {
                         ✕
                       </Button>
                     </div>
-                  )
+                  );
                 })}
               </div>
             )}
@@ -248,5 +284,5 @@ export default function RelevantPartiesForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
