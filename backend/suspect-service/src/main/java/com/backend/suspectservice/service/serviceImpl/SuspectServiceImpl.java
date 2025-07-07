@@ -6,12 +6,23 @@
 
 package com.backend.suspectservice.service.serviceImpl;
 
-import com.backend.suspectservice.model.Indictment;
-import com.backend.suspectservice.service.IndictmentService;
+import com.backend.suspectservice.dto.request.SuspectCreateRequest;
+import com.backend.suspectservice.dto.response.SuspectResponse;
+import com.backend.suspectservice.mapper.SuspectMapper;
+import com.backend.suspectservice.model.Suspect;
+import com.backend.suspectservice.repository.SuspectRepository;
+import com.backend.suspectservice.service.CloudinaryService;
+import com.backend.suspectservice.service.SuspectService;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /*
  * @description
@@ -20,39 +31,70 @@ import java.util.Optional;
  * @version:    1.0
  */
 @Service
-public class SuspectServiceImpl implements IndictmentService {
+@RequiredArgsConstructor // Only create Contructor for final fields
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
+public class SuspectServiceImpl implements SuspectService {
+    SuspectRepository suspectRep;
+    SuspectMapper suspectMapper;
+    CloudinaryService cloudinaryService;
+
     @Override
-    public List<Indictment> getAllIndictments() {
-        return List.of();
+    public List<SuspectResponse> getAllSuspects() {
+        log.info("Getting all suspects");
+        return suspectRep.getAllByIsDeletedFalse().stream().map(
+                suspectMapper::toSuspectResponse
+        ).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Indictment> getIndictmentById(String indictmentId) {
+    public Optional<Suspect> getSuspectById(String suspectId) {
         return Optional.empty();
     }
 
     @Override
-    public List<Indictment> getIndictmentsByProsecutionId(String prosecutionId) {
+    public List<Suspect> getSuspectsByCaseId(String caseId) {
         return List.of();
     }
 
     @Override
-    public Indictment createIndictment(Indictment indictment) {
-        return null;
+    public List<Suspect> searchSuspectsByName(String name) {
+        return List.of();
     }
 
     @Override
-    public Indictment updateIndictment(String indictmentId, Indictment indictment) {
-        return null;
+    public List<Suspect> getSuspectsByStatus(String status) {
+        return List.of();
+    }
+
+    @Transactional
+    @Override
+    public SuspectResponse createSuspect(SuspectCreateRequest suspect, MultipartFile suspectImage) {
+        Suspect s = suspectMapper.createSuspect(suspect);
+        String imageUrl = cloudinaryService.uploadImage(suspectImage);
+        s.setMugshotUrl(imageUrl);
+        return suspectMapper.toSuspectResponse(
+                suspectRep.save(s)
+        );
     }
 
     @Override
-    public void deleteIndictment(String indictmentId) {
+    public SuspectResponse updateSuspect(String suspectId, SuspectCreateRequest suspect) {
+       return suspectRep.findById(suspectId)
+                .map(existingSuspect -> {
+                    suspectMapper.updateSuspect(existingSuspect, suspect);
+                    return suspectMapper.toSuspectResponse(suspectRep.save(existingSuspect));
+                })
+                .orElseThrow(() -> new RuntimeException("Suspect not found with id: " + suspectId));
+    }
+
+    @Override
+    public void deleteSuspect(String suspectId) {
 
     }
 
     @Override
-    public boolean existsById(String indictmentId) {
+    public boolean existsById(String suspectId) {
         return false;
     }
 }

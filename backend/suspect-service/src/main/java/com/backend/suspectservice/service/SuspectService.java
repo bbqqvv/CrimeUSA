@@ -6,7 +6,10 @@
 
 package com.backend.suspectservice.service;
 
+import com.backend.suspectservice.dto.request.SuspectCreateRequest;
+import com.backend.suspectservice.dto.response.SuspectResponse;
 import com.backend.suspectservice.model.Suspect;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,21 +22,19 @@ import java.util.Optional;
  */
 public interface SuspectService {
 
-    List<Suspect> getAllSuspects();
+    List<SuspectResponse> getAllSuspects();
 
     Optional<Suspect> getSuspectById(String suspectId);
 
     List<Suspect> getSuspectsByCaseId(String caseId);
 
-    Optional<Suspect> getSuspectByIdentification(String identification);
-
     List<Suspect> searchSuspectsByName(String name);
 
     List<Suspect> getSuspectsByStatus(String status);
 
-    Suspect createSuspect(Suspect suspect);
+    SuspectResponse createSuspect(SuspectCreateRequest suspect, MultipartFile suspectImage);
 
-    Suspect updateSuspect(String suspectId, Suspect suspect);
+    SuspectResponse updateSuspect(String suspectId, SuspectCreateRequest suspect);
 
     void deleteSuspect(String suspectId);
 

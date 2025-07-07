@@ -6,6 +6,7 @@
 
 package com.backend.suspectservice.model;
 
+import com.backend.commonservice.enums.SuspectStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -43,7 +44,8 @@ public class Suspect {
     @Column(name = "catch_time")
     String catchTime;
     String notes;
-    String status;
+    @Enumerated(EnumType.STRING)
+    SuspectStatus status;
     @Column(name = "mugshot_url")
     String mugshotUrl;
     @Column(name = "fingerprints_hash")
