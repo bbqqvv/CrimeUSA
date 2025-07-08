@@ -11,12 +11,4 @@ public class WarrantDTO {
     @NotNull
     @NotBlank
     private String warrantId;
-    @NotBlank
-    private String warrantName;
-    @NotBlank
-    private String attachedFile;
-    @NotNull
-    private LocalDateTime timePublish;
-    @NotBlank
-    private String officerUsername;
 }

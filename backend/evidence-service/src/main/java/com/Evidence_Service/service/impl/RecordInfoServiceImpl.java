@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,7 +46,7 @@ public class RecordInfoServiceImpl implements RecordInfoService {
     @Override
     public Page<RecordInfoDTO> getAllRecordInfo(Pageable pageable) {
         try {
-            return recordInfoRepository.findByIsDeletedFalse(pageable)
+            return recordInfoRepository.findAllByIsDeletedFalse(pageable)
                     .map(recordInfoMapper::toDTO);
         } catch (Exception ex) {
             log.error("Failed to retrieve all record info: {}", ex.getMessage(), ex);
@@ -73,7 +74,7 @@ public class RecordInfoServiceImpl implements RecordInfoService {
     @Override
     public Page<RecordInfoDTO> getRecordInfoByEvidenceId(String evidenceId, Pageable pageable) {
         try {
-            return recordInfoRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
+            return recordInfoRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
                     .map(recordInfoMapper::toDTO);
         } catch (Exception ex) {
             log.error("Failed to retrieve record info for evidence ID {}: {}", evidenceId, ex.getMessage(), ex);
@@ -117,6 +118,35 @@ public class RecordInfoServiceImpl implements RecordInfoService {
         } catch (Exception ex) {
             log.error("Failed to delete record info with ID {}: {}", recordInfoId, ex.getMessage(), ex);
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public boolean existsByEvidenceId(String evidenceId) {
+        try {
+            return recordInfoRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void deleteByEvidenceId(String evidenceId) {
+        try {
+            List<RecordInfo> recordInfo = recordInfoRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);
+
+            if (recordInfo == null) throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+
+            for (RecordInfo record : recordInfo) {
+                record.setDeleted(true);
+                recordInfoRepository.save(record);
+            }
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.RECORD_INFO_NOT_FOUND);
         }
     }
 }

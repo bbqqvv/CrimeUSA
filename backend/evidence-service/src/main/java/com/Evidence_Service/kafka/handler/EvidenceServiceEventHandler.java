@@ -2,7 +2,7 @@ package com.Evidence_Service.kafka.handler;
 
 import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.event.listener.*;
-import com.Evidence_Service.service.EvidenceService;
+import com.Evidence_Service.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,9 +10,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EvidenceEventHandler {
+public class EvidenceServiceEventHandler {
 
     private final EvidenceService evidenceService;
+    private final PhysicalInvestResultService physicalInvestResultService;
+    private final ForensicInvestResultService forensicInvestResultService;
+    private final FinancialInvestResultService financialInvestResultService;
+    private final DigitalInvestResultService digitalInvestResultService;
+
 
     public void onReportCreated(ReportCreatedEvent event) {
         log.info("Handling ReportCreatedEvent: {}", event);
@@ -69,5 +74,29 @@ public class EvidenceEventHandler {
     public void onCaseAssigned(CaseAssignedEvent event) {
         log.info("Handling CaseAssignedEvent: {}", event);
         evidenceService.assignCaseToEvidence(event.getEvidenceId(), event.getCaseId());
+    }
+
+    public void onInvestigationCreated(ResultInvestAssignedEvent event) {
+        log.info("Handling ResultInvestAssignedEvent: {}", event);
+        switch (event.getType()) {
+            case "physical": physicalInvestResultService.assignPhysicalInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
+            case "digital" : digitalInvestResultService.assignDigitalInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
+            case "financial": financialInvestResultService.assignFinancialInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
+            case "forensic" : forensicInvestResultService.assignForensicInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
+            default:
+                log.info("Handling CreateInvestResult False");
+
+        }
+    }
+
+    public void onInvestigationDeleted(DeleteInvestResultEvent event) {
+        switch (event.getType()) {
+            case "physical": physicalInvestResultService.deletePhysicalInvestByResultId( event.getResultId());
+            case "digital" : digitalInvestResultService.deleteDigitalInvestByResultId(event.getResultId());
+            case "financial": financialInvestResultService.deleteFinancialInvestByResultId(event.getResultId());
+            case "forensic" : forensicInvestResultService.deleteForensicInvestByResultId(event.getResultId());
+            default:
+                log.info("Handling UpdateInvestResult False");
+        }
     }
 }

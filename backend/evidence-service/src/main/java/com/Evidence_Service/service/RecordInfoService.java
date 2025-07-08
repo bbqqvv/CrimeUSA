@@ -22,4 +22,8 @@ public interface RecordInfoService {
     RecordInfoDTO updateRecordInfo(String recordInfoId, RecordInfoDTO dto);
 
     void deleteRecordInfoByRecordInfoId(String recordInfoId);
+
+    boolean existsByEvidenceId(String evidenceId);
+
+    void deleteByEvidenceId(String evidenceId);
 }

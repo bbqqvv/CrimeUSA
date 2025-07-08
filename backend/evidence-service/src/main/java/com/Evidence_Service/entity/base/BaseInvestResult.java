@@ -20,4 +20,8 @@ public abstract class BaseInvestResult extends BaseClass{
 
     @Column(name = "evidence_id")
     protected String evidenceId;
+
+    protected String uploadFile;
+
+    protected String result;
 }

@@ -18,6 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ForensicInvestResultServiceImpl implements ForensicInvestResultService {
@@ -56,6 +59,33 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
         }
     }
 
+    @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
+    @Override
+    public void assignForensicInvestResult(String investigationPlanId, String uploadFile, String content) {
+        try {
+            List<ForensicInvestResult> forensicInvestResults = forensicInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+
+            if (forensicInvestResults ==  null) {
+                ForensicInvestResult.builder()
+                        .investigationPlanId(investigationPlanId)
+                        .result(content)
+                        .uploadFile(uploadFile)
+                        .build();
+            } else {
+                for (ForensicInvestResult forensicInvestResult : forensicInvestResults) {
+                    forensicInvestResult.setResult(content);
+                    forensicInvestResult.setUploadFile(uploadFile);
+                    forensicInvestResultRepository.save(forensicInvestResult);
+                }
+            }
+            log.info("Assigned Investigation");
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Cacheable(value = "forensicInvestResult", key = "#resultId")
     @Override
     public ForensicInvestResultDTO getForensicInvestById(String resultId) {
@@ -80,7 +110,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
     @Override
     public Page<ForensicInvestResultDTO> getAllForensicInvestByEvidenceId(String evidenceId, Pageable pageable) {
         try {
-            return forensicInvestResultRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
+            return forensicInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
                     .map(ForensicInvestResultMapper::toDTO);
         } catch (Exception ex) {
             log.error("Failed to retrieve forensic investigation results for evidence ID {}: {}", evidenceId, ex.getMessage(), ex);
@@ -93,7 +123,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
     public Page<ForensicInvestResultDTO> getAllForensicInvestByInvestigationId(String investigationId, Pageable pageable) {
         try {
             log.info("Retrieving all forensic investigation results for investigation ID: {}", investigationId);
-            return forensicInvestResultRepository.findByInvestigationPlanIdAndIsDeletedFalse(investigationId, pageable)
+            return forensicInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationId, pageable)
                     .map(ForensicInvestResultMapper::toDTO);
         } catch (Exception ex) {
             log.error("Failed to retrieve forensic investigation results for investigation ID {}: {}", investigationId, ex.getMessage(), ex);
@@ -126,7 +156,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
-    public void deleteForensicInvest(String resultId) {
+    public void deleteForensicInvestByResultId(String resultId) {
         try {
             log.info("Deleting forensic investigation result with ID: {}", resultId);
             // Find existing result
@@ -140,6 +170,35 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
             throw ae;
         } catch (Exception ex) {
             log.error("Failed to delete forensic investigation result with ID {}: {}", resultId, ex.getMessage(), ex);
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public boolean existsByEvidenceId(String evidenceId) {
+        try {
+            return forensicInvestResultRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void deleteByEvidenceId(String evidenceId) {
+        try {
+            List<ForensicInvestResult> forensicInvestResults = forensicInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);
+
+            if (forensicInvestResults == null) throw new AppException(ErrorCode.FORENSIC_INVEST_RESULT_NOT_FOUND);
+
+            for (ForensicInvestResult forensicInvestResult : forensicInvestResults) {
+                forensicInvestResult.setDeleted(true);
+                forensicInvestResultRepository.save(forensicInvestResult);
+            }
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

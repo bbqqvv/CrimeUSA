@@ -11,12 +11,4 @@ public class SuspectDTO {
     @NotNull
     @NotBlank
     private String suspectId;
-    @NotBlank
-    private String suspectName;
-    @NotBlank
-    private String fullName;
-    @NotBlank
-    private String status;
-    @NotBlank
-    private String address;
 }

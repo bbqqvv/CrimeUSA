@@ -5,11 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ForensicInvestResultRepository extends JpaRepository<ForensicInvestResult, String> {
     Optional<ForensicInvestResult> findByResultIdAndIsDeletedFalse(String resultId);
-    Page<ForensicInvestResult> findByEvidenceIdAndIsDeletedFalse(String evidenceId, Pageable pageable);
-    Page<ForensicInvestResult> findByInvestigationPlanIdAndIsDeletedFalse(String investigationId, Pageable pageable);
+    Page<ForensicInvestResult> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId, Pageable pageable);
+
+    List<ForensicInvestResult> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId);
+
+    Page<ForensicInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationId, Pageable pageable);
+
+    List<ForensicInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationId);
     boolean existsByEvidenceIdAndIsDeletedFalse(String evidenceId);
 }

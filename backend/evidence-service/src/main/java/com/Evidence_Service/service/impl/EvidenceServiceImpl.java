@@ -17,7 +17,7 @@ import com.Evidence_Service.kafka.EventPublisher;
 import com.Evidence_Service.mapper.EvidenceMapper;
 import com.Evidence_Service.entity.*;
 import com.Evidence_Service.repository.*;
-import com.Evidence_Service.service.EvidenceService;
+import com.Evidence_Service.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -49,6 +49,11 @@ public class EvidenceServiceImpl implements EvidenceService {
     private final WarrantClient warrantClient;
     private final SuspectClient suspectClient;
     private final EventPublisher eventPublisher;
+    private final DigitalInvestResultService digitalInvestResultService;
+    private final FinancialInvestResultService financialInvestResultService;
+    private final PhysicalInvestResultService physicalInvestResultService;
+    private final ForensicInvestResultService forensicInvestResultService;
+    private final RecordInfoService recordInfoService;
 
     @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
@@ -76,6 +81,26 @@ public class EvidenceServiceImpl implements EvidenceService {
             Evidence evidence = getEvidenceOrThrow(evidenceId);
             evidence.setDeleted(true);
             evidence.setStatus(EvidenceStatus.DELETED);
+
+            //Call delete result invest of Evidence if exists
+            if (digitalInvestResultService.existsByEvidenceId(evidenceId)) {
+                digitalInvestResultService.deleteByEvidenceId(evidenceId);
+            }
+            if (financialInvestResultService.existsByEvidenceId(evidenceId)) {
+                financialInvestResultService.deleteByEvidenceId(evidenceId);
+            }
+            if (physicalInvestResultService.existsByEvidenceId(evidenceId)) {
+                physicalInvestResultService.deleteByEvidenceId(evidenceId);
+            }
+            if (forensicInvestResultService.existsByEvidenceId(evidenceId)) {
+                forensicInvestResultService.deleteByEvidenceId(evidenceId);
+            }
+
+            //Call delete RecordInfo of Evidence if exists
+            if (recordInfoService.existsByEvidenceId(evidenceId)) {
+                recordInfoService.deleteByEvidenceId(evidenceId);
+            }
+
             evidenceRepository.save(evidence);
             // Publish event to notify evidence deletion
             eventPublisher.send("evidence.deleted", new EvidenceDeletedEvent());

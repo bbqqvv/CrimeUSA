@@ -24,7 +24,7 @@ public class EvidenceController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> create(@Valid  @RequestBody EvidenceDTO dto) {
+    public ApiResponse<EvidenceDTO> create(@Valid @RequestBody EvidenceDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Created evidence")
