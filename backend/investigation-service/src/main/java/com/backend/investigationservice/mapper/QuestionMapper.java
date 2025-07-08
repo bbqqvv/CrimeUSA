@@ -2,10 +2,12 @@ package com.backend.investigationservice.mapper;
 import com.backend.investigationservice.dto.request.QuestionCreationRequest;
 import com.backend.investigationservice.dto.response.QuestionResponse;
 import com.backend.investigationservice.model.Question;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+@Component
 public class QuestionMapper {
     public static Question toEntity(QuestionCreationRequest request, UUID interviewId) {
         if (request == null) return null;

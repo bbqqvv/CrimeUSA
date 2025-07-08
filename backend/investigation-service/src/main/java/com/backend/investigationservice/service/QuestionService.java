@@ -6,18 +6,16 @@
 
 package com.backend.investigationservice.service;
 
-import com.backend.investigationservice.dto.request.QuestionCreationRequest;
-import com.backend.investigationservice.dto.request.QuestionUpdateRequest;
+
 import com.backend.investigationservice.dto.response.QuestionResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface QuestionService {
-    QuestionResponse createQuestion(QuestionCreationRequest request);
-    QuestionResponse getQuestionById(UUID questionId);
-    List<QuestionResponse> getAllQuestions();
-    List<QuestionResponse> getQuestionsByInterview(UUID interviewId);
-    QuestionResponse updateQuestion(UUID questionId, QuestionUpdateRequest request);
+
+    Page<QuestionResponse> findAll(Pageable pageable);
     void deleteQuestion(UUID questionId);
 }
