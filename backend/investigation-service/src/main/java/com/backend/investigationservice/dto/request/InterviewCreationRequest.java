@@ -16,18 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 public class InterviewCreationRequest {
 
-    @JsonProperty("investigation_plan_id")
-    @NotNull(message = "Investigation plan ID must not be null")
-    private UUID investigationPlanId;
+    @JsonProperty("case_id")
+    @NotNull(message = "Case ID must not be null")
+    private UUID caseId;
 
     @JsonProperty("location")
     @NotBlank(message = "Location must not be blank")
     @Size(max = 255, message = "Location must not exceed 255 characters")
     private String location;
-
-    @JsonProperty("attached_file")
-    @Size(max = 500, message = "Attached file path must not exceed 500 characters")
-    private String attachedFile;
 
     @JsonProperty("start_time")
     @NotNull(message = "Start time must not be null")
