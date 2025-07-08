@@ -2,6 +2,7 @@ package com.backend.investigationservice.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionUpdateRequest {
+public class QuestionCreationRequest {
     @JsonProperty("content")
     @NotBlank(message = "Question content must not be blank")
     @Size(max = 1000, message = "Question content must not exceed 1000 characters")
@@ -27,4 +28,4 @@ public class QuestionUpdateRequest {
     @JsonProperty("reliability")
     @Size(max = 100, message = "Reliability must not exceed 100 characters")
     private String reliability;
-} 
+}
