@@ -1,4 +1,6 @@
 // Step1.tsx
+import InitialEvidenceForm from "@/app/(main)/reporter/initial/page";
+import RelevantPartiesForm from "@/app/(main)/reporter/relevant/page";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
@@ -48,7 +50,8 @@ export default function Step2({ data, onNext, onBack }: any) {
   //const relevantParties = data.relevantParties || [];
   //const initialEvidence = data.initialEvidence || [];
   // Lấy dữ liệu từ session
-
+  const [showInitialModal, setShowInitialModal] = useState(false);
+  const [showRelevantModal, setShowRelevantModal] = useState(false);
   const handleChange = (e: any) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -284,11 +287,11 @@ export default function Step2({ data, onNext, onBack }: any) {
             </Table>
           </div>
           <div className="flex justify-end mt-2">
+            
             <Button
               variant="outline"
               className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-               onClick={() => router.push("/reporter/relevant")}
-             // onClick={() => setShowForm(true)}
+              onClick={() => setShowRelevantModal(true)}
             >
               ADD
             </Button>
@@ -386,10 +389,11 @@ export default function Step2({ data, onNext, onBack }: any) {
             </Table>
           </div>
           <div className="flex justify-end mt-2">
+            
             <Button
               variant="outline"
               className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-              onClick={() => router.push("/reporter/initial")}
+              onClick={() => setShowInitialModal(true)}
             >
               ADD
             </Button>
@@ -475,6 +479,40 @@ export default function Step2({ data, onNext, onBack }: any) {
           </div>
         </div>
       )}
+
+
+      {showRelevantModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-white p-4 rounded-xl w-[90%] max-w-4xl max-h-[90vh] overflow-auto">
+            <RelevantPartiesForm
+              onClose={() => setShowRelevantModal(false)}
+              onSubmitted={() => {
+                setShowRelevantModal(false);
+                const data = JSON.parse(sessionStorage.getItem("relevantParties") || "[]");
+                setRelevantParties(data);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {showInitialModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-white p-4 rounded-xl w-[90%] max-w-4xl max-h-[90vh] overflow-auto">
+            <InitialEvidenceForm
+              onClose={() => setShowInitialModal(false)}
+              onSubmitted={() => {
+                setShowInitialModal(false);
+                const data = JSON.parse(sessionStorage.getItem("initialEvidence") || "[]");
+                setInitialEvidence(data);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+
     </div>
+
   );
 }

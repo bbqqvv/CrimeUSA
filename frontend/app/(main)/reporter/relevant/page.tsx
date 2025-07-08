@@ -15,7 +15,14 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function RelevantPartiesForm() {
+export default function RelevantPartiesForm({
+  onClose,
+  onSubmitted,
+}: {
+  onClose?: () => void;
+  onSubmitted?: () => void;
+}) {
+
   const [files, setFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState({
     fullname: "",
@@ -87,14 +94,17 @@ export default function RelevantPartiesForm() {
     }
     sessionStorage.setItem('relevantParties', JSON.stringify([...relevantParties, newParty]))
     // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
-    router.push('/reporter')                  //  Quay lại MultiStepForm
+   // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    // router.push('/reporter')                  //  Quay lại MultiStepForm
+    if (onSubmitted) onSubmitted();
+    if (onClose) onClose();
   }
 
   const handleCancel = () => {
     // router.push('/reporter') // Điều hướng trở lại reporter
-    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
-    router.push('/reporter')
+    // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+    // router.push('/reporter')
+    if (onClose) onClose();
   }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;

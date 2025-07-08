@@ -15,7 +15,13 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function InitialEvidenceForm() {
+export default function InitialEvidenceForm({
+  onClose,
+  onSubmitted,
+}: {
+  onClose?: () => void;
+  onSubmitted?: () => void;
+}) {
   const [files, setFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState({
     evidenceType: "",
@@ -85,14 +91,17 @@ export default function InitialEvidenceForm() {
     }
     sessionStorage.setItem('initialEvidence', JSON.stringify([...initialEvidence, newEvidence]))
     // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
-    router.push('/reporter')                 
+    // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    // router.push('/reporter')
+    if (onSubmitted) onSubmitted();
+    if (onClose) onClose();
   }
 
   const handleCancel = () => {
     // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
-    router.push('/reporter')
+   // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+   // router.push('/reporter')
+   if (onClose) onClose();
   }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
