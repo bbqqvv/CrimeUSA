@@ -1,7 +1,7 @@
 package com.Evidence_Service.mapper;
 
 import com.Evidence_Service.dto.ForensicInvestResultDTO;
-import com.Evidence_Service.model.ForensicInvestResult;
+import com.Evidence_Service.entity.ForensicInvestResult;
 
 public class ForensicInvestResultMapper {
 

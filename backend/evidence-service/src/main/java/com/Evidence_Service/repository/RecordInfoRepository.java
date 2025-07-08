@@ -1,6 +1,6 @@
 package com.Evidence_Service.repository;
 
-import com.Evidence_Service.model.RecordInfo;
+import com.Evidence_Service.entity.RecordInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

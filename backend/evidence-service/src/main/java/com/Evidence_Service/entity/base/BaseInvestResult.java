@@ -1,10 +1,8 @@
-package com.Evidence_Service.model.base;
+package com.Evidence_Service.entity.base;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Data

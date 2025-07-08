@@ -11,16 +11,18 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfiguration {
+
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("ApiKeyAuth"))
+                .info(new Info().title("Evidence-Service API").version("1.0"))
+                .addSecurityItem(new SecurityRequirement().addList("X-API-KEY"))
                 .components(new Components()
-                        .addSecuritySchemes("ApiKeyAuth",
+                        .addSecuritySchemes("X-API-KEY",
                                 new SecurityScheme()
-                                        .name("X-API-KEY")
                                         .type(SecurityScheme.Type.APIKEY)
-                                        .in(SecurityScheme.In.HEADER)))
-                .info(new Info().title("Evidence-Service API").version("1.0"));
+                                        .in(SecurityScheme.In.HEADER)
+                                        .name("X-API-KEY")));
     }
 }
+

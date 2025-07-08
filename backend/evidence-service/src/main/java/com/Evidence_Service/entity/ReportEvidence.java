@@ -1,15 +1,12 @@
-package com.Evidence_Service.model;
+package com.Evidence_Service.entity;
 
-import com.Evidence_Service.model.base.BaseClass;
-import com.Evidence_Service.model.id.ReportEvidenceId;
-import com.Evidence_Service.model.id.SuspectEvidenceId;
+import com.Evidence_Service.entity.base.BaseClass;
+import com.Evidence_Service.entity.id.ReportEvidenceId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Data

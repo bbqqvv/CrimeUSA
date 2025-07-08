@@ -7,6 +7,7 @@ import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.EvidenceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class EvidenceAssignmentController {
 
     @PutMapping("/assign-suspect")
     @PreAuthorize("hasAuthority('ASSIGN_SUSPECT')")
-    public ApiResponse<EvidenceDTO> assignSuspect(@PathVariable String evidenceId, @RequestBody SuspectDTO dto) {
+    public ApiResponse<EvidenceDTO> assignSuspect(@Valid  @PathVariable String evidenceId, @RequestBody SuspectDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Assigned suspect")
@@ -33,7 +34,7 @@ public class EvidenceAssignmentController {
 
     @PutMapping("/assign-case")
     @PreAuthorize("hasAuthority('ASSIGN_CASE')")
-    public ApiResponse<EvidenceDTO> assignCase(@PathVariable String evidenceId, @RequestBody CaseDTO dto) {
+    public ApiResponse<EvidenceDTO> assignCase(@Valid @PathVariable String evidenceId, @RequestBody CaseDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Assigned case")
@@ -43,7 +44,7 @@ public class EvidenceAssignmentController {
 
     @PutMapping("/assign-warrant")
     @PreAuthorize("hasAuthority('ASSIGN_WARRANT')")
-    public ApiResponse<EvidenceDTO> assignWarrant(@PathVariable String evidenceId, @RequestBody WarrantDTO dto) {
+    public ApiResponse<EvidenceDTO> assignWarrant(@Valid @PathVariable String evidenceId, @RequestBody WarrantDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Assigned warrant")
@@ -53,7 +54,7 @@ public class EvidenceAssignmentController {
 
     @GetMapping("/suspects")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<List<SuspectDTO>> getSuspectsByEvidence(@PathVariable String evidenceId) {
+    public ApiResponse<List<SuspectDTO>> getSuspectsByEvidence(@Valid @PathVariable String evidenceId) {
         return ApiResponse.<List<SuspectDTO>>builder()
                 .code(200)
                 .message("Suspects fetched")
@@ -63,7 +64,7 @@ public class EvidenceAssignmentController {
 
     @GetMapping("/warrants")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<List<WarrantDTO>> getWarrantsByEvidence(@PathVariable String evidenceId) {
+    public ApiResponse<List<WarrantDTO>> getWarrantsByEvidence(@Valid @PathVariable String evidenceId) {
         return ApiResponse.<List<WarrantDTO>>builder()
                 .code(200)
                 .message("Warrants fetched")
@@ -72,7 +73,7 @@ public class EvidenceAssignmentController {
     }
     @GetMapping("/cases")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<List<CaseDTO>> getCasesByEvidence(@PathVariable String evidenceId) {
+    public ApiResponse<List<CaseDTO>> getCasesByEvidence(@Valid @PathVariable String evidenceId) {
         return ApiResponse.<List<CaseDTO>>builder()
                 .code(200)
                 .message("Cases fetched")

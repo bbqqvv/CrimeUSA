@@ -4,6 +4,7 @@ import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.DigitalInvestResultService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +23,7 @@ public class DigitalInvestResultController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_DIGITAL_RESULT')")
     @Operation(summary = "Create digital investigation result")
-    public ApiResponse<DigitalInvestResultDTO> createDigitalInvestResult(@PathVariable String evidenceId, @RequestBody DigitalInvestResultDTO dto) {
+    public ApiResponse<DigitalInvestResultDTO> createDigitalInvestResult(@Valid @PathVariable String evidenceId, @RequestBody DigitalInvestResultDTO dto) {
         return ApiResponse.<DigitalInvestResultDTO>builder()
                 .code(201)
                 .message("Digital investigation result created")
@@ -33,7 +34,7 @@ public class DigitalInvestResultController {
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_DIGITAL_RESULT')")
     @Operation(summary = "Get all digital investigation results")
-    public ApiResponse<Page<DigitalInvestResultDTO>> getAllDigitalInvestResults(@PathVariable String evidenceId,
+    public ApiResponse<Page<DigitalInvestResultDTO>> getAllDigitalInvestResults(@Valid @PathVariable String evidenceId,
                                                                                 @RequestParam(defaultValue = "0", required = false) int page,
                                                                                 @RequestParam(defaultValue = "10", required = false) int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -49,7 +50,7 @@ public class DigitalInvestResultController {
     @GetMapping("/{resultId}")
     @PreAuthorize("hasAuthority('VIEW_DIGITAL_RESULT')")
     @Operation(summary = "Get digital investigation result by resultId")
-    public ApiResponse<DigitalInvestResultDTO> getDigitalInvestResultByResultId(@PathVariable String resultId) {
+    public ApiResponse<DigitalInvestResultDTO> getDigitalInvestResultByResultId(@Valid @PathVariable String resultId) {
         return ApiResponse.<DigitalInvestResultDTO>builder()
                 .code(200)
                 .message("Fetched digital investigation result")
@@ -60,7 +61,7 @@ public class DigitalInvestResultController {
     @PutMapping("/{resultId}")
     @PreAuthorize("hasAuthority('EDIT_DIGITAL_RESULT')")
     @Operation(summary = "Update digital investigation result")
-    public ApiResponse<DigitalInvestResultDTO> updateDigitalInvestResult(@PathVariable String evidenceId, @PathVariable String resultId, @RequestBody DigitalInvestResultDTO dto) {
+    public ApiResponse<DigitalInvestResultDTO> updateDigitalInvestResult(@Valid @PathVariable String evidenceId, @PathVariable String resultId, @RequestBody DigitalInvestResultDTO dto) {
         return ApiResponse.<DigitalInvestResultDTO>builder()
                 .code(200)
                 .message("Digital investigation result updated")
@@ -71,7 +72,7 @@ public class DigitalInvestResultController {
     @DeleteMapping("/{resultId}")
     @PreAuthorize("hasAuthority('DELETE_DIGITAL_RESULT')")
     @Operation(summary = "Delete digital investigation result")
-    public ApiResponse<Void> deleteDigitalInvestResult(@PathVariable String resultId) {
+    public ApiResponse<Void> deleteDigitalInvestResult(@Valid @PathVariable String resultId) {
         digitalInvestResultService.deleteDigitalInvest(resultId);
         return ApiResponse.<Void>builder()
                 .code(200)

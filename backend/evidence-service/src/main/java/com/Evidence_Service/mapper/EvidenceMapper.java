@@ -2,7 +2,7 @@ package com.Evidence_Service.mapper;
 
 import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.event.caller.EvidenceCreatedEvent;
-import com.Evidence_Service.model.Evidence;
+import com.Evidence_Service.entity.Evidence;
 
 public class EvidenceMapper {
     public static EvidenceDTO toDTO(Evidence evidence) {

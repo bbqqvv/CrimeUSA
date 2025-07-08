@@ -1,4 +1,4 @@
-package com.Evidence_Service.model.base;
+package com.Evidence_Service.entity.base;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;

@@ -1,16 +1,15 @@
-package com.Evidence_Service.dto;
+package com.Evidence_Service.entity.id;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportDTO {
-    @NotNull
+public class ReportEvidenceId implements Serializable {
     private String reportId;
+    private String evidenceId;
 }

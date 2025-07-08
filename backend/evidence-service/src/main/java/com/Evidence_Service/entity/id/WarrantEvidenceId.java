@@ -1,4 +1,4 @@
-package com.Evidence_Service.model.id;
+package com.Evidence_Service.entity.id;
 
 import lombok.*;
 

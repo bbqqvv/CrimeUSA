@@ -1,4 +1,4 @@
-package com.Evidence_Service.model.id;
+package com.Evidence_Service.entity.id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportEvidenceId implements Serializable {
-    private String reportId;
+public class SuspectEvidenceId implements Serializable {
+    private String suspectId;
     private String evidenceId;
 }

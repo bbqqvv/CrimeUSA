@@ -7,6 +7,7 @@ import com.Evidence_Service.service.RecordInfoService;
 import com.Evidence_Service.service.impl.RecordInfoServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +27,7 @@ public class RecordInfoController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_RECORD_INFO')")
     @Operation(summary = "Create new record info")
-    public ApiResponse<RecordInfoDTO> createRecordInfo(@RequestBody RecordInfoDTO dto) {
+    public ApiResponse<RecordInfoDTO> createRecordInfo(@Valid  @RequestBody RecordInfoDTO dto) {
         return ApiResponse.<RecordInfoDTO>builder()
                 .code(201)
                 .message("Record info created")
@@ -37,7 +38,7 @@ public class RecordInfoController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('VIEW_RECORD_INFO')")
     @Operation(summary = "Get record info by ID")
-    public ApiResponse<RecordInfoDTO> getRecordInfoById(@PathVariable String recordInfoId) {
+    public ApiResponse<RecordInfoDTO> getRecordInfoById(@Valid @PathVariable String recordInfoId) {
         return ApiResponse.<RecordInfoDTO>builder()
                 .code(200)
                 .message("Fetched record info")
@@ -48,7 +49,7 @@ public class RecordInfoController {
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_RECORD_INFO')")
     @Operation(summary = "Get all record info by evidence ID")
-    public ApiResponse<Page<RecordInfoDTO>> getAllRecordInfoByEvidenceId(@RequestParam String evidenceId,
+    public ApiResponse<Page<RecordInfoDTO>> getAllRecordInfoByEvidenceId(@Valid @RequestParam String evidenceId,
                                                                          @RequestParam(defaultValue = "0", required = false) int page,
                                                                          @RequestParam(defaultValue = "10", required = false) int size) {
         Pageable pageable = PageRequest.of(size, page);
@@ -63,7 +64,7 @@ public class RecordInfoController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EDIT_RECORD_INFO')")
     @Operation(summary = "Update record info")
-    public ApiResponse<RecordInfoDTO> updateRecordInfo(@PathVariable String recordInfoId, @RequestBody RecordInfoDTO dto) {
+    public ApiResponse<RecordInfoDTO> updateRecordInfo(@Valid @PathVariable String recordInfoId, @RequestBody RecordInfoDTO dto) {
         return ApiResponse.<RecordInfoDTO>builder()
                 .code(200)
                 .message("Record info updated")
@@ -74,7 +75,7 @@ public class RecordInfoController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('DELETE_RECORD_INFO')")
     @Operation(summary = "Delete record info")
-    public ApiResponse<Void> deleteRecordInfo(@PathVariable String recordInfoId) {
+    public ApiResponse<Void> deleteRecordInfo(@Valid @PathVariable String recordInfoId) {
         recordInfoService.deleteRecordInfoByRecordInfoId(recordInfoId);
         return ApiResponse.<Void>builder()
                 .code(200)

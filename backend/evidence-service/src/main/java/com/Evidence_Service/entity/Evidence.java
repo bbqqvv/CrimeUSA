@@ -1,12 +1,9 @@
-package com.Evidence_Service.model;
+package com.Evidence_Service.entity;
 
-import com.Evidence_Service.model.base.BaseClass;
+import com.Evidence_Service.entity.base.BaseClass;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "evidence")

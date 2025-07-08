@@ -1,7 +1,6 @@
 package com.Evidence_Service.repository;
 
-import com.Evidence_Service.model.Evidence;
-import com.Evidence_Service.model.MeasureSurvey;
+import com.Evidence_Service.entity.MeasureSurvey;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

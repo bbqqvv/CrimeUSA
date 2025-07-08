@@ -1,6 +1,7 @@
 package com.Evidence_Service.exception;
 
 import com.Evidence_Service.dto.response.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -70,7 +71,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleNotFound(NoHandlerFoundException ex) {
+    public ResponseEntity<?> handleNotFound(NoHandlerFoundException ex, HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        if (uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-ui")) {
+            return ResponseEntity.notFound().build();
+        }
         log.warn("NoHandlerFoundException: {}", ex.getMessage());
         return buildResponse(ErrorCode.NOT_FOUND);
     }

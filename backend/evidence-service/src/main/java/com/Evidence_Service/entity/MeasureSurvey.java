@@ -1,6 +1,6 @@
-package com.Evidence_Service.model;
+package com.Evidence_Service.entity;
 
-import com.Evidence_Service.model.base.BaseClass;
+import com.Evidence_Service.entity.base.BaseClass;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

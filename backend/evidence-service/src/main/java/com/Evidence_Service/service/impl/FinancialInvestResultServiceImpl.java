@@ -6,7 +6,7 @@ import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.KafkaEventPublisher;
 import com.Evidence_Service.mapper.FinancialInvestResultMapper;
-import com.Evidence_Service.model.FinancialInvestResult;
+import com.Evidence_Service.entity.FinancialInvestResult;
 import com.Evidence_Service.repository.FinancialInvestResultRepository;
 import com.Evidence_Service.service.FinancialInvestResultService;
 import lombok.RequiredArgsConstructor;

@@ -4,6 +4,7 @@ import com.Evidence_Service.dto.MeasureSurveyDTO;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.MeasureSurveyService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public class MeasureSurveyController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_MEASURE_SURVEY')")
-    public ApiResponse<MeasureSurveyDTO> create(@RequestBody MeasureSurveyDTO dto) {
+    public ApiResponse<MeasureSurveyDTO> create(@Valid  @RequestBody MeasureSurveyDTO dto) {
         return ApiResponse.<MeasureSurveyDTO>builder()
                 .code(200)
                 .message("Created measure survey")
@@ -31,7 +32,7 @@ public class MeasureSurveyController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_MEASURE_SURVEY')")
-    public ApiResponse<Page<MeasureSurveyDTO>> getAll(@ParameterObject Pageable pageable) {
+    public ApiResponse<Page<MeasureSurveyDTO>> getAll(@Valid @ParameterObject Pageable pageable) {
         return ApiResponse.<Page<MeasureSurveyDTO>>builder()
                 .code(200)
                 .message("List all measure surveys")
@@ -41,7 +42,7 @@ public class MeasureSurveyController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('VIEW_MEASURE_SURVEY')")
-    public ApiResponse<MeasureSurveyDTO> getById(@PathVariable String id) {
+    public ApiResponse<MeasureSurveyDTO> getById(@Valid @PathVariable String id) {
         return ApiResponse.<MeasureSurveyDTO>builder()
                 .code(200)
                 .message("Measure survey found")
@@ -51,7 +52,7 @@ public class MeasureSurveyController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EDIT_MEASURE_SURVEY')")
-    public ApiResponse<MeasureSurveyDTO> update(@PathVariable String id, @RequestBody MeasureSurveyDTO dto) {
+    public ApiResponse<MeasureSurveyDTO> update(@Valid @PathVariable String id, @RequestBody MeasureSurveyDTO dto) {
         return ApiResponse.<MeasureSurveyDTO>builder()
                 .code(200)
                 .message("Updated measure survey")
@@ -61,7 +62,7 @@ public class MeasureSurveyController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('DELETE_MEASURE_SURVEY')")
-    public ApiResponse<Void> delete(@PathVariable String id) {
+    public ApiResponse<Void> delete(@Valid @PathVariable String id) {
         measureSurveyService.deleteMeasureSurveyByMeasureSurveyId(id);
         return ApiResponse.<Void>builder()
                 .code(200)

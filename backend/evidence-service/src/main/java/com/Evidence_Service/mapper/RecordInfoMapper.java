@@ -1,7 +1,7 @@
 package com.Evidence_Service.mapper;
 
 import com.Evidence_Service.dto.RecordInfoDTO;
-import com.Evidence_Service.model.RecordInfo;
+import com.Evidence_Service.entity.RecordInfo;
 import org.springframework.stereotype.Component;
 
 @Component

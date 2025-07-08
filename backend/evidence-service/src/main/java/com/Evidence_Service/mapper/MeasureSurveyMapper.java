@@ -1,7 +1,7 @@
 package com.Evidence_Service.mapper;
 
 import com.Evidence_Service.dto.MeasureSurveyDTO;
-import com.Evidence_Service.model.MeasureSurvey;
+import com.Evidence_Service.entity.MeasureSurvey;
 import org.springframework.stereotype.Component;
 
 @Component

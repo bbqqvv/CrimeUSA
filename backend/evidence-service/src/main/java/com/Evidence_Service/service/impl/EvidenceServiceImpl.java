@@ -15,7 +15,7 @@ import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.EventPublisher;
 import com.Evidence_Service.mapper.EvidenceMapper;
-import com.Evidence_Service.model.*;
+import com.Evidence_Service.entity.*;
 import com.Evidence_Service.repository.*;
 import com.Evidence_Service.service.EvidenceService;
 import lombok.RequiredArgsConstructor;

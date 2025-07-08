@@ -1,7 +1,7 @@
 package com.Evidence_Service.repository;
 
-import com.Evidence_Service.model.SuspectEvidence;
-import com.Evidence_Service.model.id.SuspectEvidenceId;
+import com.Evidence_Service.entity.SuspectEvidence;
+import com.Evidence_Service.entity.id.SuspectEvidenceId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -4,7 +4,7 @@ import com.Evidence_Service.dto.RecordInfoDTO;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.mapper.RecordInfoMapper;
-import com.Evidence_Service.model.RecordInfo;
+import com.Evidence_Service.entity.RecordInfo;
 import com.Evidence_Service.repository.RecordInfoRepository;
 import com.Evidence_Service.service.RecordInfoService;
 import lombok.RequiredArgsConstructor;

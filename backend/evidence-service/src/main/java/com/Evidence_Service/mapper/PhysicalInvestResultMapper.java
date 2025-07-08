@@ -1,8 +1,8 @@
 package com.Evidence_Service.mapper;
 
 import com.Evidence_Service.dto.PhysicalInvestResultDTO;
-import com.Evidence_Service.model.PhysicalInvestResult;
-import com.Evidence_Service.model.PhysicalInvestStatus;
+import com.Evidence_Service.entity.PhysicalInvestResult;
+import com.Evidence_Service.entity.PhysicalInvestStatus;
 
 public class PhysicalInvestResultMapper {
 

@@ -1,7 +1,7 @@
 package com.Evidence_Service.mapper;
 
 import com.Evidence_Service.dto.DigitalInvestResultDTO;
-import com.Evidence_Service.model.DigitalInvestResult;
+import com.Evidence_Service.entity.DigitalInvestResult;
 
 public class DigitalInvestResultMapper {
 

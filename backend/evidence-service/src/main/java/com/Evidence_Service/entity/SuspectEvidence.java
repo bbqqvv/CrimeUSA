@@ -1,10 +1,9 @@
-package com.Evidence_Service.model;
+package com.Evidence_Service.entity;
 
-import com.Evidence_Service.model.base.BaseClass;
-import com.Evidence_Service.model.id.SuspectEvidenceId;
+import com.Evidence_Service.entity.base.BaseClass;
+import com.Evidence_Service.entity.id.SuspectEvidenceId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

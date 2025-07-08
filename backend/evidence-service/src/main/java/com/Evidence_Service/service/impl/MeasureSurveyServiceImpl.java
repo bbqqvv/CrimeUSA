@@ -4,7 +4,7 @@ import com.Evidence_Service.dto.MeasureSurveyDTO;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.mapper.MeasureSurveyMapper;
-import com.Evidence_Service.model.MeasureSurvey;
+import com.Evidence_Service.entity.MeasureSurvey;
 import com.Evidence_Service.repository.MeasureSurveyRepository;
 import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.MeasureSurveyService;
@@ -16,8 +16,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

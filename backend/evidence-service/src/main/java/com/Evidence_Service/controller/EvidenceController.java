@@ -3,7 +3,9 @@ package com.Evidence_Service.controller;
 import com.Evidence_Service.dto.*;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.EvidenceService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "X-API-KEY")
 @RestController
 @RequestMapping("/api/v1/evidences")
 @RequiredArgsConstructor
@@ -21,7 +24,7 @@ public class EvidenceController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> create(@RequestBody EvidenceDTO dto) {
+    public ApiResponse<EvidenceDTO> create(@Valid  @RequestBody EvidenceDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Created evidence")
@@ -31,7 +34,7 @@ public class EvidenceController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> getByEvidenceId(@PathVariable String evidenceId) {
+    public ApiResponse<EvidenceDTO> getByEvidenceId(@Valid @PathVariable String evidenceId) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Evidence found")
@@ -41,7 +44,7 @@ public class EvidenceController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<Page<EvidenceDTO>> getByCaseOrSuspect(
+    public ApiResponse<Page<EvidenceDTO>> getByCaseOrSuspect(@Valid
             @RequestParam(required = false) String caseId,
             @RequestParam(required = false) String suspectId,
             @RequestParam(defaultValue = "0", required = false) int page,
@@ -58,7 +61,7 @@ public class EvidenceController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('EDIT_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> updateEvidence(@PathVariable String evidenceId, @RequestBody EvidenceDTO dto) {
+    public ApiResponse<EvidenceDTO> updateEvidence(@Valid @PathVariable String evidenceId, @RequestBody EvidenceDTO dto) {
         dto.setEvidenceId(evidenceId);
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
@@ -69,7 +72,7 @@ public class EvidenceController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('DELETE_EVIDENCE')")
-    public ApiResponse<Void> deleteByEvidenceId(@PathVariable String evidenceId) {
+    public ApiResponse<Void> deleteByEvidenceId(@Valid @PathVariable String evidenceId) {
         evidenceService.deleteByEvidenceId(evidenceId);
         return ApiResponse.<Void>builder()
                 .code(200)
