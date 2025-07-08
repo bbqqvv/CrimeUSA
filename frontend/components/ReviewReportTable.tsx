@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EyeIcon, Printer } from "lucide-react";
-import { StatusComponent } from "./status-component";
+import { StatusComponent } from "./StatusComponent";
 import { useRouter } from "next/navigation";
 
 export function ReviewReportTable() {

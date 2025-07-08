@@ -16,9 +16,8 @@ export function StatusComponent({ status }: StatusComponentProps) {
 
   return (
     <span
-      className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-        statusStyles[displayStatus] || statusStyles.Unknown
-      }`}
+      className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${statusStyles[displayStatus] || statusStyles.Unknown
+        }`}
     >
       {displayStatus}
     </span>

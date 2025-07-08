@@ -10,8 +10,9 @@ import DeleteModal from "@/components/DeleteModal";
 
 export default function Step2({ data, onNext, onBack }: any) {
   const router = useRouter();
-
   const [form, setForm] = useState(data);
+  const [date, setDate] = useState<Date | undefined>(undefined); // ✅ ADD THIS LINE
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{
@@ -61,7 +62,12 @@ export default function Step2({ data, onNext, onBack }: any) {
     <div className="w-full max-w-screen-md mx-auto py-8">
       <h2 className="text-2xl font-semibold text-center mb-8">Incident Information</h2>
 
-      <IncidentInfoForm form={form} setForm={setForm} />
+      <IncidentInfoForm
+        form={form}
+        setForm={setForm}
+        date={date}
+        setDate={setDate} // ✅ ADD THIS LINE
+      />
 
       <RelevantPartiesTable
         data={relevantParties || []}
@@ -78,8 +84,8 @@ export default function Step2({ data, onNext, onBack }: any) {
       />
 
       <div className="flex justify-end gap-4 mt-8">
-        <button className="btn border px-4 py-2" onClick={onBack}>Back</button>
-        <button className="btn bg-black text-white px-4 py-2" onClick={handleSubmit}>Submit</button>
+        <button className="btn border px-4 py-2 rounded-xl" onClick={onBack}>Back</button>
+        <button className="btn bg-black text-white px-4 py-2 rounded-xl" onClick={handleSubmit}>Submit</button>
       </div>
 
       {showConfirm && (

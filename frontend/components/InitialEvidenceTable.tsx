@@ -18,11 +18,12 @@ type Evidence = {
     description: string;
     attachments?: string;
 };
-
-interface InitialEvidenceTableProps {
-    data: Evidence[];
+type InitialEvidenceTableProps = {
+    data: any[];
+    onEdit: (id: any) => void;
     onDelete: (id: number) => void;
-}
+    onAdd: () => void;
+};
 
 export default function InitialEvidenceTable({
     data,

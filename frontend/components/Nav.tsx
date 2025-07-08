@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-export const Navigation: React.FC = () => {
+export const Navigation = () => {
     return (
         <div className="bg-white py-6 ">
             <div className="container mx-auto px-4 text-center">
