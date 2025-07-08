@@ -1,6 +1,8 @@
 // Step1.tsx
-import InitialEvidenceForm from "@/app/(main)/reporter/initial/page";
-import RelevantPartiesForm from "@/app/(main)/reporter/relevant/page";
+
+import InitialEvidenceForm from "@/components/form/InitialEvidenceForm"
+import RelevantPartiesForm from "@/components/form/RelevantPartiesForm"
+
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
@@ -74,7 +76,7 @@ export default function Step2({ data, onNext, onBack }: any) {
     setDeleteTarget({ id, type: "initial" });
     setShowDelete(true);
   };
-
+  const [selectedParty, setSelectedParty] = useState<any>(null)
   const handleDeleteYes = () => {
     if (!deleteTarget) return;
     if (deleteTarget.type === "relevant") {
@@ -267,9 +269,10 @@ export default function Step2({ data, onNext, onBack }: any) {
                       <TableCell className="text-center">
                         <button
                           className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
-                          onClick={() =>
-                            router.push(`/reporter/relevant?id=${party.id}`)
-                          }
+                          onClick={() => {
+                            setSelectedParty(party)         // <== set dữ liệu cần sửa
+                            setShowRelevantModal(true)      // mở modal
+                          }}
                         >
                           <Edit size={18} />
                         </button>
@@ -287,7 +290,7 @@ export default function Step2({ data, onNext, onBack }: any) {
             </Table>
           </div>
           <div className="flex justify-end mt-2">
-            
+
             <Button
               variant="outline"
               className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
@@ -389,7 +392,7 @@ export default function Step2({ data, onNext, onBack }: any) {
             </Table>
           </div>
           <div className="flex justify-end mt-2">
-            
+
             <Button
               variant="outline"
               className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"

@@ -211,7 +211,7 @@ export default function RelevantPartiesForm({
             />
           </div>
 
-          <div>
+          {/* <div>
             <Label>Attachments</Label>
             <div className="border-2 border-dashed rounded-md p-6 text-center mt-2">
               <p className="text-sm mb-1">
@@ -283,7 +283,7 @@ export default function RelevantPartiesForm({
                 })}
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="flex justify-end space-x-4 pt-4">
             <Button type="button" variant="outline" onClick={handleCancel}>
