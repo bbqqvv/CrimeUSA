@@ -24,19 +24,17 @@ public interface SuspectService {
 
     List<SuspectResponse> getAllSuspects();
 
+    List<SuspectResponse> getSuspectsByStatus(String status);
+
+    SuspectResponse createSuspect(SuspectCreateRequest suspect, MultipartFile suspectImage);
+
     Optional<Suspect> getSuspectById(String suspectId);
 
     List<Suspect> getSuspectsByCaseId(String caseId);
 
     List<Suspect> searchSuspectsByName(String name);
 
-    List<Suspect> getSuspectsByStatus(String status);
-
-    SuspectResponse createSuspect(SuspectCreateRequest suspect, MultipartFile suspectImage);
-
     SuspectResponse updateSuspect(String suspectId, SuspectCreateRequest suspect);
 
     void deleteSuspect(String suspectId);
-
-    boolean existsById(String suspectId);
 }

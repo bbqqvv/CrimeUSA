@@ -6,6 +6,7 @@
 
 package com.backend.suspectservice.mapper;
 
+import com.backend.commonservice.enums.SuspectStatus;
 import com.backend.suspectservice.dto.request.SuspectCreateRequest;
 import com.backend.suspectservice.dto.response.SuspectResponse;
 import com.backend.suspectservice.model.Suspect;
@@ -21,7 +22,19 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface SuspectMapper {
     SuspectResponse toSuspectResponse(Suspect suspect);
-    Suspect createSuspect(SuspectCreateRequest suspect);
-    void updateSuspect(@MappingTarget Suspect suspect , SuspectCreateRequest sus);
 
+    Suspect createSuspect(SuspectCreateRequest suspect);
+
+    void updateSuspect(@MappingTarget Suspect suspect, SuspectCreateRequest sus);
+
+    default String mapStatusToString(SuspectStatus status) {
+        return status == null ? null : status.getDescription();
+    }
+
+    default SuspectStatus mapStringToStatus(String description) {
+        if (description == null || description.trim().isEmpty()) {
+            return null;
+        }
+        return SuspectStatus.fromDescription(description);
+    }
 }

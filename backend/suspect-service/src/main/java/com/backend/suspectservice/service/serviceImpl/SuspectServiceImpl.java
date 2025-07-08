@@ -6,6 +6,9 @@
 
 package com.backend.suspectservice.service.serviceImpl;
 
+import com.backend.commonservice.enums.ErrorMessage;
+import com.backend.commonservice.enums.SuspectStatus;
+import com.backend.commonservice.model.AppException;
 import com.backend.suspectservice.dto.request.SuspectCreateRequest;
 import com.backend.suspectservice.dto.response.SuspectResponse;
 import com.backend.suspectservice.mapper.SuspectMapper;
@@ -39,6 +42,9 @@ public class SuspectServiceImpl implements SuspectService {
     SuspectMapper suspectMapper;
     CloudinaryService cloudinaryService;
 
+    /**
+     * Get all suspects from the repository.
+     */
     @Override
     public List<SuspectResponse> getAllSuspects() {
         log.info("Getting all suspects");
@@ -47,40 +53,53 @@ public class SuspectServiceImpl implements SuspectService {
         ).collect(Collectors.toList());
     }
 
+    /**
+     * Get suspects by their status.
+     *
+     * @param status The status of the suspects to retrieve.
+     * @return A list of suspects with the specified status.
+     * @throws AppException if the status is null or empty.
+     */
     @Override
-    public Optional<Suspect> getSuspectById(String suspectId) {
-        return Optional.empty();
+    public List<SuspectResponse> getSuspectsByStatus(String status) {
+        log.info("Getting suspects by status: {}", status);
+        try {
+            SuspectStatus suspectStatus = SuspectStatus.fromDescription(status);
+            return suspectRep.findByStatusAndIsDeletedFalse(suspectStatus).stream()
+                    .map(suspectMapper::toSuspectResponse)
+                    .collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            log.warn("Status is null or empty, returning thrown");
+            throw new AppException(ErrorMessage.SUSPECT_STATUS_NOT_FOUND);
+        }
     }
 
-    @Override
-    public List<Suspect> getSuspectsByCaseId(String caseId) {
-        return List.of();
-    }
-
-    @Override
-    public List<Suspect> searchSuspectsByName(String name) {
-        return List.of();
-    }
-
-    @Override
-    public List<Suspect> getSuspectsByStatus(String status) {
-        return List.of();
-    }
-
+    /**
+     * Create a new suspect with the provided details and image.
+     *
+     * @param suspect      The details of the suspect to create.
+     * @param suspectImage The image of the suspect to upload.
+     * @return The created SuspectResponse.
+     */
     @Transactional
     @Override
     public SuspectResponse createSuspect(SuspectCreateRequest suspect, MultipartFile suspectImage) {
         Suspect s = suspectMapper.createSuspect(suspect);
         String imageUrl = cloudinaryService.uploadImage(suspectImage);
         s.setMugshotUrl(imageUrl);
-        return suspectMapper.toSuspectResponse(
-                suspectRep.save(s)
-        );
+        return suspectMapper.toSuspectResponse(suspectRep.save(s));
     }
 
+    /**
+     * Update an existing suspect with the provided details.
+     *
+     * @param suspectId The ID of the suspect to update.
+     * @param suspect   The new details of the suspect.
+     * @return The updated SuspectResponse.
+     */
     @Override
     public SuspectResponse updateSuspect(String suspectId, SuspectCreateRequest suspect) {
-       return suspectRep.findById(suspectId)
+        return suspectRep.findById(suspectId)
                 .map(existingSuspect -> {
                     suspectMapper.updateSuspect(existingSuspect, suspect);
                     return suspectMapper.toSuspectResponse(suspectRep.save(existingSuspect));
@@ -94,7 +113,17 @@ public class SuspectServiceImpl implements SuspectService {
     }
 
     @Override
-    public boolean existsById(String suspectId) {
-        return false;
+    public List<Suspect> getSuspectsByCaseId(String caseId) {
+        return List.of();
+    }
+
+    @Override
+    public List<Suspect> searchSuspectsByName(String name) {
+        return List.of();
+    }
+
+    @Override
+    public Optional<Suspect> getSuspectById(String suspectId) {
+        return Optional.empty();
     }
 }

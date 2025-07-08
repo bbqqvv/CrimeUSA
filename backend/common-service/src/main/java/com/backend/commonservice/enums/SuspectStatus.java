@@ -5,17 +5,21 @@
  */
 
 package com.backend.commonservice.enums;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
 public enum SuspectStatus {
     INTERVIEWED("Interviewed"),
     NOT_YET_CATCH("Not Yet Catch"),
-    WAITING_FOR_INTERVIEW("Waiting for  interview");
+    WAITING_FOR_INTERVIEW("Waiting for interview");
     private final String description;
+
     SuspectStatus(String description) {
         this.description = description;
     }
+
     /**
      * Find SuspectStatus by its description.
      *

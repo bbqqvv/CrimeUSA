@@ -8,6 +8,7 @@ package com.backend.commonservice.exception;
 
 import com.backend.commonservice.dto.response.ApiResponseDTO;
 import com.backend.commonservice.enums.ErrorMessage;
+import com.backend.commonservice.model.AppException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -27,6 +28,12 @@ import java.util.Map;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * Handle MethodArgumentNotValidException to return a structured error response.
+     *
+     * @param ex the exception thrown when validation fails
+     * @return a ResponseEntity containing the error details
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiResponseDTO<Map<String, String>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -42,4 +49,32 @@ public class GlobalExceptionHandler {
         response.setErrors(errors);
         return new ResponseEntity<>(response, ErrorMessage.INVALID_DATA.getHttpStatus());
     }
+
+    /**
+     * Handle AppException to return a structured error response.
+     *
+     * @param ex the AppException thrown by the application
+     * @return a ResponseEntity containing the error details
+     */
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ApiResponseDTO<String>> handleAppException(AppException ex) {
+        ApiResponseDTO<String> response = new ApiResponseDTO<>();
+        ErrorMessage error = ex.getErrorCode();
+        response.setCode(error.getCode());
+        if (ex.getAddContent() != null) {
+            response.setMessage(ex.getAddContent());
+        } else {
+            response.setMessage(error.getMessage());
+        }
+        return new ResponseEntity<>(response, error.getHttpStatus());
+    }
+
+    @ExceptionHandler(FileValidationException.class)
+    public ResponseEntity<ApiResponseDTO<String>> imageUploadException(FileValidationException ex) {
+        ApiResponseDTO<String> response = new ApiResponseDTO<>();
+        response.setCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

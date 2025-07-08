@@ -1,6 +1,6 @@
 package com.backend.suspectservice.service.serviceImpl;
 
-import com.backend.suspectservice.exception.FileValidationException;
+import com.backend.commonservice.exception.FileValidationException;
 import com.backend.suspectservice.service.CloudinaryService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

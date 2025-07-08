@@ -41,5 +41,5 @@ public class Sentence {
     @Column(name = "sentence_date")
     String sentenceDate;
     @Column(name = "is_deleted", nullable = false)
-    Boolean isDeleted = false;
+    boolean isDeleted = false;
 }

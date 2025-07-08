@@ -6,6 +6,7 @@
 
 package com.backend.suspectservice.repository;
 
+import com.backend.commonservice.enums.SuspectStatus;
 import com.backend.suspectservice.model.Suspect;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,18 +30,5 @@ public interface SuspectRepository extends JpaRepository<Suspect, String> {
 
     List<Suspect> getAllByIsDeletedFalse();
 
-    @Query("SELECT s FROM Suspect s WHERE s.suspectId = :id AND s.isDeleted = false")
-    Optional<Suspect> findByIdActive(@Param("id") String id);
-
-    @Query("SELECT s FROM Suspect s WHERE s.caseId = :caseId AND s.isDeleted = false")
-    List<Suspect> findByCaseIdActive(@Param("caseId") String caseId);
-
-    @Query("SELECT s FROM Suspect s WHERE s.identification = :identification AND s.isDeleted = false")
-    Optional<Suspect> findByIdentificationActive(@Param("identification") String identification);
-
-    @Query("SELECT s FROM Suspect s WHERE s.fullName LIKE %:name% AND s.isDeleted = false")
-    List<Suspect> findByFullNameContainingActive(@Param("name") String name);
-
-    @Query("SELECT s FROM Suspect s WHERE s.status = :status AND s.isDeleted = false")
-    List<Suspect> findByStatusActive(@Param("status") String status);
+    List<Suspect> findByStatusAndIsDeletedFalse(SuspectStatus status);
 }

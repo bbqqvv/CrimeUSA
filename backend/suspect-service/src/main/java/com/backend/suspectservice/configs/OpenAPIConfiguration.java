@@ -21,10 +21,10 @@ public class OpenAPIConfiguration {
     public OpenAPI defineOpenApi() {
         Server server = new Server();
         server.setUrl("http://localhost:9001");
-        server.setDescription("User Suspect REST API Documentation");
+        server.setDescription("Suspect-Service REST API Documentation");
 
         Info information = new Info()
-                .title("User Suspect REST API Documentation")
+                .title("Suspect-Service REST API Documentation")
                 .version("1.0")
                 .description("This API exposes endpoints to manage suspects.");
 
