@@ -1,7 +1,0 @@
-API Rest
-Investigation Service
-POST /investigation-plans
-GET /investigation-plans/{caseId}
-POST /interviews
-GET /interviews?suspectId=...
-POST /arrests
