@@ -5,42 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44820489-d502-4b12-a185-2442831f06d7" name="Changes" comment="feat: add AppException class and enhance error handling in suspect service">
-      <change afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/client/InvestigationClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/dto/InvestigationDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/event/listener/DeleteInvestResultEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/event/listener/ResultInvestAssignedEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/config/kafka/KafkaListenerFactoryProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/config/kafka/KafkaListenerFactoryProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/DigitalInvestResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/DigitalInvestResultController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/EvidenceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/EvidenceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/FinancialInvestResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/FinancialInvestResultController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/ForensicInvestResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/ForensicInvestResultController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/PhysicalInvestResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/controller/PhysicalInvestResultController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/dto/SuspectDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/dto/SuspectDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/dto/WarrantDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/dto/WarrantDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/entity/base/BaseInvestResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/entity/base/BaseInvestResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/kafka/consumer/EvidenceKafkaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/kafka/consumer/EvidenceKafkaConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/kafka/handler/EvidenceEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/kafka/handler/EvidenceServiceEventHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/mapper/EvidenceMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/mapper/EvidenceMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/DigitalInvestResultRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/DigitalInvestResultRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/FinancialInvestResultRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/FinancialInvestResultRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/ForensicInvestResultRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/ForensicInvestResultRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/PhysicalInvestResultRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/PhysicalInvestResultRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/RecordInfoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/repository/RecordInfoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/DigitalInvestResultService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/DigitalInvestResultService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/FinancialInvestResultService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/FinancialInvestResultService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/ForensicInvestResultService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/ForensicInvestResultService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/PhysicalInvestResultService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/PhysicalInvestResultService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/RecordInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/RecordInfoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/DigitalInvestResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/DigitalInvestResultServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/EvidenceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/EvidenceServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/FinancialInvestResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/FinancialInvestResultServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/ForensicInvestResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/ForensicInvestResultServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/PhysicalInvestResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/PhysicalInvestResultServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/RecordInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/evidence-service/src/main/java/com/Evidence_Service/service/impl/RecordInfoServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +70,7 @@
     "Spring Boot.SuspectServiceApplication.executor": "Run",
     "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/a_DieuTra2/MockProject_062025_Nhom1",
+    "last_opened_file_path": "D:/Day15/backend/evidence-service/src/main/resources/keys",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -115,12 +80,14 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "preferences.fileTypes",
     "ts.external.directory.path": "D:\\a_DieuTra2\\MockProject_062025_Nhom1\\frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Day15\backend\evidence-service\src\main\resources\keys" />
       <recent name="D:\a_DieuTra2\MockProject_062025_Nhom1\backend\suspect-service\src\main\java\com\backend\suspectservice" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
