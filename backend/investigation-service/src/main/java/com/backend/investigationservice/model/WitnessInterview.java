@@ -14,8 +14,7 @@ public class WitnessInterview {
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
-
-    // Optional: mapping đến Interview (nếu cần truy xuất thông tin)
+    
     @ManyToOne
     @MapsId("interviewId")
     @JoinColumn(name = "interview_id", insertable = false, updatable = false)

@@ -1,6 +1,8 @@
 package com.backend.investigationservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,14 +21,13 @@ public class Interview {
     @Column(name = "interview_id", nullable = false)
     private UUID interviewId;
 
-    @ManyToOne
-    @JoinColumn(name = "investigation_plan_id")
-    private InvestigationPlan investigationPlan;
+    @Column(name = "investigation_plan_id")
+    private UUID investigationPlanId;
 
-    @Column(name = "location")
+    @Column(name = "location", length = 255)
     private String location;
 
-    @Column(name = "attached_file")
+    @Column(name = "attached_file", length = 500)
     private String attachedFile;
 
     @Column(name = "start_time")
@@ -35,17 +36,28 @@ public class Interview {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @Column(name = "holiday_conflict")
+    @Column(name = "holiday_conflict", length = 255)
     private String holidayConflict;
 
-    @Column(name = "holiday_id")
+    @Column(name = "holiday_id", length = 50)
     private String holidayId;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    @Column(name = "interviewee_type", length = 100)
+    private String intervieweeType;
+
+    @Column(name = "interviewee_id", length = 100)
+    private String intervieweeId;
+
+    @Column(name = "interviewee_name", length = 255)
+    private String intervieweeName;
+
+    @ElementCollection
+    @CollectionTable(name = "interview_files", joinColumns = @JoinColumn(name = "interview_id"))
+    @Column(name = "file_path")
+    private List<String> attachedFiles;
 
     @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
     private List<WitnessInterview> witnessInterviews;

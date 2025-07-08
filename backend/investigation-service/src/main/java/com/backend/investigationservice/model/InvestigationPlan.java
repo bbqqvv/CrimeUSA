@@ -17,7 +17,8 @@ public class InvestigationPlan {
     @Column(name = "investigation_plan_id", nullable = false)
     private UUID investigationPlanId;
 
-    @Column(name = "summary")
+    //name of the investigation plan
+    @Column(name = "summary", length = 1000)
     private String summary;
 
     @Column(name = "create_at")
@@ -26,22 +27,22 @@ public class InvestigationPlan {
     @Column(name = "deadline_date")
     private LocalDateTime deadlineDate;
 
-    @Column(name = "status")
+    @Column(name = "status", length = 50)
     private String status;
 
-    @Column(name = "plan_content")
+    @Column(name = "plan_content", length = 3000)
     private String planContent;
 
-    @Column(name = "type")
+    @Column(name = "type", length = 100)
     private String type;
 
-    @Column(name = "holiday_conflict")
+    @Column(name = "holiday_conflict", length = 255)
     private String holidayConflict;
 
-    @Column(name = "created_officer_name")
+    @Column(name = "created_officer_name", length = 255)
     private String createdOfficerName;
 
-    @Column(name = "accepted_officer_name")
+    @Column(name = "accepted_officer_name", length = 255)
     private String acceptedOfficerName;
 
     @Column(name = "case_id")
