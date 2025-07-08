@@ -4,6 +4,9 @@ import com.backend.investigationservice.dto.request.InterviewCreationRequest;
 import com.backend.investigationservice.dto.request.InterviewUpdateRequest;
 import com.backend.investigationservice.dto.response.InterviewResponse;
 import com.backend.investigationservice.service.InterviewService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +23,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/interviews")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
+@Tag(name = "Interview", description = "Interview API")
 public class InterviewController {
 
     private final InterviewService interviewService;
@@ -28,6 +32,9 @@ public class InterviewController {
      * Create a new interview with questions
      */
     @PostMapping
+    @Operation(summary = "Create new Interview", description = "Create a new interview with questions")
+    @ApiResponse(responseCode = "201", description = "Interview created successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid request data")
     public ResponseEntity<InterviewResponse> createInterview(@Valid @RequestBody InterviewCreationRequest request) {
         InterviewResponse response = interviewService.createInterview(request);
         return ResponseEntity.ok(response);
@@ -37,6 +44,10 @@ public class InterviewController {
      * Get all interviews by case ID (including questions)
      */
     @GetMapping("/case/{caseId}")
+    @Operation(summary = "Get Interviews by Case ID", description = "Retrieve all interviews associated with a specific case ID, including their questions")
+    @ApiResponse(responseCode = "200", description = "Interviews retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No interviews found for the given case ID")
+    @ApiResponse(responseCode = "400", description = "Invalid case ID")
     public ResponseEntity<List<InterviewResponse>> getByCaseId(@PathVariable UUID caseId) {
         List<InterviewResponse> responses = interviewService.getInterviewsByCaseId(caseId);
         return ResponseEntity.ok(responses);
@@ -45,6 +56,10 @@ public class InterviewController {
      * Get all interviews by case ID Paging(including questions)
      */
     @GetMapping("/by-case")
+    @Operation(summary = "Get Interviews by Case ID with Pagination", description = "Retrieve paginated interviews associated with a specific case ID, including their questions")
+    @ApiResponse(responseCode = "200", description = "Interviews retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "No interviews found for the given case ID")
+    @ApiResponse(responseCode = "400", description = "Invalid case ID or pagination parameters")
     public ResponseEntity<Page<InterviewResponse>> getInterviewsByCaseId(
             @RequestParam UUID caseId,
             Pageable pageable
@@ -56,6 +71,10 @@ public class InterviewController {
      * Search and paginate interviews by keyword in location
      */
     @GetMapping
+    @Operation(summary = "Search Interviews", description = "Search and paginate interviews by keyword in location")
+    @ApiResponse(responseCode = "200", description = "Interviews retrieved successfully")
+    @ApiResponse(responseCode = "400", description = "Invalid search parameters")
+    @ApiResponse(responseCode = "404", description = "No interviews found matching the search criteria")
     public ResponseEntity<Page<InterviewResponse>> searchInterviews(
             @RequestParam(required = false) String keyword,
             @PageableDefault(size = 10) Pageable pageable
