@@ -2,7 +2,9 @@ com\example\auth\dto\AuthRequest.class
 com\example\auth\entity\User.class
 com\example\auth\service\UserDetailsServiceImpl.class
 com\example\auth\dto\AuthResponse.class
+com\example\auth\controller\UserController.class
 com\example\auth\security\JwtAuthenticationFilter.class
+HashGenerator.class
 com\example\auth\security\SecurityConfig.class
 com\example\auth\service\AuthService.class
 com\example\auth\controller\AuthController.class

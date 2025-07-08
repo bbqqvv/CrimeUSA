@@ -28,8 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String requestPath = request.getRequestURI();
+        System.out.println("🔍 Request path: " + requestPath);
 
-        // ✅ Bỏ qua JWT Filter với các URL không cần auth, ví dụ: /api/auth/login, /api/auth/register...
+        // ✅ Bỏ qua filter cho login và logout
         if (requestPath.startsWith("/api/auth")) {
             chain.doFilter(request, response);
             return;
@@ -37,14 +38,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
+        // ✅ Không có header hoặc sai định dạng
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("⚠️ No Bearer token in Authorization header");
             chain.doFilter(request, response);
             return;
         }
 
         final String token = authHeader.substring(7);
-        final String username = jwtService.extractUsername(token);
+        String username = null;
 
+        try {
+            username = jwtService.extractUsername(token);
+        } catch (Exception e) {
+            System.out.println("❌ Failed to extract username from token: " + e.getMessage());
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // ✅ Kiểm tra xác thực
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtService.isTokenValid(token, userDetails)) {
@@ -52,6 +64,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("✅ JWT token authenticated for user: " + username);
+            } else {
+                System.out.println("❌ Token is invalid for user: " + username);
             }
         }
 

@@ -17,6 +17,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+        System.out.println("✅ Inside login controller");
         String token = authService.login(request);
         return ResponseEntity.ok(token);
     }

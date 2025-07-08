@@ -18,6 +18,7 @@ public class User implements UserDetails {
     @Id
     private String username;
 
+    @Column(name = "password_hash")
     private String passwordHash;
     private String fullname;
     private String avatarUrl;
@@ -37,7 +38,8 @@ public class User implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    @Override public String getPassword() { return passwordHash; }
+    @Override
+    public String getPassword() { return passwordHash; }
     @Override public String getUsername() { return username; }
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
