@@ -3,15 +3,16 @@ package com.backend.investigationservice.service;
 import com.backend.investigationservice.dto.request.InterviewCreationRequest;
 import com.backend.investigationservice.dto.request.InterviewUpdateRequest;
 import com.backend.investigationservice.dto.response.InterviewResponse;
+import com.backend.investigationservice.dto.response.InvestigationPlanResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface InterviewService {
     InterviewResponse createInterview(InterviewCreationRequest request);
-    InterviewResponse getInterviewById(UUID interviewId);
-    List<InterviewResponse> getAllInterviews();
-    List<InterviewResponse> getInterviewsByInvestigationPlan(UUID investigationPlanId);
-    InterviewResponse updateInterview(UUID interviewId, InterviewUpdateRequest request);
-    void deleteInterview(UUID interviewId);
+    List<InterviewResponse> getInterviewsByCaseId(UUID caseId);
+    Page<InterviewResponse> findAll(String keyword, Pageable pageable);
+    Page<InterviewResponse> getInterviewsByCaseId(UUID caseId, Pageable pageable);
 } 
