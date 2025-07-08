@@ -3,9 +3,10 @@ package com.backend.investigationservice.mapper;
 import com.backend.investigationservice.dto.request.InvestigationPlanCreationRequest;
 import com.backend.investigationservice.dto.response.InvestigationPlanResponse;
 import com.backend.investigationservice.model.InvestigationPlan;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-
+@Component
 public class InvestigationPlanMapper {
 
     public static InvestigationPlan toEntity(InvestigationPlanCreationRequest request) {

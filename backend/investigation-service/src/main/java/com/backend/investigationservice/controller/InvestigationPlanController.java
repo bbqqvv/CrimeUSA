@@ -3,6 +3,7 @@ package com.backend.investigationservice.controller;
 import com.backend.investigationservice.dto.request.InvestigationPlanCreationRequest;
 import com.backend.investigationservice.dto.response.InvestigationPlanResponse;
 import com.backend.investigationservice.service.InvestigationPlanService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,45 +22,62 @@ public class InvestigationPlanController {
 
     private final InvestigationPlanService investigationPlanService;
 
+    // GET ALL (non-deleted)
     @GetMapping
     public ResponseEntity<List<InvestigationPlanResponse>> getAllPlans() {
-        return ResponseEntity.ok(investigationPlanService.findAll());
+        List<InvestigationPlanResponse> plans = investigationPlanService.findAll();
+        return ResponseEntity.ok(plans);
     }
 
-    @GetMapping("/case/{caseId}")
-    public ResponseEntity<List<InvestigationPlanResponse>> getPlansByCaseId(@PathVariable UUID caseId) {
-        return ResponseEntity.ok(investigationPlanService.getByCaseId(caseId));
-    }
-
+    // GET paginated with keyword search
     @GetMapping("/search")
     public ResponseEntity<Page<InvestigationPlanResponse>> searchPlans(
             @RequestParam(required = false) String keyword,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(investigationPlanService.findAll(keyword, pageable));
+        Page<InvestigationPlanResponse> plans = investigationPlanService.findAll(keyword, pageable);
+        return ResponseEntity.ok(plans);
     }
 
+    // GET by caseId
+    @GetMapping("/case/{caseId}")
+    public ResponseEntity<List<InvestigationPlanResponse>> getPlansByCaseId(@PathVariable UUID caseId) {
+        List<InvestigationPlanResponse> plans = investigationPlanService.getByCaseId(caseId);
+        return ResponseEntity.ok(plans);
+    }
+
+    // GET paginated by caseId
+    @GetMapping("/by-case")
+    public ResponseEntity<Page<InvestigationPlanResponse>> getByCaseId(
+            @RequestParam UUID caseId,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(investigationPlanService.getByCaseId(caseId, pageable));
+    }
+
+    // CREATE
     @PostMapping
-    public ResponseEntity<InvestigationPlanResponse> createPlan(@RequestBody InvestigationPlanCreationRequest request) {
-        InvestigationPlanResponse response = investigationPlanService.createPlan(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<InvestigationPlanResponse> createPlan(
+            @RequestBody @Valid InvestigationPlanCreationRequest request
+    ) {
+        InvestigationPlanResponse created = investigationPlanService.createPlan(request);
+        return ResponseEntity.ok(created);
     }
 
-    @PutMapping("/{planId}")
+    // UPDATE
+    @PutMapping("/{id}")
     public ResponseEntity<InvestigationPlanResponse> updatePlan(
-            @PathVariable UUID planId,
-            @RequestBody InvestigationPlanCreationRequest request
+            @PathVariable UUID id,
+            @RequestBody @Valid InvestigationPlanCreationRequest request
     ) {
-        InvestigationPlanResponse response = investigationPlanService.updatePlan(planId, request);
-        return ResponseEntity.ok(response);
+        InvestigationPlanResponse updated = investigationPlanService.updatePlan(id, request);
+        return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping("/{planId}")
-    public ResponseEntity<InvestigationPlanResponse> deletePlan(
-            @PathVariable UUID planId,
-            @RequestBody InvestigationPlanCreationRequest request
-    ) {
-        InvestigationPlanResponse response = investigationPlanService.deletePlan(planId, request);
-        return ResponseEntity.ok(response);
+    // DELETE (soft delete)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<InvestigationPlanResponse> deletePlan(@PathVariable UUID id) {
+        InvestigationPlanResponse deleted = investigationPlanService.deletePlan(id);
+        return ResponseEntity.ok(deleted);
     }
 } 

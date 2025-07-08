@@ -2,6 +2,7 @@ package com.backend.investigationservice.service.serviceImpl;
 
 import com.backend.investigationservice.dto.request.InvestigationPlanCreationRequest;
 import com.backend.investigationservice.dto.response.InvestigationPlanResponse;
+import com.backend.investigationservice.mapper.InvestigationPlanMapper;
 import com.backend.investigationservice.model.InvestigationPlan;
 import com.backend.investigationservice.repository.InvestigationPlanRepository;
 import com.backend.investigationservice.service.InvestigationPlanService;
@@ -23,124 +24,47 @@ public class InvestigationPlanServiceImpl implements InvestigationPlanService {
         this.investigationPlanRepository = investigationPlanRepository;
     }
 
-
     @Override
     public List<InvestigationPlanResponse> findAll() {
-        var investigationPlans = investigationPlanRepository.findByIsDeletedFalse();
-        var investigationPlanResponses = investigationPlans.stream().map(investigationPlan -> {
-           var response = new InvestigationPlanResponse();
-            response.setInvestigationPlanId(investigationPlan.getInvestigationPlanId());
-                   response.setSummary(investigationPlan.getSummary());
-                   response.setCreateAt(investigationPlan.getCreateAt());
-                   response.setDeadlineDate(investigationPlan.getDeadlineDate());
-                   response.setStatus(investigationPlan.getStatus());
-                   response.setPlanContent(investigationPlan.getPlanContent());
-                   response.setType(investigationPlan.getType());
-                   response.setHolidayConflict(investigationPlan.getHolidayConflict());
-                   response.setCreatedOfficerName(investigationPlan.getCreatedOfficerName());
-                   response.setAcceptedOfficerName(investigationPlan.getAcceptedOfficerName());
-                   response.setCaseId(investigationPlan.getCaseId());
-              return response;
-        }).toList();
-        return investigationPlanResponses;
+        var plans = investigationPlanRepository.findByIsDeletedFalse();
+        return plans.stream()
+                .map(InvestigationPlanMapper::toResponse)
+                .toList();
     }
 
     @Override
     public Page<InvestigationPlanResponse> findAll(String keyword, Pageable pageable) {
-        // Find Investigation by keyword
-        Specification<InvestigationPlan> specification = (root, query, criteriaBuilder) -> {
-            if (keyword == null || keyword.isEmpty()) {
-                return null;
-            }
-            // WHERE LOWER(status) LIKE %keyword%
-            Predicate predicate = criteriaBuilder.like(
-                criteriaBuilder.lower(root.get("status")),
-                "%" + keyword.toLowerCase() + "%"
-            );
-            return criteriaBuilder.or(predicate);
+        Specification<InvestigationPlan> specification = (root, query, cb) -> {
+            if (keyword == null || keyword.isBlank()) return null;
+            Predicate predicate = cb.like(cb.lower(root.get("status")), "%" + keyword.toLowerCase() + "%");
+            return cb.and(predicate, cb.isFalse(root.get("isDeleted")));
         };
 
-        var investigationPlansPage = investigationPlanRepository.findAll(specification, pageable);
-
-        var investigationPlanResponses = investigationPlansPage.map(investigationPlan -> {
-            var response = new InvestigationPlanResponse();
-            response.setInvestigationPlanId(investigationPlan.getInvestigationPlanId());
-            response.setSummary(investigationPlan.getSummary());
-            response.setCreateAt(investigationPlan.getCreateAt());
-            response.setDeadlineDate(investigationPlan.getDeadlineDate());
-            response.setStatus(investigationPlan.getStatus());
-            response.setPlanContent(investigationPlan.getPlanContent());
-            response.setType(investigationPlan.getType());
-            response.setHolidayConflict(investigationPlan.getHolidayConflict());
-            response.setCreatedOfficerName(investigationPlan.getCreatedOfficerName());
-            response.setAcceptedOfficerName(investigationPlan.getAcceptedOfficerName());
-            response.setCaseId(investigationPlan.getCaseId());
-            return response;
-        });
-        return investigationPlanResponses;
+        return investigationPlanRepository.findAll(specification, pageable)
+                .map(InvestigationPlanMapper::toResponse);
     }
 
     @Override
     public InvestigationPlanResponse createPlan(InvestigationPlanCreationRequest request) {
-        //check request null
-        if (request == null) {
-            throw new IllegalArgumentException("Request cannot be null");
-        }
-        var investigationPlan = new InvestigationPlan();
-        investigationPlan.setSummary(request.getSummary());
-        investigationPlan.setCreateAt(request.getCreateAt());
-        investigationPlan.setDeadlineDate(request.getDeadlineDate());
-        investigationPlan.setStatus(request.getStatus());
-        investigationPlan.setPlanContent(request.getPlanContent());
-        investigationPlan.setType(request.getType());
-        investigationPlan.setHolidayConflict(request.getHolidayConflict());
-        investigationPlan.setCreatedOfficerName(request.getCreatedOfficerName());
-        investigationPlan.setAcceptedOfficerName(request.getAcceptedOfficerName());
-        investigationPlan.setCaseId(
-                request.getCaseId() != null ? UUID.fromString(String.valueOf(request.getCaseId())) : null
-        );
-        investigationPlan.setDeleted(false); // Set default value for isDeleted
+        if (request == null) throw new IllegalArgumentException("Request cannot be null");
 
-        //save
-        investigationPlan = investigationPlanRepository.save(investigationPlan);
-
-        //convert to response
-        var response = new InvestigationPlanResponse();
-        response.setInvestigationPlanId(investigationPlan.getInvestigationPlanId());
-        response.setSummary(investigationPlan.getSummary());
-        response.setCreateAt(investigationPlan.getCreateAt());
-        response.setDeadlineDate(investigationPlan.getDeadlineDate());
-        response.setStatus(investigationPlan.getStatus());
-        response.setPlanContent(investigationPlan.getPlanContent());
-        response.setType(investigationPlan.getType());
-        response.setHolidayConflict(investigationPlan.getHolidayConflict());
-        response.setCreatedOfficerName(investigationPlan.getCreatedOfficerName());
-        response.setAcceptedOfficerName(investigationPlan.getAcceptedOfficerName());
-        response.setCaseId(investigationPlan.getCaseId());
-
-        return response;
-
+        var entity = InvestigationPlanMapper.toEntity(request);
+        var saved = investigationPlanRepository.save(entity);
+        return InvestigationPlanMapper.toResponse(saved);
     }
 
     @Override
     public List<InvestigationPlanResponse> getByCaseId(UUID caseId) {
-        var plans = investigationPlanRepository.findByCaseId(UUID.fromString(caseId.toString()));
+        return investigationPlanRepository.findByCaseIdAndIsDeletedFalse(caseId).stream()
+                .map(InvestigationPlanMapper::toResponse)
+                .toList();
+    }
 
-        return plans.stream().map(plan -> {
-            var response = new InvestigationPlanResponse();
-            response.setInvestigationPlanId(plan.getInvestigationPlanId());
-            response.setSummary(plan.getSummary());
-            response.setCreateAt(plan.getCreateAt());
-            response.setDeadlineDate(plan.getDeadlineDate());
-            response.setStatus(plan.getStatus());
-            response.setPlanContent(plan.getPlanContent());
-            response.setType(plan.getType());
-            response.setHolidayConflict(plan.getHolidayConflict());
-            response.setCreatedOfficerName(plan.getCreatedOfficerName());
-            response.setAcceptedOfficerName(plan.getAcceptedOfficerName());
-            response.setCaseId(plan.getCaseId());
-            return response;
-        }).toList();
+    @Override
+    public Page<InvestigationPlanResponse> getByCaseId(UUID caseId, Pageable pageable) {
+        return investigationPlanRepository
+                .findByCaseIdAndIsDeletedFalse(caseId, pageable)
+                .map(InvestigationPlanMapper::toResponse);
     }
 
     @Override
@@ -148,7 +72,6 @@ public class InvestigationPlanServiceImpl implements InvestigationPlanService {
         var plan = investigationPlanRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Investigation plan not found"));
 
-        // Cập nhật thông tin
         plan.setSummary(request.getSummary());
         plan.setCreateAt(request.getCreateAt());
         plan.setDeadlineDate(request.getDeadlineDate());
@@ -160,49 +83,16 @@ public class InvestigationPlanServiceImpl implements InvestigationPlanService {
         plan.setAcceptedOfficerName(request.getAcceptedOfficerName());
         plan.setCaseId(UUID.fromString(request.getCaseId()));
 
-        // Lưu lại
-        plan = investigationPlanRepository.save(plan);
-
-        // Trả về response
-        var response = new InvestigationPlanResponse();
-        response.setInvestigationPlanId(plan.getInvestigationPlanId());
-        response.setSummary(plan.getSummary());
-        response.setCreateAt(plan.getCreateAt());
-        response.setDeadlineDate(plan.getDeadlineDate());
-        response.setStatus(plan.getStatus());
-        response.setPlanContent(plan.getPlanContent());
-        response.setType(plan.getType());
-        response.setHolidayConflict(plan.getHolidayConflict());
-        response.setCreatedOfficerName(plan.getCreatedOfficerName());
-        response.setAcceptedOfficerName(plan.getAcceptedOfficerName());
-        response.setCaseId(plan.getCaseId());
-
-        return response;
+        return InvestigationPlanMapper.toResponse(investigationPlanRepository.save(plan));
     }
 
     @Override
-    public InvestigationPlanResponse deletePlan(UUID id, InvestigationPlanCreationRequest request) {
+    public InvestigationPlanResponse deletePlan(UUID id) {
         var plan = investigationPlanRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Investigation plan not found"));
 
-        plan.setDeleted(true); // Set isDeleted to true to mark as deleted
-
-        var updatedPlan = investigationPlanRepository.save(plan);
-
-        var response = new InvestigationPlanResponse();
-        response.setInvestigationPlanId(updatedPlan.getInvestigationPlanId());
-        response.setSummary(updatedPlan.getSummary());
-        response.setCreateAt(updatedPlan.getCreateAt());
-        response.setDeadlineDate(updatedPlan.getDeadlineDate());
-        response.setStatus(updatedPlan.getStatus());
-        response.setPlanContent(updatedPlan.getPlanContent());
-        response.setType(updatedPlan.getType());
-        response.setHolidayConflict(updatedPlan.getHolidayConflict());
-        response.setCreatedOfficerName(updatedPlan.getCreatedOfficerName());
-        response.setAcceptedOfficerName(updatedPlan.getAcceptedOfficerName());
-        response.setCaseId(updatedPlan.getCaseId());
-
-        return response;
+        plan.setDeleted(true);
+        return InvestigationPlanMapper.toResponse(investigationPlanRepository.save(plan));
     }
 
 }
