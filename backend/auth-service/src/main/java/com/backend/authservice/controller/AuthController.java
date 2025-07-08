@@ -1,13 +1,13 @@
-package com.example.auth.controller;
+package com.backend.authservice.controller;
 
-import com.example.auth.dto.AuthRequest;
-import com.example.auth.dto.AuthResponse;
-import com.example.auth.service.AuthService;
+import com.backend.authservice.dto.AuthRequest;
+import com.backend.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")

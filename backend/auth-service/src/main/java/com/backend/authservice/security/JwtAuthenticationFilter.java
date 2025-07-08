@@ -1,6 +1,6 @@
-package com.example.auth.security;
+package com.backend.authservice.security;
 
-import com.example.auth.service.UserDetailsServiceImpl;
+import com.backend.authservice.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

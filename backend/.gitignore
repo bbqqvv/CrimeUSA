@@ -113,3 +113,4 @@ Thumbs.db
 # Environment files
 
 .env
+/auth-service/target/

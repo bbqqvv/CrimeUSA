@@ -1,8 +1,8 @@
-package com.example.auth.service;
+package com.backend.authservice.service;
 
-import com.example.auth.dto.AuthRequest;
-import com.example.auth.security.JwtService;
-import com.example.auth.repository.UserRepository;
+import com.backend.authservice.dto.AuthRequest;
+import com.backend.authservice.repository.UserRepository;
+import com.backend.authservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;

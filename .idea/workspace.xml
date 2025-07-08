@@ -4,49 +4,54 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44820489-d502-4b12-a185-2442831f06d7" name="Changes" comment="feat: add AppException class and enhance error handling in suspect service">
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/config/SwaggerConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/controller/InterviewController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/controller/InvestigationPlanController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/InterviewCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/InterviewRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/InterviewUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/InvestigationPlanCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/QuestionCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/QuestionUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/VictimInterviewRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/request/WitnessInterviewRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/response/InterviewResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/response/InvestigationPlanResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/response/QuestionResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/response/VictimInterviewResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/dto/response/WitnessInterviewResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/mapper/InterviewMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/mapper/InvestigationPlanMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/mapper/QuestionMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/Interview.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/InvestigationPlan.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/VictimInterview.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/VictimInterviewId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/WitnessInterview.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/WitnessInterviewId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/repository/InterviewRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/repository/InvestigationPlanRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/repository/VictimInterviewRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/repository/WitnessInterviewRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/InterviewService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/InvestigationPlanService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/serviceImpl/InterviewServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/serviceImpl/InvestigationPlanServiceImpl.java" afterDir="false" />
+    <list default="true" id="44820489-d502-4b12-a185-2442831f06d7" name="Changes" comment="feat: implement authentication service with JWT support">
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/AuthServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/AuthRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/AuthResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/PermissionCreationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/RoleCreationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/UserCreationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/PermissionResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/RoleResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/UserResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/Permission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/RolePermission.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/RolePermissionId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/PermissionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/RoleReposiory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/JwtService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/UserDetailsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/InvestigationServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/InvestigationServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/controller/QuestionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/controller/QuestionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/model/Question.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/repository/QuestionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/repository/QuestionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/QuestionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/QuestionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/serviceImpl/QuestionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/java/com/backend/investigationservice/service/serviceImpl/QuestionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/investigation-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/investigation-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/HashGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/AuthServiceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/dto/AuthRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/dto/AuthResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/entity/Permission.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/entity/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/entity/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/security/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/security/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/security/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/service/AuthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/service/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/target/classes/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +62,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Record" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -76,12 +83,15 @@
     &quot;accountId&quot;: &quot;aaf52191-bfe3-4958-a261-44fc8ecc72c3&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/dev.env" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -92,36 +102,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.common-service [clean].executor": "Run",
-    "Maven.common-service [package].executor": "Run",
-    "Maven.suspect-service [compile].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.SuspectServiceApplication.executor": "Run",
-    "git-widget-placeholder": "Merging khuong__0210",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/a_DieuTra2/MockProject_062025_Nhom1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "ts.external.directory.path": "D:\\a_DieuTra2\\MockProject_062025_Nhom1\\frontend\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.common-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.common-service [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.suspect-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SuspectServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;khuong__0210&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/a_DieuTra2/MockProject_062025_Nhom1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\a_DieuTra2\\MockProject_062025_Nhom1\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\a_DieuTra2\MockProject_062025_Nhom1\backend\suspect-service\src\main\java\com\backend\suspectservice" />
@@ -137,7 +149,33 @@
       <recent name="com.backend.suspectservice.configs" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SuspectServiceApplication">
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
+    <configuration name="AuthServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="auth-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.backend.authservice.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="auth-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.auth.AuthServiceApplication" />
+      <extension name="net.ashald.envfile">
+        <option name="IS_ENABLED" value="true" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="env" IS_EXECUTABLE="true" PATH="backend/dev.env" />
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+        </ENTRIES>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CommonServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="common-service" />
@@ -177,6 +215,8 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Spring Boot.AuthServiceApplication (1)" />
+      <item itemvalue="Spring Boot.AuthServiceApplication" />
       <item itemvalue="Spring Boot.DiscoveryServerApplication" />
       <item itemvalue="Spring Boot.CommonServiceApplication" />
       <item itemvalue="Spring Boot.InvestigationServiceApplication" />
@@ -204,6 +244,7 @@
       <workItem from="1751949733908" duration="7833000" />
       <workItem from="1751964175405" duration="952000" />
       <workItem from="1751966468859" duration="336000" />
+      <workItem from="1751977876592" duration="5100000" />
     </task>
     <task id="LOCAL-00001" summary="feat: implement suspect management with CRUD operations and Cloudinary integration">
       <option name="closed" value="true" />
@@ -243,7 +284,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="dev" />
+                        <option value="khuong_0210" />
                       </list>
                     </value>
                   </entry>
@@ -258,6 +299,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: implement suspect management with CRUD operations and Cloudinary integration" />
     <MESSAGE value="feat: add AppException class and enhance error handling in suspect service" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add AppException class and enhance error handling in suspect service" />
+    <MESSAGE value="feat: implement authentication service with JWT support" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: implement authentication service with JWT support" />
   </component>
 </project>

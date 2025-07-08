@@ -1,6 +1,6 @@
-package com.example.auth.service;
+package com.backend.authservice.service;
 
-import com.example.auth.repository.UserRepository;
+import com.backend.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
