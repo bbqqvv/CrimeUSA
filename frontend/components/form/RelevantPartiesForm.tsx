@@ -15,11 +15,20 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function InitialEvidenceForm() {
+export default function RelevantPartiesForm({
+  onClose,
+  onSubmitted,
+}: {
+  onClose?: () => void;
+  onSubmitted?: () => void;
+}) {
+
   const [files, setFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState({
-    evidenceType: "",
-    location: "",
+    fullname: "",
+    relation: "",
+    gender: "",
+    nationality: "",
     description: "",
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -31,7 +40,7 @@ export default function InitialEvidenceForm() {
   useEffect(() => {
     if (id && typeof window !== "undefined") {
       const data = JSON.parse(
-        sessionStorage.getItem("initialEvidence") || "[]"
+        sessionStorage.getItem("relevantParties") || "[]"
       );
       const found = data.find((item: any) => String(item.id) === String(id));
       if (found) setForm(found);
@@ -55,17 +64,18 @@ export default function InitialEvidenceForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, evidenceType: value }));
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const errors: string[] = []
+    e.preventDefault();
+    // Lưu dữ liệu vào sessionStorage (tạm thời)
+    const errors: string[] = [];
 
     // Kiểm tra các trường rỗng
-    if (!formData.evidenceType) errors.push('Types of Evidence is required.')
-
+    if (!formData.relation) errors.push('Relationship to the incident is required.')
+    if (!formData.gender) errors.push('Gender is required.')
 
 
     if (errors.length > 0) {
@@ -74,25 +84,27 @@ export default function InitialEvidenceForm() {
       });
       return;
     }
-    // Lưu dữ liệu vào sessionStorage
-    const initialEvidence = JSON.parse(
-      sessionStorage.getItem("initialEvidence") || "[]"
+    const relevantParties = JSON.parse(
+      sessionStorage.getItem("relevantParties") || "[]"
     );
-    const newEvidence = {
-      id: initialEvidence.length + 1,
+    const newParty = {
+      id: relevantParties.length + 1,
       ...formData,
       attachments: files.length > 0 ? `${files.length} files` : 'No attachments'
     }
-    sessionStorage.setItem('initialEvidence', JSON.stringify([...initialEvidence, newEvidence]))
+    sessionStorage.setItem('relevantParties', JSON.stringify([...relevantParties, newParty]))
     // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
-    router.push('/reporter')                 
+   // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    // router.push('/reporter')                  //  Quay lại MultiStepForm
+    if (onSubmitted) onSubmitted();
+    if (onClose) onClose();
   }
 
   const handleCancel = () => {
-    // router.push('/reporter') // Quay lại trang chính reporter
-    sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
-    router.push('/reporter')
+    // router.push('/reporter') // Điều hướng trở lại reporter
+    // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+    // router.push('/reporter')
+    if (onClose) onClose();
   }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
@@ -107,47 +119,77 @@ export default function InitialEvidenceForm() {
     <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
       <CardContent>
         <h2 className="text-2xl font-bold text-center mb-2">
-          Initial Evidence
+          Relevant Parties
         </h2>
         <p className="text-sm text-muted-foreground text-center mb-6">
-          This form is used to document physical evidence collected at the
-          scene.
+          This form is used to document the roles and identities of all parties
+          connected to the incident.
         </p>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="evidenceType" className="mb-2 block">
-                Types of Evidence *
+              <Label htmlFor="fullname" className="mb-2 block">
+                Full name
               </Label>
-              <Select onValueChange={handleSelectChange}>
-                <SelectTrigger id="evidenceType" className="w-full">
+              <Input
+                id="fullname"
+                name="fullname"
+                placeholder="E.g., John Michael Doe"
+                className="w-full"
+                value={formData.fullname}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="relation" className="mb-2 block">
+                Relationship to the incident *
+              </Label>
+              <Select
+                onValueChange={(value) => handleSelectChange("relation", value)}
+              >
+                <SelectTrigger id="relation" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="physical">Physical Evidence</SelectItem>
-                  <SelectItem value="biological">
-                    Biological Evidence
-                  </SelectItem>
-                  <SelectItem value="trace">Trace Evidence</SelectItem>
-                  <SelectItem value="documentary">
-                    Documentary Evidence
-                  </SelectItem>
-                  <SelectItem value="digital">Digital Evidence</SelectItem>
+                  <SelectItem value="witness">Witness</SelectItem>
+                  <SelectItem value="victim">Victim</SelectItem>
+                  <SelectItem value="suspect">Suspect</SelectItem>
+                  <SelectItem value="accomplice">Accomplice</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label htmlFor="location" className="mb-2 block">
-                Evidence Location *
+              <Label htmlFor="gender" className="mb-2 block">
+                Gender
+              </Label>
+              <Select
+                onValueChange={(value) => handleSelectChange("gender", value)}
+              >
+                <SelectTrigger id="gender" className="w-full">
+                  <SelectValue placeholder="Select an option" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="unknown">Unknown</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="nationality" className="mb-2 block">
+                Nationality
               </Label>
               <Input
-                id="location"
-                name="location"
-                placeholder="E.g., At the scene, in the car..."
+                id="nationality"
+                name="nationality"
+                placeholder="E.g., American"
                 className="w-full"
-                value={formData.location}
+                value={formData.nationality}
                 onChange={handleInputChange}
                 required
               />
@@ -156,12 +198,12 @@ export default function InitialEvidenceForm() {
 
           <div>
             <Label htmlFor="description" className="mb-2 block">
-              Evidence Description *
+              Statement / Description
             </Label>
             <Textarea
               id="description"
               name="description"
-              placeholder="Provide a clear and detailed description of the evidence (shape, material, identifying features...)"
+              placeholder="Provide a clear and detailed description..."
               className="w-full"
               value={formData.description}
               onChange={handleInputChange}
@@ -169,7 +211,7 @@ export default function InitialEvidenceForm() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <Label>Attachments</Label>
             <div className="border-2 border-dashed rounded-md p-6 text-center mt-2">
               <p className="text-sm mb-1">
@@ -241,7 +283,7 @@ export default function InitialEvidenceForm() {
                 })}
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="flex justify-end space-x-4 pt-4">
             <Button type="button" variant="outline" onClick={handleCancel}>
