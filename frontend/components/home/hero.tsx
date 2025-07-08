@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-export const Hero: React.FC = () => {
+export const Hero = () => {
   const slides = [
     '/images/banner1.png',
     '/images/banner2.png',

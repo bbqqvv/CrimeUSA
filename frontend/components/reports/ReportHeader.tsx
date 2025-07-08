@@ -1,5 +1,5 @@
 import { Calendar, Clock } from "lucide-react";
-import Badge from "../ui/Badge";
+import Badge from "../ui/badge";
 
 export function ReportHeader() {
   return (

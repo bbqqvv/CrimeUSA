@@ -1,49 +1,26 @@
-// Step1.tsx
 
 import InitialEvidenceForm from "@/components/form/InitialEvidenceForm"
 import RelevantPartiesForm from "@/components/form/RelevantPartiesForm"
-
 import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from "@/components/ui/table";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { Edit, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-// import Calendar hoặc DatePicker nếu có
+import IncidentInfoForm from "@/components/IncidentInfoForm";
+import RelevantPartiesTable from "@/components/RelevantPartiesTable";
+import InitialEvidenceTable from "@/components/InitialEvidenceTable";
+import ConfirmModal from "@/components/ConfirmModal";
+import DeleteModal from "@/components/DeleteModal";
 
 export default function Step2({ data, onNext, onBack }: any) {
+  const router = useRouter();
   const [form, setForm] = useState(data);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined); // ✅ ADD THIS LINE
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{
     id: number;
     type: "relevant" | "initial";
   } | null>(null);
+
   const [relevantParties, setRelevantParties] = useState<any[]>([]);
   const [initialEvidence, setInitialEvidence] = useState<any[]>([]);
   const router = useRouter();
@@ -66,139 +43,44 @@ export default function Step2({ data, onNext, onBack }: any) {
     setShowConfirm(false);
     onNext(form);
   };
+  useEffect(() => {
+    const parties = sessionStorage.getItem("relevantParties");
+    const evidence = sessionStorage.getItem("initialEvidence");
+    if (parties) setRelevantParties(JSON.parse(parties));
+    if (evidence) setInitialEvidence(JSON.parse(evidence));
+  }, []);
 
-  const handleDeleteRelevant = (id: number) => {
-    setDeleteTarget({ id, type: "relevant" });
-    setShowDelete(true);
-  };
-
-  const handleDeleteEvidence = (id: number) => {
-    setDeleteTarget({ id, type: "initial" });
+  const handleDelete = (id: number, type: "relevant" | "initial") => {
+    setDeleteTarget({ id, type });
     setShowDelete(true);
   };
   const [selectedParty, setSelectedParty] = useState<any>(null)
   const handleDeleteYes = () => {
     if (!deleteTarget) return;
+
     if (deleteTarget.type === "relevant") {
-      const updated = relevantParties.filter(
-        (item: any) => item.id !== deleteTarget.id
-      );
+      const updated = relevantParties.filter((p) => p.id !== deleteTarget.id);
       setRelevantParties(updated);
       sessionStorage.setItem("relevantParties", JSON.stringify(updated));
     } else {
-      const updated = initialEvidence.filter(
-        (item: any) => item.id !== deleteTarget.id
-      );
+      const updated = initialEvidence.filter((e) => e.id !== deleteTarget.id);
       setInitialEvidence(updated);
       sessionStorage.setItem("initialEvidence", JSON.stringify(updated));
     }
+
     setShowDelete(false);
     setDeleteTarget(null);
-    // KHÔNG reload trang!
+  };
+
+  const handleSubmit = () => setShowConfirm(true);
+  const handleConfirmSubmit = () => {
+    setShowConfirm(false);
+    onNext(form);
   };
 
   return (
     <div className="w-full max-w-screen-md mx-auto py-8">
-      {/* Incident Information */}
-      <div className="my-8">
-        <div className="flex items-center mb-8">
-          <div className="flex-1 border-t border-gray-300" />
-          <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
-            Incident Information
-          </h2>
-          <div className="flex-1 border-t border-gray-300" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="typeOfCrime" className="text-base font-semibold">
-              Type of crime <span className="text-red-500">*</span>
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select an option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="crimes-against-persons">
-                  Crimes Against Persons
-                </SelectItem>
-                <SelectItem value="crimes-against-property">
-                  Crimes Against Property
-                </SelectItem>
-                <SelectItem value="white-collar-crimes">
-                  White-Collar Crimes
-                </SelectItem>
-                <SelectItem value="cyber-crimes">Cyber Crimes</SelectItem>
-                <SelectItem value="drug-related-crimes">
-                  Drug-related Crimes
-                </SelectItem>
-                <SelectItem value="public-order-crimes">
-                  Public Order Crimes
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="severity" className="text-base font-semibold">
-              Severity <span className="text-red-500">*</span>
-            </Label>
-            <Select>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select an option" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="minor">Minor</SelectItem>
-                <SelectItem value="moderate">Moderate</SelectItem>
-                <SelectItem value="serious">Serious</SelectItem>
-                <SelectItem value="critical">Critical</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="datetime" className="text-base font-semibold">
-              Datetime of occurrence <span className="text-red-500">*</span>
-            </Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  {date ? (
-                    format(date, "dd/MM/yyyy")
-                  ) : (
-                    <span className="text-muted-foreground">Choose</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="address" className="text-base font-semibold">
-              Detailed address
-            </Label>
-            <Input type="text" name="address" className="w-full" />
-          </div>
-        </div>
-        <div className="mt-6 space-y-2">
-          <Label htmlFor="description" className="text-base font-semibold">
-            Description of the incident
-          </Label>
-          <Textarea
-            name="description"
-            placeholder="Briefly describe what happened, including key facts such as time, location, and main events."
-            className="w-full"
-          />
-        </div>
-      </div>
-
+      <h2 className="text-2xl font-semibold text-center mb-8">Incident Information</h2>
       <div className="w-full max-w-screen-md mx-auto py-8">
         {/* Relevant Parties */}
         <div className="my-8">
@@ -404,83 +286,22 @@ export default function Step2({ data, onNext, onBack }: any) {
         </div>
       }
 
-      {/* Nút điều hướng */}
       <div className="flex justify-end gap-4 mt-8">
-        <Button variant="outline" className="w-32" onClick={onBack}>
-          Back
-        </Button>
-        <Button className="w-32 bg-black text-white" onClick={handleSubmit}>
-          Submit
-        </Button>
+        <button className="btn border px-4 py-2 rounded-xl" onClick={onBack}>Back</button>
+        <button className="btn bg-black text-white px-4 py-2 rounded-xl" onClick={handleSubmit}>Submit</button>
       </div>
 
-      {/* Modal CONFIRM */}
       {showConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-2 h-10 rounded bg-blue-300" />
-              <div>
-                <div className="text-xl font-bold mb-1">
-                  Declaration & Confirmation
-                </div>
-                <ol className="text-gray-700 text-sm list-decimal pl-5">
-                  <li>
-                    I hereby declare that all the information provided in this
-                    report is true and accurate to the best of my knowledge.
-                  </li>
-                  <li>
-                    I accept full legal responsibility for any false or
-                    misleading information submitted.
-                  </li>
-                </ol>
-              </div>
-            </div>
-            <div className="flex justify-end gap-4 mt-6">
-              <Button variant="outline" onClick={() => setShowConfirm(false)}>
-                Cancel
-              </Button>
-              <Button
-                className="bg-black text-white"
-                onClick={handleConfirmYes}
-              >
-                Yes
-              </Button>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          onClose={() => setShowConfirm(false)}
+          onConfirm={handleConfirmSubmit}
+        />
       )}
-      {/* Modal DELETE */}
       {showDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-2 h-10 rounded bg-red-200" />
-              <div>
-                <div className="text-xl font-bold mb-1 text-red-600">
-                  Delete
-                </div>
-                <div className="text-gray-700 text-sm">
-                  Are you sure you want to delete this record?
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end gap-4 mt-6">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowDelete(false);
-                  setDeleteTarget(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button className="bg-black text-white" onClick={handleDeleteYes}>
-                Yes
-              </Button>
-            </div>
-          </div>
-        </div>
+        <DeleteModal
+          onClose={() => setShowDelete(false)}
+          onConfirm={handleConfirmDelete}
+        />
       )}
 
 

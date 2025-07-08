@@ -3,8 +3,8 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Navigation } from './nav';
-export const Header: React.FC = () => {
+import { Navigation } from '../../Nav';
+export const Header = () => {
   return (
     <header className="bg-black text-white">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
