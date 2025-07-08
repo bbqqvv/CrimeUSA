@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class CaseCreatedEvent {
     private String caseId;
     private String caseNumber;
-    private String evidenceId;
 }

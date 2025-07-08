@@ -21,6 +21,6 @@ public class SwaggerConfiguration {
                                         .name("X-API-KEY")
                                         .type(SecurityScheme.Type.APIKEY)
                                         .in(SecurityScheme.In.HEADER)))
-                .info(new Info().title("Evidence API").version("1.0"));
+                .info(new Info().title("Evidence-Service API").version("1.0"));
     }
 }

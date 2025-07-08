@@ -11,9 +11,5 @@ public class SuspectAssignedEvent {
     private String evidenceId;
     private String suspectId;
     private LocalDateTime assignedAt;
-
-
-
-
 }
 
