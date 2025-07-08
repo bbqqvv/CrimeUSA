@@ -51,7 +51,7 @@ public class InvestigationPlan {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "investigationPlan", cascade = CascadeType.ALL)
-    private List<Interview> interviews;
+    @Column(name = "interview_id")
+    private UUID interviewId;
 
 }

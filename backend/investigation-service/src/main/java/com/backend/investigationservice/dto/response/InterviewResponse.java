@@ -17,14 +17,11 @@ public class InterviewResponse {
     @JsonProperty("interview_id")
     private UUID interviewId;
 
-    @JsonProperty("investigation_plan_id")
-    private UUID investigationPlanId;
+    @JsonProperty("case_id")
+    private UUID caseId;
 
     @JsonProperty("location")
     private String location;
-
-    @JsonProperty("attached_file")
-    private String attachedFile;
 
     @JsonProperty("start_time")
     private LocalDateTime startTime;

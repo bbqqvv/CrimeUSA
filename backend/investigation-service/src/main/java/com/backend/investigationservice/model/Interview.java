@@ -21,8 +21,8 @@ public class Interview {
     @Column(name = "interview_id", nullable = false)
     private UUID interviewId;
 
-    @Column(name = "investigation_plan_id")
-    private UUID investigationPlanId;
+    @Column(name = "case_id")
+    private UUID caseId;
 
     @Column(name = "location", length = 255)
     private String location;

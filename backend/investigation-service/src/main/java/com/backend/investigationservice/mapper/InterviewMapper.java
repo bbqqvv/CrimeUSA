@@ -5,19 +5,19 @@ import com.backend.investigationservice.dto.response.InterviewResponse;
 import com.backend.investigationservice.dto.response.QuestionResponse;
 import com.backend.investigationservice.model.Interview;
 import com.backend.investigationservice.model.Question;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-
+@Component
 public class InterviewMapper {
 
     public static Interview toEntity(InterviewCreationRequest request) {
         if (request == null) return null;
 
         Interview interview = new Interview();
-        interview.setInvestigationPlanId(request.getInvestigationPlanId());
+        interview.setCaseId(request.getCaseId());
         interview.setLocation(request.getLocation());
-        interview.setAttachedFile(request.getAttachedFile());
         interview.setStartTime(request.getStartTime());
         interview.setEndTime(request.getEndTime());
         interview.setHolidayConflict(request.getHolidayConflict());
@@ -37,9 +37,8 @@ public class InterviewMapper {
 
         return InterviewResponse.builder()
                 .interviewId(interview.getInterviewId())
-                .investigationPlanId(interview.getInvestigationPlanId())
+                .caseId(interview.getCaseId())
                 .location(interview.getLocation())
-                .attachedFile(interview.getAttachedFile())
                 .startTime(interview.getStartTime())
                 .endTime(interview.getEndTime())
                 .holidayConflict(interview.getHolidayConflict())
