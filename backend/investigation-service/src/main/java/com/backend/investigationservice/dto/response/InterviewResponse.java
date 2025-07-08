@@ -1,5 +1,6 @@
 package com.backend.investigationservice.dto.response;
 
+import com.backend.investigationservice.dto.request.QuestionCreationRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -39,6 +40,18 @@ public class InterviewResponse {
 
     @JsonProperty("deleted")
     private boolean deleted;
+
+    @JsonProperty("interviewee_type")
+    private String intervieweeType;
+
+    @JsonProperty("interviewee_id")
+    private String intervieweeId;
+
+    @JsonProperty("interviewee_name")
+    private String intervieweeName;
+
+    @JsonProperty("attached_files")
+    private List<String> attachedFiles;
 
     @JsonProperty("questions")
     private List<QuestionResponse> questions;
