@@ -14,7 +14,7 @@ public class WitnessInterview {
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
-    
+
     @ManyToOne
     @MapsId("interviewId")
     @JoinColumn(name = "interview_id", insertable = false, updatable = false)
