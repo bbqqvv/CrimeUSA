@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
  * @version:    1.0
  */
 @Data
-@Table
+@Table(name = "sentence")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,9 +36,10 @@ public class Sentence {
     @Column(name = "sentence_type")
     String sentenceType;
     String duration;
+    @Column(name = "conditions")
     String condition;
     @Column(name = "sentence_date")
     String sentenceDate;
     @Column(name = "is_deleted", nullable = false)
-    Boolean isDeleted = false;
+    boolean isDeleted = false;
 }

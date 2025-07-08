@@ -6,12 +6,15 @@
 
 package com.backend.suspectservice.model;
 
+import com.backend.commonservice.enums.SuspectStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
 
 /*
  * @description
@@ -41,15 +44,16 @@ public class Suspect {
     String description;
     String address;
     @Column(name = "catch_time")
-    String catchTime;
+    LocalDateTime catchTime;
     String notes;
-    String status;
+    @Enumerated(EnumType.STRING)
+    SuspectStatus status = SuspectStatus.NOT_YET_CATCH; // Default status is PENDING
     @Column(name = "mugshot_url")
     String mugshotUrl;
     @Column(name = "fingerprints_hash")
     String fingerprintsHash;
     @Column(name = "health_status")
     String healthStatus;
-    @Column(name = "is_deleted")
-    Boolean isDeleted;
+    @Column(name = "is_deleted", nullable = false)
+    boolean isDeleted = false; // Default value is false, indicating the suspect is not deleted
 }

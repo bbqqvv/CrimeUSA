@@ -41,7 +41,7 @@ public class Inmate {
     @Column(name="health_status")
     String healthStatus;
     String status;
-    @Column(name="is_deleted")
-    Boolean isDeleted = false;
+    @Column(name="is_deleted", nullable = false)
+    boolean isDeleted = false;
 
 }

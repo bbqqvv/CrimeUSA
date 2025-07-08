@@ -34,6 +34,6 @@ public class Indictment {
     String content;
     @Column(name = "issued_at")
     String issuedAt;
-    @Column(name = "is_deleted")
-    Boolean isDeleted;
+    @Column(name = "is_deleted", nullable = false)
+    boolean isDeleted;
 }

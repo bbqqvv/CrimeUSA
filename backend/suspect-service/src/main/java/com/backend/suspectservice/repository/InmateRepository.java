@@ -7,6 +7,7 @@
 package com.backend.suspectservice.repository;
 
 import com.backend.suspectservice.model.Inmate;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -17,6 +18,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @version:    1.0
  */
 @RepositoryRestResource
+@Hidden
 public interface InmateRepository extends JpaRepository<Inmate,String> {
 
 }
