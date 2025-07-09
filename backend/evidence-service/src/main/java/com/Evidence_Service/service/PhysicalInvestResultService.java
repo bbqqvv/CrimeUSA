@@ -1,8 +1,11 @@
 package com.Evidence_Service.service;
 
 import com.Evidence_Service.dto.PhysicalInvestResultDTO;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface PhysicalInvestResultService {
     PhysicalInvestResultDTO addPhysicalInvestResult(String evidenceId, PhysicalInvestResultDTO dto);
@@ -20,5 +23,5 @@ public interface PhysicalInvestResultService {
 
     void deleteByEvidenceId(String evidenceId);
 
-    void assignPhysicalInvestResult(String investigationPlanId, String uploadFile, String content);
+    void assignPhysicalInvestResult(ResultInvestAssignedEvent resultInvestAssignedEvent);
 }

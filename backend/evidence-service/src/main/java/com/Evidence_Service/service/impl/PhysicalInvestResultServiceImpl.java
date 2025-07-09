@@ -2,6 +2,7 @@ package com.Evidence_Service.service.impl;
 
 import com.Evidence_Service.dto.PhysicalInvestResultDTO;
 import com.Evidence_Service.event.caller.PhysicalInvestResultCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.KafkaEventPublisher;
@@ -172,20 +173,21 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     }
 
     @Override
-    public void assignPhysicalInvestResult(String investigationPlanId, String uploadFile, String content) {
+    public void assignPhysicalInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+            List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
 
             if (physicalInvestResults ==  null) {
                 PhysicalInvestResult.builder()
-                        .investigationPlanId(investigationPlanId)
-                        .result(content)
-                        .uploadFile(uploadFile)
+                        .evidenceId(event.getEvidenceId())
+                        .result(event.getContent())
+                        .uploadFile(event.getUploadFile())
                         .build();
             } else {
                 for (PhysicalInvestResult physicalInvestResult : physicalInvestResults) {
-                    physicalInvestResult.setResult(content);
-                    physicalInvestResult.setUploadFile(uploadFile);
+                    physicalInvestResult.setEvidenceId(event.getEvidenceId());
+                    physicalInvestResult.setResult(event.getContent());
+                    physicalInvestResult.setUploadFile(event.getUploadFile());
                     physicalInvestResultRepository.save(physicalInvestResult);
                 }
             }

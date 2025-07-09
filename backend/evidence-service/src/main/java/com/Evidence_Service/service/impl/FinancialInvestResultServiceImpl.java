@@ -2,6 +2,7 @@ package com.Evidence_Service.service.impl;
 
 import com.Evidence_Service.dto.FinancialInvestResultDTO;
 import com.Evidence_Service.event.caller.FinancialInvestResultCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.KafkaEventPublisher;
@@ -85,20 +86,21 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
-    public void assignFinancialInvestResult(String investigationPlanId, String uploadFile, String content) {
+    public void assignFinancialInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+            List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
 
             if (financialInvestResults ==  null) {
                 FinancialInvestResult.builder()
-                        .investigationPlanId(investigationPlanId)
-                        .result(content)
-                        .uploadFile(uploadFile)
+                        .evidenceId(event.getEvidenceId())
+                        .result(event.getContent())
+                        .uploadFile(event.getUploadFile())
                         .build();
             } else {
                 for (FinancialInvestResult financialInvestResult : financialInvestResults) {
-                    financialInvestResult.setResult(content);
-                    financialInvestResult.setUploadFile(uploadFile);
+                    financialInvestResult.setEvidenceId(event.getEvidenceId());
+                    financialInvestResult.setResult(event.getContent());
+                    financialInvestResult.setUploadFile(event.getUploadFile());
                     financialInvestResultRepository.save(financialInvestResult);
                 }
             }

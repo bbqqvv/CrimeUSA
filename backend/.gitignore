@@ -113,3 +113,6 @@ Thumbs.db
 # Environment files
 
 .env
+
+keys/*
+!keys/public.pem

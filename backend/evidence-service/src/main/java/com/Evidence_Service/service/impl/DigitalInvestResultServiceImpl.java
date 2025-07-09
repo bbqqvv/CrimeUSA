@@ -2,6 +2,7 @@ package com.Evidence_Service.service.impl;
 
 import com.Evidence_Service.dto.DigitalInvestResultDTO;
 import com.Evidence_Service.event.caller.DigitalInvestResultCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.EventPublisher;
@@ -58,20 +59,21 @@ public class DigitalInvestResultServiceImpl implements DigitalInvestResultServic
 
     @CacheEvict(value = {"digitalInvestResult", "digitalInvestList"}, allEntries = true)
     @Override
-    public void assignDigitalInvestResult(String investigationPlanId, String uploadFile, String content) {
+    public void assignDigitalInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<DigitalInvestResult> digitalInvestResults = digitalInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+            List<DigitalInvestResult> digitalInvestResults = digitalInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
 
             if (digitalInvestResults ==  null) {
                 DigitalInvestResult.builder()
-                        .investigationPlanId(investigationPlanId)
-                        .result(content)
-                        .uploadFile(uploadFile)
+                        .evidenceId(event.getEvidenceId())
+                        .result(event.getContent())
+                        .uploadFile(event.getUploadFile())
                         .build();
             } else {
                 for (DigitalInvestResult digitalInvestResult : digitalInvestResults) {
-                    digitalInvestResult.setResult(content);
-                    digitalInvestResult.setUploadFile(uploadFile);
+                    digitalInvestResult.setEvidenceId(event.getEvidenceId());
+                    digitalInvestResult.setResult(event.getContent());
+                    digitalInvestResult.setUploadFile(event.getUploadFile());
                     digitalInvestResultRepository.save(digitalInvestResult);
                 }
             }

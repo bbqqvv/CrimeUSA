@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ReportCreatedEvent {
     private String reportId;
-    private List<String> evidenceId;
+    private List<String> evidenceIds;
 }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -76,27 +78,21 @@ public class EvidenceServiceEventHandler {
         evidenceService.assignCaseToEvidence(event.getEvidenceId(), event.getCaseId());
     }
 
-    public void onInvestigationCreated(ResultInvestAssignedEvent event) {
+    public void onInvestigationAssigned(ResultInvestAssignedEvent event) {
+        evidenceService.assignInvestResultByInvestigationPlanId(event);
         log.info("Handling ResultInvestAssignedEvent: {}", event);
-        switch (event.getType()) {
-            case "physical": physicalInvestResultService.assignPhysicalInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
-            case "digital" : digitalInvestResultService.assignDigitalInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
-            case "financial": financialInvestResultService.assignFinancialInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
-            case "forensic" : forensicInvestResultService.assignForensicInvestResult(event.getInvestigationPlanId(), event.getUploadFile(), event.getContent());
-            default:
-                log.info("Handling CreateInvestResult False");
-
-        }
     }
 
     public void onInvestigationDeleted(DeleteInvestResultEvent event) {
+        evidenceService.deleteByInvestigationPlanId(event.getInvestigationPlanId());
+
         switch (event.getType()) {
-            case "physical": physicalInvestResultService.deletePhysicalInvestByResultId( event.getResultId());
-            case "digital" : digitalInvestResultService.deleteDigitalInvestByResultId(event.getResultId());
-            case "financial": financialInvestResultService.deleteFinancialInvestByResultId(event.getResultId());
-            case "forensic" : forensicInvestResultService.deleteForensicInvestByResultId(event.getResultId());
+            case "physical": physicalInvestResultService.deleteByEvidenceId(event.getEvidenceId());
+            case "digital" : digitalInvestResultService.deleteByEvidenceId(event.getEvidenceId());
+            case "financial": financialInvestResultService.deleteByEvidenceId(event.getEvidenceId());
+            case "forensic" : forensicInvestResultService.deleteByEvidenceId(event.getEvidenceId());
             default:
-                log.info("Handling UpdateInvestResult False");
+                log.info("Handling DeletedInvestResult False");
         }
     }
 }

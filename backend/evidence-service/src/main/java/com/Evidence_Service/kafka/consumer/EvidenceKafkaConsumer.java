@@ -77,7 +77,7 @@ public class EvidenceKafkaConsumer {
     @KafkaListener(topics = "investigation.assigned", groupId = "evidence-service-investigation-assigned", containerFactory = "investigationAssignedKafkaListenerFactory")
     public void handleInvestigationCreated(ResultInvestAssignedEvent event) {
         log.info("Received investigation.assigned: {}", event);
-        handler.onInvestigationCreated(event);
+        handler.onInvestigationAssigned(event);
     }
 
     @KafkaListener(topics = "investigation.deleted", groupId = "evidence-service-investigation-deleted", containerFactory = "investigationDeletedKafkaListenerFactory")

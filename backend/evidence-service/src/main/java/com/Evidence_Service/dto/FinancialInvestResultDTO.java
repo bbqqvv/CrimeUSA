@@ -28,6 +28,12 @@ public class FinancialInvestResultDTO {
     @NotBlank
     private String attachedFile;
 
+    @NotBlank
+    private String imageUrl;
+
+    @NotBlank
+    private String notes;
+
     @NotNull
     private LocalDateTime createdAt;
     private boolean isDeleted;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResultInvestAssignedEvent {
     private String investigationPlanId;
-    private String resultId;
+    private String evidenceId;
     private String uploadFile;
     private String content;
     private String type; //forensic, physical, financial, digital

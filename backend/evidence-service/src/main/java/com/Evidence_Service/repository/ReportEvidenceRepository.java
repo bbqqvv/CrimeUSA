@@ -10,14 +10,12 @@ import java.util.List;
 @Repository
 public interface ReportEvidenceRepository extends JpaRepository<ReportEvidence, ReportEvidenceId> {
 
-    List<ReportEvidence> findByEvidenceId(String evidenceId);
+    List<ReportEvidence> findAllByEvidenceId(String evidenceId);
 
     boolean existsByReportIdAndEvidenceId(String reportId, String evidenceId);
 
     List<ReportEvidence> findAllByReportIdAndIsDeletedFalse(String reportId);
-
-    List<ReportEvidence> findByReportIdAndIsDeletedFalse(String reportId);
     boolean existsByReportIdAndIsDeletedFalse(String reportId);
-    List<ReportEvidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
+    List<ReportEvidence> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId);
     void deleteByReportIdAndEvidenceId(String reportId, String evidenceId);
 }

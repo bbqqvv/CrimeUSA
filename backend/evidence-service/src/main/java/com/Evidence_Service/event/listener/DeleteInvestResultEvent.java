@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteInvestResultEvent {
-    private String resultId;
+    private String investigationPlanId;
+    private String evidenceId;
     private String type;
 }

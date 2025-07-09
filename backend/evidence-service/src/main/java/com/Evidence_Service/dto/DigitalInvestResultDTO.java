@@ -30,6 +30,12 @@ public class DigitalInvestResultDTO {
     @NotBlank
     private String result;
 
+    @NotBlank
+    private String imageUrl;
+
+    @NotBlank
+    private String notes;
+
     @NotNull
     private LocalDateTime createdAt;
 

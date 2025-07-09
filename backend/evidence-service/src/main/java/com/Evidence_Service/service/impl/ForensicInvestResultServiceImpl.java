@@ -2,6 +2,7 @@ package com.Evidence_Service.service.impl;
 
 import com.Evidence_Service.dto.ForensicInvestResultDTO;
 import com.Evidence_Service.event.caller.ForensicInvestResultCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.KafkaEventPublisher;
@@ -61,20 +62,21 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
-    public void assignForensicInvestResult(String investigationPlanId, String uploadFile, String content) {
+    public void assignForensicInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<ForensicInvestResult> forensicInvestResults = forensicInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+            List<ForensicInvestResult> forensicInvestResults = forensicInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
 
             if (forensicInvestResults ==  null) {
                 ForensicInvestResult.builder()
-                        .investigationPlanId(investigationPlanId)
-                        .result(content)
-                        .uploadFile(uploadFile)
+                        .evidenceId(event.getEvidenceId())
+                        .result(event.getContent())
+                        .uploadFile(event.getEvidenceId())
                         .build();
             } else {
                 for (ForensicInvestResult forensicInvestResult : forensicInvestResults) {
-                    forensicInvestResult.setResult(content);
-                    forensicInvestResult.setUploadFile(uploadFile);
+                    forensicInvestResult.setEvidenceId(event.getEvidenceId());
+                    forensicInvestResult.setResult(event.getContent());
+                    forensicInvestResult.setUploadFile(event.getUploadFile());
                     forensicInvestResultRepository.save(forensicInvestResult);
                 }
             }

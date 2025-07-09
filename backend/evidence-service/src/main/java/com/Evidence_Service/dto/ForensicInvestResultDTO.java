@@ -33,6 +33,14 @@ public class ForensicInvestResultDTO {
     @NotBlank
     private String resultSummary;
 
+    @NotBlank
+    private String notes;
+
+    @NotBlank
+    private String imageUrl;
+
+
+
     @NotNull
     private LocalDateTime createdAt;
 

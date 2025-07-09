@@ -1,6 +1,7 @@
 package com.Evidence_Service.service;
 
 import com.Evidence_Service.dto.FinancialInvestResultDTO;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,7 +10,7 @@ public interface FinancialInvestResultService {
 
     FinancialInvestResultDTO getFinancialInvestById(String resultId);
 
-    void assignFinancialInvestResult(String investigationPlanId, String uploadFile, String content);
+    void assignFinancialInvestResult(ResultInvestAssignedEvent resultInvestAssignedEvent);
 
 
     Page<FinancialInvestResultDTO> getAllFinancialInvestByEvidenceId(String evidenceId, Pageable pageable);

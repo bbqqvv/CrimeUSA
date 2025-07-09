@@ -1,13 +1,14 @@
 package com.Evidence_Service.service;
 
 import com.Evidence_Service.dto.ForensicInvestResultDTO;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ForensicInvestResultService {
     ForensicInvestResultDTO addForensicInvestResult(String evidenceId, ForensicInvestResultDTO dto);
 
-    void assignForensicInvestResult(String investigationPlanId, String uploadFile, String content);
+    void assignForensicInvestResult(ResultInvestAssignedEvent resultInvestAssignedEvent);
 
     ForensicInvestResultDTO getForensicInvestById(String resultId);
 
