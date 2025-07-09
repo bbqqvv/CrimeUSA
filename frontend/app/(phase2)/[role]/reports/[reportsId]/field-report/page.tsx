@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Trash2, ExternalLink } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
+import { SubmitSuccessModal } from "@/components/features/phase2/SubmitSuccessModal"; // 🆕 Import success modal
 import { SectionContainer } from "@/components/features/phase2/SectionContainer";
 import { DataTable } from "@/components/features/phase2/DataTable";
 import { ActionButtons } from "@/components/features/phase2/ActionButtons";
@@ -112,8 +113,9 @@ export default function FieldReportPage() {
    const [isEditing, setIsEditing] = useState(false);
    const [editableData, setEditableData] = useState(fieldReportData);
    
-   // State for controlling the delete modal
+   // State for controlling modals
    const [showDeleteModal, setShowDeleteModal] = useState(false);
+   const [showSuccessModal, setShowSuccessModal] = useState(false); // 🆕 Success modal state
 
    // Check if data has content
    const hasContent = () => {
@@ -134,6 +136,9 @@ export default function FieldReportPage() {
       // TODO: Save field report to database/API
       console.log("Saving field report:", editableData);
       setIsEditing(false);
+      
+      // 🆕 Show success modal after saving
+      setShowSuccessModal(true);
    };
 
    const handleCancel = () => {
@@ -197,6 +202,16 @@ export default function FieldReportPage() {
 
    const handleCloseModal = () => {
       setShowDeleteModal(false);
+   };
+
+   // 🆕 Success modal handlers
+   const handleSuccessClose = () => {
+      setShowSuccessModal(false);
+   };
+
+   const handleSuccessContinue = () => {
+      // Navigate to reports overview after success
+      router.push(`/${params.role}/reports/${params.reportsId}`);
    };
 
    // Column configurations
@@ -401,6 +416,16 @@ export default function FieldReportPage() {
             onClose={handleCloseModal}
             onConfirm={handleConfirmDelete}
             evidenceName="this field report"
+         />
+
+         {/* 🆕 SUBMIT SUCCESS MODAL */}
+         <SubmitSuccessModal
+            isOpen={showSuccessModal}
+            onClose={handleSuccessClose}
+            onContinue={handleSuccessContinue}
+            title="Field Report Saved Successfully!"
+            itemName={`Case #${params.reportsId} Field Report`}
+            message="Your field report has been successfully saved and added to the case file. All details, assessments, and linked evidence are now part of the official investigation record."
          />
       </main>
    );
