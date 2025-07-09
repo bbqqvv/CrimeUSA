@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 public class Role {
     @Id
     @Column(name = "role_id")
@@ -25,6 +26,11 @@ public class Role {
     @OneToMany(mappedBy = "role")
     Set<User> users;
 
-    @OneToMany(mappedBy = "role")
-    Set<RolePermission> rolePermissions;
+    @ManyToMany
+    @JoinTable(
+            name = "roles_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    Set<Permission> permissions;
 }

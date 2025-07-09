@@ -10,6 +10,7 @@ import com.backend.authservice.dto.request.UserCreationRequest;
 import com.backend.authservice.dto.response.UserResponse;
 import com.backend.authservice.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /*
  * @description
@@ -20,6 +21,8 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     UserResponse toUserRes(User user);
-    User toUser(UserCreationRequest userCreationRequest);
-    User createUser(UserCreationRequest user);
+
+    @Mapping(target = "userName", source = "userName")
+    @Mapping(target = "passwordHash", source = "passwordHash")
+    User toUser(UserCreationRequest request);
 }

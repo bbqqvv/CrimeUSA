@@ -12,5 +12,12 @@ package com.backend.authservice.dto.response;
  * @date:   7/8/2025
  * @version:    1.0
  */
-public record PermissionResponse() {
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record PermissionResponse(
+        String permissionId,
+        String description
+) {
 }

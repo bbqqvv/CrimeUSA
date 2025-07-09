@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,6 +24,6 @@ public class Permission {
     @Column(name = "is_deleted", nullable = false)
     boolean isDeleted = false;
 
-    @OneToMany(mappedBy = "permission")
-    Set<RolePermission> rolePermissions;
+    @ManyToMany(mappedBy = "permissions")
+    Set<Role> roles;
 }

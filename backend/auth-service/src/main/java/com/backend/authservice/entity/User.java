@@ -17,18 +17,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User implements UserDetails {
+@ToString
+public class User {
     @Id
-    String username;
-    @Column(name = "password_hash")
+    @Column(name = "user_name")
+    String userName;
+    @Column(name = "password_hash",nullable = false)
     String passwordHash;
     @Column(name = "full_name")
-    String fullname;
+    String fullName;
     @Column(name = "avatar_url")
     String avatarUrl;
     String email;
     @Column(name = "phone_number")
-    String phonenumber;
+    String phoneNumber;
     @Column(name = "create_at")
     LocalDateTime createAt;
     @Column(name = "is_delete", nullable = false)
@@ -36,41 +38,4 @@ public class User implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "role_id")
     Role role;
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getRolePermissions().stream()
-                .map(p -> (GrantedAuthority) () -> p.getRole().getDescription())
-                .collect(Collectors.toList());
-    }
-    @Override
-    public String getPassword() {
-        return passwordHash;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return !isDeleted;
-    }
 }

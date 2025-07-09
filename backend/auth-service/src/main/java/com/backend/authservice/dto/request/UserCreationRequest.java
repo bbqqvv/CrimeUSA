@@ -8,9 +8,7 @@ package com.backend.authservice.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 /*
@@ -20,13 +18,16 @@ import lombok.experimental.FieldDefaults;
  * @version:    1.0
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
     @NotEmpty(message = "Username cannot be empty")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
-    String username;
+    private String userName;
     @NotEmpty(message = "Password cannot be empty")
     @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
-    String passwordHash;
+    private String passwordHash;
+    @NotEmpty(message = "Role ID cannot be empty")
+    private String roleId;
 }

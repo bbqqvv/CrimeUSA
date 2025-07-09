@@ -10,6 +10,8 @@ package com.backend.authservice.service;
 import com.backend.authservice.dto.request.UserCreationRequest;
 import com.backend.authservice.dto.response.UserResponse;
 
+import java.util.List;
+
 /*
  * @description
  * @author: Khuong Pham
@@ -19,4 +21,6 @@ import com.backend.authservice.dto.response.UserResponse;
 public interface UserService {
     UserResponse createUser(UserCreationRequest userCreationRequest);
     UserResponse getUserByUsername(String username);
+    List<UserResponse> getAllUsers();
+    UserResponse getMyInfo();
 }
