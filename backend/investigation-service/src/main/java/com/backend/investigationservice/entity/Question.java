@@ -1,4 +1,4 @@
-package com.backend.investigationservice.model;
+package com.backend.investigationservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +30,7 @@ public class Question {
 
     @Column(name = "interview_id")
     private UUID interviewId;
+
 
     @Column(name = "is_deleted")
     private boolean isDeleted;

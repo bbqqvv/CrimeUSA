@@ -2,42 +2,43 @@ package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecordInfoDTO {
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Record info ID cannot be empty")
+    @Size(max = 50, message = "Record info ID must not exceed 50 characters")
     private String recordInfoId;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Evidence ID cannot be empty")
+    @Size(max = 50, message = "Evidence ID must not exceed 50 characters")
     private String evidenceId;
 
-    @NotBlank
+    @NotBlank(message = "Type name cannot be empty")
+    @Size(max = 50, message = "Type name must not exceed 50 characters")
     private String typeName;
 
-    @NotBlank
+    @NotBlank(message = "Source cannot be empty")
+    @Size(max = 100, message = "Source must not exceed 100 characters")
     private String source;
 
-    @NotNull
+    @NotNull(message = "Date collected cannot be null")
     private LocalDateTime dateCollected;
 
-    @NotBlank
+    @NotBlank(message = "Summary cannot be empty")
+    @Size(max = 500, message = "Summary must not exceed 500 characters")
     private String summary;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Created at timestamp cannot be null")
     private LocalDateTime createdAt;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Updated at timestamp cannot be null")
     private LocalDateTime updatedAt;
 
     private boolean isDeleted;

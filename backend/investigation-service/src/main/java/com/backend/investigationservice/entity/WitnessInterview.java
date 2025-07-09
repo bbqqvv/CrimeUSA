@@ -1,4 +1,4 @@
-package com.backend.investigationservice.model;
+package com.backend.investigationservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WitnessInterview {
-
     @EmbeddedId
     private WitnessInterviewId id;
 

@@ -1,14 +1,12 @@
 package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.util.UUID;
 
 @Data
 public class SuspectDTO {
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Suspect ID cannot be empty")
+    @Size(max = 50, message = "Suspect ID must not exceed 50 characters")
     private String suspectId;
 }

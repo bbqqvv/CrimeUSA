@@ -1,5 +1,4 @@
-package com.backend.investigationservice.model;
-
+package com.backend.investigationservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,9 +8,9 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WitnessInterviewId implements java.io.Serializable {
-    @Column(name = "witness_id")
-    private UUID witnessId;
+public class VictimInterviewId implements java.io.Serializable {
+    @Column(name = "victim_id")
+    private UUID victimId;
 
     @Column(name = "interview_id")
     private UUID interviewId;

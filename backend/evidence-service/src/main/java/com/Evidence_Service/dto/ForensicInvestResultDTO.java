@@ -2,43 +2,44 @@ package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ForensicInvestResultDTO {
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Result ID cannot be empty")
+    @Size(max = 50, message = "Result ID must not exceed 50 characters")
     private String resultId;
 
-
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Evidence ID cannot be empty")
+    @Size(max = 50, message = "Evidence ID must not exceed 50 characters")
     private String evidenceId;
 
-    @NotBlank
+    @NotBlank(message = "Lab name cannot be empty")
+    @Size(max = 100, message = "Lab name must not exceed 100 characters")
     private String labName;
 
-    @NotBlank
+    @NotBlank(message = "Report cannot be empty")
+    @Size(max = 500, message = "Report must not exceed 500 characters")
     private String report;
 
-    @NotBlank
+    @NotBlank(message = "Result summary cannot be empty")
+    @Size(max = 500, message = "Result summary must not exceed 500 characters")
     private String resultSummary;
 
-    @NotBlank
+    @NotBlank(message = "Notes cannot be empty")
+    @Size(max = 1000, message = "Notes must not exceed 1000 characters")
     private String notes;
 
-    @NotBlank
+    @NotBlank(message = "Image URL cannot be empty")
+    @Size(max = 255, message = "Image URL must not exceed 255 characters")
     private String imageUrl;
 
-
-
-    @NotNull
+    @NotNull(message = "Created at timestamp cannot be null")
     private LocalDateTime createdAt;
 
     private boolean isDeleted;

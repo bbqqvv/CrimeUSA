@@ -1,8 +1,6 @@
-package com.backend.investigationservice.model;
+package com.backend.investigationservice.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -60,9 +58,5 @@ public class Interview {
     @Column(name = "file_path")
     private List<String> attachedFiles;
 
-    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
-    private List<WitnessInterview> witnessInterviews;
 
-    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
-    private List<VictimInterview> victimInterviews;
 }

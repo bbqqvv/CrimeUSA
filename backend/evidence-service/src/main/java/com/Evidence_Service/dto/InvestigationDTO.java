@@ -1,26 +1,26 @@
 package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvestigationDTO {
-
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Result ID cannot be empty")
+    @Size(max = 50, message = "Result ID must not exceed 50 characters")
     private String resultId;
 
-    @NotBlank
+    @NotBlank(message = "Type cannot be empty")
+    @Size(max = 50, message = "Type must not exceed 50 characters")
     private String type;
 
-    @NotBlank
+    @NotBlank(message = "Upload file cannot be empty")
+    @Size(max = 255, message = "Upload file path must not exceed 255 characters")
     private String uploadFile;
 
-    @NotBlank
+    @NotBlank(message = "Content cannot be empty")
+    @Size(max = 1000, message = "Content must not exceed 1000 characters")
     private String content;
 }

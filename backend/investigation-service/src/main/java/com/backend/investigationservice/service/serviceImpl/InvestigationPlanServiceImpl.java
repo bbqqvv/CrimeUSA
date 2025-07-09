@@ -3,7 +3,7 @@ package com.backend.investigationservice.service.serviceImpl;
 import com.backend.investigationservice.dto.request.InvestigationPlanCreationRequest;
 import com.backend.investigationservice.dto.response.InvestigationPlanResponse;
 import com.backend.investigationservice.mapper.InvestigationPlanMapper;
-import com.backend.investigationservice.model.InvestigationPlan;
+import com.backend.investigationservice.entity.InvestigationPlan;
 import com.backend.investigationservice.repository.InvestigationPlanRepository;
 import com.backend.investigationservice.service.InvestigationPlanService;
 import jakarta.persistence.criteria.Predicate;

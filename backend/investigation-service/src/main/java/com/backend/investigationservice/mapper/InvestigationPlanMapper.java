@@ -2,7 +2,7 @@ package com.backend.investigationservice.mapper;
 
 import com.backend.investigationservice.dto.request.InvestigationPlanCreationRequest;
 import com.backend.investigationservice.dto.response.InvestigationPlanResponse;
-import com.backend.investigationservice.model.InvestigationPlan;
+import com.backend.investigationservice.entity.InvestigationPlan;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
