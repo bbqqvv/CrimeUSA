@@ -5,53 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44820489-d502-4b12-a185-2442831f06d7" name="Changes" comment="feat: implement authentication service with JWT support">
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/AuthServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/AuthRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/AuthResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/PermissionCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/RoleCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/UserCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/PermissionResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/RoleResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/UserResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/Permission.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/RolePermission.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/RolePermissionId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/PermissionRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/RoleReposiory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/JwtService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/AuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/UserDetailsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/configs/OpenAPIConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/configs/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/IntrospectRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/response/IntrospectResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/mapper/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/AuthServicee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/serviceImpl/AuthServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/serviceImpl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/auth-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/HashGenerator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/AuthServiceApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/controller/AuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/dto/AuthRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/dto/AuthResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/entity/Permission.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/entity/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/entity/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/repository/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/security/JwtAuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/security/JwtService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/security/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/service/AuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/example/service/UserDetailsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/AuthRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/AuthRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/UserCreationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/dto/request/UserCreationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/java/com/backend/authservice/service/UserDetailsServiceImpl.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/auth-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/auth-service/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth-service/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/common-service/src/main/java/com/backend/commonservice/enums/ErrorMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/common-service/src/main/java/com/backend/commonservice/enums/ErrorMessage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +37,8 @@
       <list>
         <option value="Enum" />
         <option value="Record" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -142,11 +116,11 @@
       <recent name="D:\a_DieuTra2\MockProject_062025_Nhom1\backend" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.backend.authservice.configs" />
       <recent name="com.backend.commonservice.model" />
       <recent name="com.backend.suspectservice.exception" />
       <recent name="com.backend.suspectservice.service.serviceImpl" />
       <recent name="com.backend.suspectservice.service" />
-      <recent name="com.backend.suspectservice.configs" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
@@ -245,6 +219,7 @@
       <workItem from="1751964175405" duration="952000" />
       <workItem from="1751966468859" duration="336000" />
       <workItem from="1751977876592" duration="5100000" />
+      <workItem from="1752016052958" duration="6888000" />
     </task>
     <task id="LOCAL-00001" summary="feat: implement suspect management with CRUD operations and Cloudinary integration">
       <option name="closed" value="true" />
@@ -262,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751960591493</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: implement authentication service with JWT support">
+      <option name="closed" value="true" />
+      <created>1751986216002</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751986216002</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

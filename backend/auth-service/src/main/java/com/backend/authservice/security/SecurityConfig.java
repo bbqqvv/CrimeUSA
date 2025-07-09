@@ -1,6 +1,5 @@
 package com.backend.authservice.security;
 
-import com.backend.authservice.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;

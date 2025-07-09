@@ -17,4 +17,4 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 jwt:
-  secret-key: yourSuperSecretKey1234567890ABCDEF  # ✅ Phải >= 32 ký tự
+  secret-key: ${JWT_SECRET_KEY}

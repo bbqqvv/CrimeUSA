@@ -24,7 +24,9 @@ import org.springframework.http.HttpStatus;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorMessage {
     INVALID_DATA("Validation failed", 400, HttpStatus.BAD_REQUEST),
-    SUSPECT_STATUS_NOT_FOUND("Suspect status not found", 404, HttpStatus.NOT_FOUND)
+    SUSPECT_STATUS_NOT_FOUND("Suspect status not found", 404, HttpStatus.NOT_FOUND),
+    USER_NOT_FOUND("User not found", 404, HttpStatus.NOT_FOUND),
+    INVALID_CREDENTIALS("username or password invalid", 401, HttpStatus.UNAUTHORIZED),
     ;
     String message;
     int code;
