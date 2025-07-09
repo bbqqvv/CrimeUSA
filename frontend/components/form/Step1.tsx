@@ -37,10 +37,9 @@ export default function Step1({ data, onNext }: Props) {
     };
 
     const relationshipOptions = [
-        { value: 'victim', label: 'Victim' },
         { value: 'witness', label: 'Witness' },
-        { value: 'offender', label: 'Offender' },
-        { value: 'anonymous', label: 'Anonymous' },
+        { value: 'victim', label: 'Victim' },
+        { value: 'suspect', label: 'Suspect' },
     ];
 
     return (
@@ -56,19 +55,19 @@ export default function Step1({ data, onNext }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
                 <div className="space-y-2">
                     <Label htmlFor="fullName">Full name <span className="text-red-500">*</span></Label>
-                    <Input id="fullName" value={localData.fullName} onChange={handleChange} />
+                    <Input id="fullName" value={localData.fullName} onChange={handleChange} required placeholder='E.g., John Michael Doe' />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
-                    <Input id="email" type="email" value={localData.email} onChange={handleChange} />
+                    <Input id="email" type="email" value={localData.email} onChange={handleChange} required placeholder='E.g., john.doe@example.com' />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="phone">Phone number <span className="text-red-500">*</span></Label>
-                    <Input id="phone" value={localData.phone} onChange={handleChange} />
+                    <Input id="phone" value={localData.phone} onChange={handleChange} required placeholder='E.g., +1 (555) 123-4567' />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="address">Address</Label>
-                    <Input id="address" value={localData.address} onChange={handleChange} />
+                    <Input id="address" value={localData.address} onChange={handleChange} required placeholder='E.g., 123 Main St, Anytown, USA' />
                 </div>
             </div>
 

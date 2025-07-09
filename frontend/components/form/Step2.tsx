@@ -48,10 +48,6 @@ export default function Step2({ data, onNext, onBack }: any) {
   const [initialEvidence, setInitialEvidence] = useState<any[]>([]);
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
-  // Dữ liệu lấy từ props (database)
-  //const relevantParties = data.relevantParties || [];
-  //const initialEvidence = data.initialEvidence || [];
-  // Lấy dữ liệu từ session
   const [showInitialModal, setShowInitialModal] = useState(false);
   const [showRelevantModal, setShowRelevantModal] = useState(false);
   const handleChange = (e: any) => {
@@ -184,7 +180,7 @@ export default function Step2({ data, onNext, onBack }: any) {
             <Label htmlFor="address" className="text-base font-semibold">
               Detailed address
             </Label>
-            <Input type="text" name="address" className="w-full" />
+            <Input type="text" name="address" className="w-full" placeholder="Enter detailed address" />
           </div>
         </div>
         <div className="mt-6 space-y-2">

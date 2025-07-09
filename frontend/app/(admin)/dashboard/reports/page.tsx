@@ -1,5 +1,6 @@
 //app/page.tsx
-import ReportsTable from "@/components/ReportsTable";
+
+import ReportsTable from "./components/ReportsTable";
 
 export default function Home() {
   return (
