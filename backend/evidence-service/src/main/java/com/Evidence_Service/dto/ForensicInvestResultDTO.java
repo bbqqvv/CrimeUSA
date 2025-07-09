@@ -16,9 +16,6 @@ public class ForensicInvestResultDTO {
     @NotBlank
     private String resultId;
 
-    @NotNull
-    @NotBlank
-    private String investigationPlanId;
 
     @NotNull
     @NotBlank

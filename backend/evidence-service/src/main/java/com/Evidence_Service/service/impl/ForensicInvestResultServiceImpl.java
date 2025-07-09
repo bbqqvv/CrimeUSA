@@ -9,12 +9,14 @@ import com.Evidence_Service.kafka.KafkaEventPublisher;
 import com.Evidence_Service.mapper.ForensicInvestResultMapper;
 import com.Evidence_Service.entity.ForensicInvestResult;
 import com.Evidence_Service.repository.ForensicInvestResultRepository;
+import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.ForensicInvestResultService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,6 @@ import java.util.List;
 public class ForensicInvestResultServiceImpl implements ForensicInvestResultService {
 
     private static final Logger log = LoggerFactory.getLogger(ForensicInvestResultServiceImpl.class);
-
     private final ForensicInvestResultRepository forensicInvestResultRepository;
     private final KafkaEventPublisher publisher;
 
@@ -116,19 +117,6 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
                     .map(ForensicInvestResultMapper::toDTO);
         } catch (Exception ex) {
             log.error("Failed to retrieve forensic investigation results for evidence ID {}: {}", evidenceId, ex.getMessage(), ex);
-            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Cacheable(value = "forensicInvestResultsByInvestigation", key = "#investigationId + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
-    @Override
-    public Page<ForensicInvestResultDTO> getAllForensicInvestByInvestigationId(String investigationId, Pageable pageable) {
-        try {
-            log.info("Retrieving all forensic investigation results for investigation ID: {}", investigationId);
-            return forensicInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationId, pageable)
-                    .map(ForensicInvestResultMapper::toDTO);
-        } catch (Exception ex) {
-            log.error("Failed to retrieve forensic investigation results for investigation ID {}: {}", investigationId, ex.getMessage(), ex);
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

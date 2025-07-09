@@ -9,12 +9,14 @@ import com.Evidence_Service.kafka.KafkaEventPublisher;
 import com.Evidence_Service.mapper.FinancialInvestResultMapper;
 import com.Evidence_Service.entity.FinancialInvestResult;
 import com.Evidence_Service.repository.FinancialInvestResultRepository;
+import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.FinancialInvestResultService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,6 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     private static final Logger log = LoggerFactory.getLogger(FinancialInvestResultServiceImpl.class);
 
-    private final EvidenceServiceImpl evidenceService;
     private final FinancialInvestResultRepository financialInvestResultRepository;
     private final KafkaEventPublisher publisher;
 
@@ -37,11 +38,6 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
     public FinancialInvestResultDTO addFinancialInvestResult(String evidenceId, FinancialInvestResultDTO dto) {
         try {
             log.info("Adding financial investigation result for evidence ID: {}", evidenceId);
-            // Check if evidence exists
-            if (evidenceService.existsByEvidenceId(evidenceId)) {
-                log.warn("Evidence not found for ID: {}", evidenceId);
-                throw new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND);
-            }
 
             // Convert DTO to entity and set evidence ID
             FinancialInvestResult result = FinancialInvestResultMapper.toEntity(dto);
@@ -88,7 +84,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
     @Override
     public void assignFinancialInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
+            List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
 
             if (financialInvestResults ==  null) {
                 FinancialInvestResult.builder()

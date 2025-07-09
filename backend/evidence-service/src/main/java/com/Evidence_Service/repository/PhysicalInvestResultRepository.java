@@ -15,8 +15,4 @@ public interface PhysicalInvestResultRepository extends JpaRepository<PhysicalIn
     PhysicalInvestResult findByResultIdAndIsDeletedFalse(String resultId);
 
     boolean existsByEvidenceIdAndIsDeletedFalse(String evidenceId);
-
-    List<PhysicalInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
-
-
 }

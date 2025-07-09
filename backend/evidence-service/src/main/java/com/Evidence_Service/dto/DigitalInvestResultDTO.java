@@ -16,9 +16,6 @@ public class DigitalInvestResultDTO {
     private String resultId;
 
     @NotBlank
-    private String investigationPlanId;
-
-    @NotBlank
     private String evidenceId;
 
     @NotBlank

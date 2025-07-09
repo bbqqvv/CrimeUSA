@@ -14,6 +14,4 @@ public interface FinancialInvestResultRepository extends JpaRepository<Financial
     List<FinancialInvestResult> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId);
 
     boolean existsByEvidenceIdAndIsDeletedFalse(String evidenceId);
-
-    List<FinancialInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
 }

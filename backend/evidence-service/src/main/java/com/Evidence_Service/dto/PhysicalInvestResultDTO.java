@@ -17,10 +17,6 @@ public class PhysicalInvestResultDTO {
 
     @NotBlank
     @NotNull
-    private String investigationPlanId;
-
-    @NotBlank
-    @NotNull
     private String evidenceId;
 
     @NotBlank

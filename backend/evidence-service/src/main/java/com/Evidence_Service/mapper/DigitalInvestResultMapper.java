@@ -10,7 +10,6 @@ public class DigitalInvestResultMapper {
 
         return DigitalInvestResultDTO.builder()
                 .resultId(entity.getResultId())
-                .investigationPlanId(entity.getInvestigationPlanId())
                 .evidenceId(entity.getEvidenceId())
                 .deviceType(entity.getDeviceType())
                 .analystTool(entity.getAnalystTool())
@@ -25,7 +24,6 @@ public class DigitalInvestResultMapper {
 
         return DigitalInvestResult.builder()
                 .resultId(dto.getResultId())
-                .investigationPlanId(dto.getInvestigationPlanId())
                 .evidenceId(dto.getEvidenceId())
                 .deviceType(dto.getDeviceType())
                 .analystTool(dto.getAnalystTool())

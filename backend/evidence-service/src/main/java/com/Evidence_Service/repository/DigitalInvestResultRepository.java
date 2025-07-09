@@ -13,6 +13,4 @@ public interface DigitalInvestResultRepository extends JpaRepository<DigitalInve
     List<DigitalInvestResult> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId);
     Optional<DigitalInvestResult> findByResultIdAndIsDeletedFalse(String resultId);
     boolean existsByEvidenceIdAndIsDeletedFalse(String evidenceId);
-
-    List<DigitalInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
 }

@@ -16,8 +16,6 @@ public class FinancialInvestResultDTO {
     @NotNull
     private String resultId;
 
-    @NotBlank
-    private String investigationPlanId;
 
     @NotBlank
     private String evidenceId;

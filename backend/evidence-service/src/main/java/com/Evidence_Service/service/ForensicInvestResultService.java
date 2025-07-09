@@ -14,8 +14,6 @@ public interface ForensicInvestResultService {
 
     Page<ForensicInvestResultDTO> getAllForensicInvestByEvidenceId(String evidenceId, Pageable pageable);
 
-    Page<ForensicInvestResultDTO> getAllForensicInvestByInvestigationId(String investigationId, Pageable pageable);
-
     ForensicInvestResultDTO updateForensicInvest(String evidenceId, String resultId, ForensicInvestResultDTO dto);
 
     void deleteForensicInvestByResultId(String resultId);

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class ForensicInvestResultCreatedEvent {
     private String resultId;
     private String evidenceId;
-    private String investigationPlanId;
     private String labName;
     private String report;
     private String resultSummary;
@@ -22,7 +21,6 @@ public class ForensicInvestResultCreatedEvent {
         return new ForensicInvestResultCreatedEvent(
                 dto.getResultId(),
                 dto.getEvidenceId(),
-                dto.getInvestigationPlanId(),
                 dto.getLabName(),
                 dto.getReport(),
                 dto.getResultSummary(),

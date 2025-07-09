@@ -18,6 +18,7 @@ import com.Evidence_Service.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -81,29 +82,11 @@ public class EvidenceServiceImpl implements EvidenceService {
             Evidence evidence = getEvidenceOrThrow(evidenceId);
             evidence.setDeleted(true);
             evidence.setStatus(EvidenceStatus.DELETED);
-
-            //Call delete result invest of Evidence if exists
-            if (digitalInvestResultService.existsByEvidenceId(evidenceId)) {
-                digitalInvestResultService.deleteByEvidenceId(evidenceId);
-            }
-            if (financialInvestResultService.existsByEvidenceId(evidenceId)) {
-                financialInvestResultService.deleteByEvidenceId(evidenceId);
-            }
-            if (physicalInvestResultService.existsByEvidenceId(evidenceId)) {
-                physicalInvestResultService.deleteByEvidenceId(evidenceId);
-            }
-            if (forensicInvestResultService.existsByEvidenceId(evidenceId)) {
-                forensicInvestResultService.deleteByEvidenceId(evidenceId);
-            }
-
-            //Call delete RecordInfo of Evidence if exists
-            if (recordInfoService.existsByEvidenceId(evidenceId)) {
-                recordInfoService.deleteByEvidenceId(evidenceId);
-            }
-
             evidenceRepository.save(evidence);
-            // Publish event to notify evidence deletion
+
+            // Publish event instead of direct service call
             eventPublisher.send("evidence.deleted", new EvidenceDeletedEvent());
+
             log.info("Successfully deleted evidence with ID: {}", evidenceId);
         } catch (Exception ex) {
             log.error("Failed to delete evidence with ID {}: {}", evidenceId, ex.getMessage(), ex);

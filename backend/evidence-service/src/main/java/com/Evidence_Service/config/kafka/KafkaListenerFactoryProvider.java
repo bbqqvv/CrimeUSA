@@ -93,7 +93,7 @@ public class KafkaListenerFactoryProvider {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ResultInvestAssignedEvent> investigationCreatedKafkaListenerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, ResultInvestAssignedEvent> investigationAssignedKafkaListenerFactory() {
         return buildFactory(ResultInvestAssignedEvent.class, "evidence-service");
     }
 

@@ -11,7 +11,6 @@ public class PhysicalInvestResultMapper {
 
         return PhysicalInvestResultDTO.builder()
                 .resultId(entity.getResultId())
-                .investigationPlanId(entity.getInvestigationPlanId())
                 .evidenceId(entity.getEvidenceId())
                 .status(String.valueOf(entity.getStatus()))
                 .notes(entity.getNotes())
@@ -26,7 +25,6 @@ public class PhysicalInvestResultMapper {
 
         return PhysicalInvestResult.builder()
                 .resultId(dto.getResultId())
-                .investigationPlanId(dto.getInvestigationPlanId())
                 .evidenceId(dto.getEvidenceId())
                 .status(PhysicalInvestStatus.valueOf(dto.getStatus()))
                 .notes(dto.getNotes())

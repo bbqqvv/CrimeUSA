@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class FinancialInvestResultCreatedEvent {
     private String resultId;
     private String evidenceId;
-    private String investigationPlanId;
     private String summary;
     private String attachedFile;
     private LocalDateTime createdAt;
@@ -22,7 +21,6 @@ public class FinancialInvestResultCreatedEvent {
         return new FinancialInvestResultCreatedEvent(
                 dto.getResultId(),
                 dto.getEvidenceId(),
-                dto.getInvestigationPlanId(),
                 dto.getSummary(),
                 dto.getAttachedFile(),
                 dto.getCreatedAt()

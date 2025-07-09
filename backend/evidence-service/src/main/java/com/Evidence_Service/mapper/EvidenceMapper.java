@@ -29,7 +29,7 @@ public class EvidenceMapper {
     }
 
     public static Evidence toEntity(EvidenceDTO dto) {
-        if (evidence == null) return null;
+        if (dto == null) return null;
 
 
         return Evidence.builder()

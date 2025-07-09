@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvestigationDTO {
-    @NotNull
-    @NotBlank
-    private String investigationPlanId;
 
     @NotNull
     @NotBlank

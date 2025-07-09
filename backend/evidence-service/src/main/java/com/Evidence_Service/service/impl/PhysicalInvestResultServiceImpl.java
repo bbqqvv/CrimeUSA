@@ -9,12 +9,14 @@ import com.Evidence_Service.kafka.KafkaEventPublisher;
 import com.Evidence_Service.mapper.PhysicalInvestResultMapper;
 import com.Evidence_Service.entity.PhysicalInvestResult;
 import com.Evidence_Service.repository.PhysicalInvestResultRepository;
+import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.PhysicalInvestResultService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,6 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     private static final Logger log = LoggerFactory.getLogger(PhysicalInvestResultServiceImpl.class);
 
-    private final EvidenceServiceImpl evidenceService;
     private final PhysicalInvestResultRepository physicalInvestResultRepository;
     private final KafkaEventPublisher publisher;
 
@@ -36,11 +37,6 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     @Override
     public PhysicalInvestResultDTO addPhysicalInvestResult(String evidenceId, PhysicalInvestResultDTO dto) {
         try {
-            // Check if evidence exists
-            if (evidenceService.existsByEvidenceId(evidenceId)) {
-                throw new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND);
-            }
-
             // Convert DTO to entity and set evidence ID
             PhysicalInvestResult result = PhysicalInvestResultMapper.toEntity(dto);
             result.setEvidenceId(evidenceId);
@@ -175,7 +171,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     @Override
     public void assignPhysicalInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
+            List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
 
             if (physicalInvestResults ==  null) {
                 PhysicalInvestResult.builder()

@@ -10,10 +10,12 @@ import com.Evidence_Service.mapper.DigitalInvestResultMapper;
 import com.Evidence_Service.entity.DigitalInvestResult;
 import com.Evidence_Service.repository.DigitalInvestResultRepository;
 import com.Evidence_Service.service.DigitalInvestResultService;
+import com.Evidence_Service.service.EvidenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DigitalInvestResultServiceImpl implements DigitalInvestResultService {
 
-    private final EvidenceServiceImpl evidenceService;
     private final DigitalInvestResultRepository digitalInvestResultRepository;
     private final EventPublisher publisher;
 
@@ -61,7 +62,7 @@ public class DigitalInvestResultServiceImpl implements DigitalInvestResultServic
     @Override
     public void assignDigitalInvestResult(ResultInvestAssignedEvent event) {
         try {
-            List<DigitalInvestResult> digitalInvestResults = digitalInvestResultRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
+            List<DigitalInvestResult> digitalInvestResults = digitalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
 
             if (digitalInvestResults ==  null) {
                 DigitalInvestResult.builder()

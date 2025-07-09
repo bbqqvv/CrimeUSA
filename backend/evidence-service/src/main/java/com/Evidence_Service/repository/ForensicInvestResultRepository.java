@@ -14,8 +14,5 @@ public interface ForensicInvestResultRepository extends JpaRepository<ForensicIn
 
     List<ForensicInvestResult> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId);
 
-    Page<ForensicInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationId, Pageable pageable);
-
-    List<ForensicInvestResult> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationId);
     boolean existsByEvidenceIdAndIsDeletedFalse(String evidenceId);
 }
