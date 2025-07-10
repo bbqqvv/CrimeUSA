@@ -1,20 +1,19 @@
-/*
- * @ (#) TimeLine.java 1.0 7/9/2025
- *
- * Copyright (c) 2025 IUH.All rights reserved
- */
-
 package com.example.caseservicebase.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Timeline {
     @Id
     @Column(name = "timeline_id")

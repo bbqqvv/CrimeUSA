@@ -1,18 +1,14 @@
-/*
- * @ (#) CaseService.java 1.0 7/9/2025
- *
- * Copyright (c) 2025 IUH.All rights reserved
- */
 package com.example.caseservicebase.service;
 
-import org.springframework.stereotype.Service;
+import com.backend.caseservice.dto.requestDTO.CaseRequestDTO;
+import com.backend.caseservice.model.Case;
 
-/*
- * @description
- * @author : Nguyen Truong An
- * @date : 7/9/2025
- * @version 1.0
- */
-@Service
+import java.util.List;
+
 public interface CaseService {
+    Long createCase(CaseRequestDTO request);
+    Case updateCase(Long caseId, CaseRequestDTO request);
+    Case getCaseById(Long caseId);
+    List<Case> getAllCases();
+    void softDeleteCase(Long caseId);
 }

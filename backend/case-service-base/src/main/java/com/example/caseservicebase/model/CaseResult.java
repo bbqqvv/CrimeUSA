@@ -1,12 +1,8 @@
-/*
- * @ (#) CaseResult.java 1.0 7/9/2025
- *
- * Copyright (c) 2025 IUH.All rights reserved
- */
-
 package com.example.caseservicebase.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CaseResult {
     @Id
     @Column(name = "case_result_id")
@@ -41,4 +39,5 @@ public class CaseResult {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+
 }

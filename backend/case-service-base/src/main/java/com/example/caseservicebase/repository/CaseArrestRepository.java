@@ -1,20 +1,25 @@
 /*
- * @ (#) CaseRepository.java 1.0 7/9/2025
+ * @ (#) CaseArrestRepository.java 1.0 7/10/2025
  *
  * Copyright (c) 2025 IUH.All rights reserved
  */
 package com.example.caseservicebase.repository;
 
+import com.backend.caseservice.model.CaseArrest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 /*
  * @description
  * @author : Nguyen Truong An
- * @date : 7/9/2025
+ * @date : 7/10/2025
  * @version 1.0
  */
 @Repository
-public interface CaseArrestRepository extends JpaRepository<CaseArrestRepository
-        , Long> {
+public interface CaseArrestRepository extends JpaRepository<CaseArrest, Long> {
+    Optional<CaseArrest> findByIdAndIsDeletedFalse(Long id);
+    List<CaseArrest> findAllByIsDeletedFalse();
 }

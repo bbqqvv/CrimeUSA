@@ -1,23 +1,20 @@
-/*
- * @ (#) Case.java 1.0 7/9/2025
- *
- * Copyright (c) 2025 IUH.All rights reserved
- */
-
 package com.example.caseservicebase.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "cases")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Case {
     @Id
@@ -40,6 +37,7 @@ public class Case {
     private String summary;
 
     @Column(name = "create_at")
+    @CreationTimestamp
     private LocalDateTime createAt;
 
     @Column(name = "case_target")
