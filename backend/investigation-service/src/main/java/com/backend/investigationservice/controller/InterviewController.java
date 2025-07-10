@@ -82,4 +82,16 @@ public class InterviewController {
         Page<InterviewResponse> page = interviewService.findAll(keyword, pageable);
         return ResponseEntity.ok(page);
     }
-} 
+    /**
+     * Get an interview by ID
+     */
+    @GetMapping("/{interviewId}")
+    @Operation(summary = "Get Interview by ID", description = "Retrieve an interview by its ID, including its questions")
+    @ApiResponse(responseCode = "200", description = "Interview retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "Interview not found")
+    @ApiResponse(responseCode = "400", description = "Invalid interview ID")
+    public ResponseEntity<InterviewResponse> getInterviewById(@PathVariable UUID interviewId) {
+        InterviewResponse response = interviewService.getInterviewById(interviewId);
+        return ResponseEntity.ok(response);
+    }
+}

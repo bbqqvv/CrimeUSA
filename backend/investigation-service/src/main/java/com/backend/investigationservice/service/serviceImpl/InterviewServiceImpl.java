@@ -1,6 +1,7 @@
 package com.backend.investigationservice.service.serviceImpl;
 
 import com.backend.investigationservice.dto.request.InterviewCreationRequest;
+import com.backend.investigationservice.dto.request.InterviewUpdateRequest;
 import com.backend.investigationservice.dto.response.InterviewResponse;
 import com.backend.investigationservice.mapper.InterviewMapper;
 import com.backend.investigationservice.mapper.QuestionMapper;
@@ -61,6 +62,46 @@ public class InterviewServiceImpl implements InterviewService {
             List<Question> questions = questionRepository.findByInterviewIdAndIsDeletedFalse(interview.getInterviewId());
             return InterviewMapper.toResponse(interview, questions);
         });
+    }
+
+    @Override
+    public InterviewResponse getInterviewById(UUID interviewId) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Interview not found"));
+
+        List<Question> questions = questionRepository.findByInterviewIdAndIsDeletedFalse(interviewId);
+
+        return InterviewMapper.toResponse(interview, questions);
+    }
+
+    @Override
+    public InterviewResponse updateInterview(UUID interviewId, InterviewUpdateRequest request) {
+        Interview interview = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Interview not found"));
+
+        // Update fields
+        interview.setLocation(request.getLocation());
+        interview.setStartTime(request.getStartTime());
+        interview.setEndTime(request.getEndTime());
+        interview.setHolidayConflict(request.getHolidayConflict());
+        interview.setHolidayId(request.getHolidayId());
+        interview.setIntervieweeType(request.getIntervieweeType());
+        interview.setIntervieweeId(request.getIntervieweeId());
+        interview.setIntervieweeName(request.getIntervieweeName());
+        interview.setAttachedFiles(request.getAttachedFiles());
+        interview = interviewRepository.save(interview);
+        // Update Questions
+        List<Question> existingQuestions = questionRepository.findByInterviewIdAndIsDeletedFalse(interviewId);
+        List<Question> updatedQuestions = QuestionMapper.toEntities(request.getQuestions(), interviewId);
+        // Delete old questions
+        existingQuestions.forEach(question -> {
+            question.setDeleted(true);
+            questionRepository.save(question);
+        });
+        // Save new questions
+        questionRepository.saveAll(updatedQuestions);
+        // Return updated interview response
+        return InterviewMapper.toResponse(interview, updatedQuestions);
     }
 
     @Override
