@@ -1,5 +1,6 @@
 package com.backend.reportservice.controller;
 
+import com.backend.reportservice.dto.response.ApiResponse;
 import com.backend.reportservice.dto.response.ReportDto;
 import com.backend.reportservice.dto.request.ReportRequest;
 import com.backend.reportservice.entity.Report;
@@ -23,41 +24,65 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping("")
-    public ResponseEntity<List<Report>> getAllReport() {
+    public ApiResponse<List<Report>> getAllReport() {
         List<Report> reports = reportService.getAllReports();
-        return ResponseEntity.ok(reports);
+        return ApiResponse.<List<Report>>builder()
+                .code(200)
+                .message("Get all reports")
+                .data(reports)
+                .build();
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ReportDto>> getReports(
+    public ApiResponse<List<ReportDto>> getReports(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String severity,
             @RequestParam(required = false) String typeOfReport,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime reportAt
     ) {
         List<ReportDto> reports = reportService.getReports(status, typeOfReport, reportAt);
-        return ResponseEntity.ok(reports);
+        return ApiResponse.<List<ReportDto>>builder()
+                .code(200)
+                .message("Get reports by filter")
+                .data(reports)
+                .build();
     }
 
 
     @GetMapping("/statuses")
-    public ResponseEntity<List<String>> getAllStatuses() {
-        return ResponseEntity.ok(reportService.getAllStatuses());
+    public ApiResponse<List<String>> getAllStatuses() {
+        return ApiResponse.<List<String>>builder()
+                .code(200)
+                .message("Get statuses")
+                .data(reportService.getAllStatuses())
+                .build();
     }
 
     @GetMapping("/severities")
-    public ResponseEntity<List<String>> getAllSeverities() {
-        return ResponseEntity.ok(reportService.getAllSeverities());
+    public ApiResponse<List<String>> getAllSeverities() {
+        return ApiResponse.<List<String>>builder()
+                .code(200)
+                .message("Get severities")
+                .data(reportService.getAllSeverities())
+                .build();
     }
 
     @GetMapping("/report-types")
-    public ResponseEntity<List<String>> getAllCrimeTypes() {
-        return ResponseEntity.ok(reportService.getAllCrimeTypes());
+    public ApiResponse<List<String>> getAllCrimeTypes() {
+        return ApiResponse.<List<String>>builder()
+                .code(200)
+                .message("Get report types")
+                .data(reportService.getAllCrimeTypes())
+                .build();
     }
 
     @PostMapping
-    public ResponseEntity<ReportDto> createReport(@RequestBody ReportRequest reportRequest) {
+    public ApiResponse<ReportDto> createReport(@RequestBody ReportRequest reportRequest) {
         ReportDto savedReport = reportService.saveReport(reportRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedReport);
+        return ApiResponse.<ReportDto>builder()
+                .code(201)
+                .message("Report created")
+                .data(savedReport)
+                .build();
     }
 }
