@@ -3,10 +3,15 @@ package com.backend.reportservice.service.impl;
 import com.backend.reportservice.dto.response.ReportDto;
 import com.backend.reportservice.dto.request.ReportRequest;
 import com.backend.reportservice.entity.Report;
+import com.backend.reportservice.kafka.producer.ReportKafkaProducer;
 import com.backend.reportservice.mapper.ReportMapper;
 import com.backend.reportservice.repository.ReportRepository;
 import com.backend.reportservice.service.ReportService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,7 +25,10 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
+    private final ReportKafkaProducer reportKafkaProducer;
     private final ReportMapper reportMapper;
+    private final KafkaTemplate<String, ReportDto> kafkaTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(ReportServiceImpl.class);
 
     @Override
     public List<ReportDto> getReports(String status, String typeOfReport, LocalDateTime reportAt) {
@@ -45,6 +53,16 @@ public class ReportServiceImpl implements ReportService {
         report.setStatus("Pending");
         reportRepository.save(report);
         return reportMapper.toDto(report);
+    }
+
+    @Override
+    public ReportDto acceptReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElseThrow(() -> new EntityNotFoundException("Report not found with id: " + reportId));
+        report.setStatus("Accepted");
+        ReportDto reportDto = reportMapper.toDto(reportRepository.save(report));
+        logger.info(report.toString());
+        reportKafkaProducer.sendReportAccepted(reportId, reportDto);
+        return reportDto;
     }
 
 

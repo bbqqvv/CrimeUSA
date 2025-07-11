@@ -1,6 +1,7 @@
 package com.example.caseservicebase.service.impl;
 
 import com.example.caseservicebase.dto.requestDTO.CaseRequestDTO;
+import com.example.caseservicebase.dto.shared.ReportDto;
 import com.example.caseservicebase.model.Case;
 import com.example.caseservicebase.repository.CaseRepository;
 import com.example.caseservicebase.service.CaseService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -37,11 +39,23 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
+    public Case createCaseFromReport(ReportDto reportDto) {
+        Case caseEntity = Case.builder()
+                .caseNumber(UUID.randomUUID().toString())
+                .typeCase(reportDto.getTypeReport())
+                .severity(reportDto.getSeverity())
+                .status("New case")
+                .isDeleted(false)
+                .build();
+        return caseRepository.save(caseEntity);
+    }
+
+    @Override
     public Case updateCase(Long caseId, CaseRequestDTO request) {
         if (caseId == null || caseId <= 0) {
             throw new IllegalArgumentException("Case ID must be a positive non-null value");
         }
-        Case caseEntity = caseRepository.findByIdAndIsDeletedFalse(caseId)
+        Case caseEntity = caseRepository.findByCaseIdAndIsDeletedFalse(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found with id = " + caseId));
         if (request.getCaseNumber() != null) caseEntity.setCaseNumber(request.getCaseNumber());
         if (request.getCaseTarget() != null) caseEntity.setCaseTarget(request.getCaseTarget());
@@ -58,7 +72,7 @@ public class CaseServiceImpl implements CaseService {
         if (caseId == null || caseId <= 0) {
             throw new IllegalArgumentException("Case ID must be a positive non-null value");
         }
-        return caseRepository.findByIdAndIsDeletedFalse(caseId)
+        return caseRepository.findByCaseIdAndIsDeletedFalse(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found with id = " + caseId));
     }
 
@@ -72,7 +86,7 @@ public class CaseServiceImpl implements CaseService {
         if (caseId == null || caseId <= 0) {
             throw new IllegalArgumentException("Case ID must be a positive non-null value");
         }
-        Case caseEntity = caseRepository.findByIdAndIsDeletedFalse(caseId)
+        Case caseEntity = caseRepository.findByCaseIdAndIsDeletedFalse(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found with id = " + caseId));
         caseEntity.setIsDeleted(true);
         caseRepository.save(caseEntity);

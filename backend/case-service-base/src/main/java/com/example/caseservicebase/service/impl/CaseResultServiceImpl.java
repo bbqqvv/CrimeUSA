@@ -38,12 +38,12 @@ public class CaseResultServiceImpl implements CaseResultService {
         if (request.getCaseResultId() == null || request.getCaseResultId() <= 0) {
             throw new IllegalArgumentException("Case Result ID must be a positive non-null value");
         }
-        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
+        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
             throw new IllegalArgumentException("Invalid or non-existent Case ID");
         }
         CaseResult caseResult = CaseResult.builder()
                 .caseResultId(request.getCaseResultId())
-                .caseId(request.getCaseId() != null ? caseRepository.findByIdAndIsDeletedFalse(request.getCaseId())
+                .caseId(request.getCaseId() != null ? caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId())
                         .orElseThrow(() -> new RuntimeException("Case not found with id = " + request.getCaseId())) : null)
                 .reportTime(request.getReportTime() != null ? LocalDateTime.parse(request.getReportTime()) : null)
                 .reportAnalyst(request.getReportAnalyst())
@@ -61,13 +61,13 @@ public class CaseResultServiceImpl implements CaseResultService {
         if (caseResultId == null || caseResultId <= 0) {
             throw new IllegalArgumentException("Case Result ID must be a positive non-null value");
         }
-        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
+        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
             throw new IllegalArgumentException("Invalid or non-existent Case ID");
         }
-        CaseResult caseResult = caseResultRepository.findByIdAndIsDeletedFalse(caseResultId)
+        CaseResult caseResult = caseResultRepository.findByCaseResultIdAndIsDeletedFalse(caseResultId)
                 .orElseThrow(() -> new RuntimeException("Case Result not found with id = " + caseResultId));
         if (request.getCaseId() != null) {
-            caseResult.setCaseId(caseRepository.findByIdAndIsDeletedFalse(request.getCaseId())
+            caseResult.setCaseId(caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId())
                     .orElseThrow(() -> new RuntimeException("Case not found with id = " + request.getCaseId())));
         }
         if (request.getReportTime() != null) {
@@ -94,7 +94,7 @@ public class CaseResultServiceImpl implements CaseResultService {
         if (caseResultId == null || caseResultId <= 0) {
             throw new IllegalArgumentException("Case Result ID must be a positive non-null value");
         }
-        return caseResultRepository.findByIdAndIsDeletedFalse(caseResultId)
+        return caseResultRepository.findByCaseResultIdAndIsDeletedFalse(caseResultId)
                 .orElseThrow(() -> new RuntimeException("Case Result not found with id = " + caseResultId));
     }
 
@@ -108,7 +108,7 @@ public class CaseResultServiceImpl implements CaseResultService {
         if (caseResultId == null || caseResultId <= 0) {
             throw new IllegalArgumentException("Case Result ID must be a positive non-null value");
         }
-        CaseResult caseResult = caseResultRepository.findByIdAndIsDeletedFalse(caseResultId)
+        CaseResult caseResult = caseResultRepository.findByCaseResultIdAndIsDeletedFalse(caseResultId)
                 .orElseThrow(() -> new RuntimeException("Case Result not found with id = " + caseResultId));
         caseResult.setIsDeleted(true);
         caseResultRepository.save(caseResult);

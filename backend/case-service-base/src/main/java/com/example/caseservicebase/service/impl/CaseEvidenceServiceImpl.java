@@ -37,12 +37,12 @@ public class CaseEvidenceServiceImpl implements CaseEvidenceService {
         if (request.getEvidenceId() == null || request.getEvidenceId() <= 0) {
             throw new IllegalArgumentException("Evidence ID must be a positive non-null value");
         }
-        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
+        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
             throw new IllegalArgumentException("Invalid or non-existent Case ID");
         }
         CaseEvidence caseEvidence = CaseEvidence.builder()
                 .evidenceId(request.getEvidenceId())
-                .caseId(request.getCaseId() != null ? caseRepository.findByIdAndIsDeletedFalse(request.getCaseId())
+                .caseId(request.getCaseId() != null ? caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId())
                         .orElseThrow(() -> new RuntimeException("Case not found with id = " + request.getCaseId())) : null)
                 .isDeleted(false)
                 .build();
@@ -55,13 +55,13 @@ public class CaseEvidenceServiceImpl implements CaseEvidenceService {
         if (evidenceId == null || evidenceId <= 0) {
             throw new IllegalArgumentException("Evidence ID must be a positive non-null value");
         }
-        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
+        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
             throw new IllegalArgumentException("Invalid or non-existent Case ID");
         }
-        CaseEvidence caseEvidence = caseEvidenceRepository.findByIdAndIsDeletedFalse(evidenceId)
+        CaseEvidence caseEvidence = caseEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .orElseThrow(() -> new RuntimeException("Case Evidence not found with id = " + evidenceId));
         if (request.getCaseId() != null) {
-            caseEvidence.setCaseId(caseRepository.findByIdAndIsDeletedFalse(request.getCaseId())
+            caseEvidence.setCaseId(caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId())
                     .orElseThrow(() -> new RuntimeException("Case not found with id = " + request.getCaseId())));
         }
         log.info("Updated case evidence successfully, evidenceId={}", evidenceId);
@@ -73,7 +73,7 @@ public class CaseEvidenceServiceImpl implements CaseEvidenceService {
         if (evidenceId == null || evidenceId <= 0) {
             throw new IllegalArgumentException("Evidence ID must be a positive non-null value");
         }
-        return caseEvidenceRepository.findByIdAndIsDeletedFalse(evidenceId)
+        return caseEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .orElseThrow(() -> new RuntimeException("Case Evidence not found with id = " + evidenceId));
     }
 
@@ -87,7 +87,7 @@ public class CaseEvidenceServiceImpl implements CaseEvidenceService {
         if (evidenceId == null || evidenceId <= 0) {
             throw new IllegalArgumentException("Evidence ID must be a positive non-null value");
         }
-        CaseEvidence caseEvidence = caseEvidenceRepository.findByIdAndIsDeletedFalse(evidenceId)
+        CaseEvidence caseEvidence = caseEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
                 .orElseThrow(() -> new RuntimeException("Case Evidence not found with id = " + evidenceId));
         caseEvidence.setIsDeleted(true);
         caseEvidenceRepository.save(caseEvidence);

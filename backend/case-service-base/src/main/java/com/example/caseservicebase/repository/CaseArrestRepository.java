@@ -5,6 +5,7 @@
  */
 package com.example.caseservicebase.repository;
 
+import com.example.caseservicebase.model.Case;
 import com.example.caseservicebase.model.CaseArrest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,6 @@ import java.util.Optional;
  */
 @Repository
 public interface CaseArrestRepository extends JpaRepository<CaseArrest, Long> {
-    Optional<CaseArrest> findByIdAndIsDeletedFalse(Long id);
+    Optional<CaseArrest> findByArrestIdAndIsDeletedFalse(Long arrestId);
     List<CaseArrest> findAllByIsDeletedFalse();
 }

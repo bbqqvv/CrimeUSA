@@ -36,7 +36,7 @@ public class CaseArrestServiceImpl implements CaseArrestService {
         if (request.getArrestId() == null || request.getArrestId() <= 0) {
             throw new IllegalArgumentException("Arrest ID must be a positive non-null value");
         }
-        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
+        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
             throw new IllegalArgumentException("Invalid or non-existent Case ID");
         }
         if (request.getSuspectId() != null && request.getSuspectId() <= 0) {
@@ -44,7 +44,7 @@ public class CaseArrestServiceImpl implements CaseArrestService {
         }
         CaseArrest caseArrest = CaseArrest.builder()
                 .arrestId(request.getArrestId())
-                .caseId(request.getCaseId() != null ? caseRepository.findByIdAndIsDeletedFalse(request.getCaseId())
+                .caseId(request.getCaseId() != null ? caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId())
                         .orElseThrow(() -> new RuntimeException("Case not found with id = " + request.getCaseId())) : null)
                 .suspectId(request.getSuspectId())
                 .isDeleted(false)
@@ -58,16 +58,16 @@ public class CaseArrestServiceImpl implements CaseArrestService {
         if (arrestId == null || arrestId <= 0) {
             throw new IllegalArgumentException("Arrest ID must be a positive non-null value");
         }
-        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
+        if (request.getCaseId() != null && (request.getCaseId() <= 0 || caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId()).isEmpty())) {
             throw new IllegalArgumentException("Invalid or non-existent Case ID");
         }
         if (request.getSuspectId() != null && request.getSuspectId() <= 0) {
             throw new IllegalArgumentException("Suspect ID must be a positive value if provided");
         }
-        CaseArrest caseArrest = caseArrestRepository.findByIdAndIsDeletedFalse(arrestId)
+        CaseArrest caseArrest = caseArrestRepository.findByArrestIdAndIsDeletedFalse(arrestId)
                 .orElseThrow(() -> new RuntimeException("Case Arrest not found with id = " + arrestId));
         if (request.getCaseId() != null) {
-            caseArrest.setCaseId(caseRepository.findByIdAndIsDeletedFalse(request.getCaseId())
+            caseArrest.setCaseId(caseRepository.findByCaseIdAndIsDeletedFalse(request.getCaseId())
                     .orElseThrow(() -> new RuntimeException("Case not found with id = " + request.getCaseId())));
         }
         if (request.getSuspectId() != null) {
@@ -82,7 +82,7 @@ public class CaseArrestServiceImpl implements CaseArrestService {
         if (arrestId == null || arrestId <= 0) {
             throw new IllegalArgumentException("Arrest ID must be a positive non-null value");
         }
-        return caseArrestRepository.findByIdAndIsDeletedFalse(arrestId)
+        return caseArrestRepository.findByArrestIdAndIsDeletedFalse(arrestId)
                 .orElseThrow(() -> new RuntimeException("Case Arrest not found with id = " + arrestId));
     }
 
@@ -96,7 +96,7 @@ public class CaseArrestServiceImpl implements CaseArrestService {
         if (arrestId == null || arrestId <= 0) {
             throw new IllegalArgumentException("Arrest ID must be a positive non-null value");
         }
-        CaseArrest caseArrest = caseArrestRepository.findByIdAndIsDeletedFalse(arrestId)
+        CaseArrest caseArrest = caseArrestRepository.findByArrestIdAndIsDeletedFalse(arrestId)
                 .orElseThrow(() -> new RuntimeException("Case Arrest not found with id = " + arrestId));
         caseArrest.setIsDeleted(true);
         caseArrestRepository.save(caseArrest);

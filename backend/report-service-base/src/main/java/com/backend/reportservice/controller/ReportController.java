@@ -85,4 +85,18 @@ public class ReportController {
                 .data(savedReport)
                 .build();
     }
+
+    @PutMapping("/accept")
+    public ApiResponse<ReportDto> acceptReport(@RequestParam Long reportId) {
+        try {
+            ReportDto accpectedReport = reportService.acceptReport(reportId);
+            return ApiResponse.<ReportDto>builder()
+                    .code(200)
+                    .message("Report accepted")
+                    .data(accpectedReport)
+                    .build();
+        } catch (Exception e) {
+            return ApiResponse.<ReportDto>builder().code(500).message("Error accpecting report").build();
+        }
+    }
 }

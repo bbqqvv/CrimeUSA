@@ -1,13 +1,11 @@
 package com.example.caseservicebase.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Stack;
 
 @Entity
 @Getter
@@ -18,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Case {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "case_id")
     private Long caseId;
 

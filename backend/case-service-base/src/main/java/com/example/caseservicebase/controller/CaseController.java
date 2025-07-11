@@ -4,7 +4,7 @@
  * Copyright (c) 2025 IUH. All rights reserved
  */
 
-package com.example.caseservicebasebase.controller;
+package com.example.caseservicebase.controller;
 
 import com.example.caseservicebase.dto.requestDTO.CaseRequestDTO;
 import com.example.caseservicebase.dto.responseDTO.ResponseData;

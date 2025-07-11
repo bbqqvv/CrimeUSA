@@ -11,6 +11,7 @@ import java.util.List;
 public interface ReportService {
     List<ReportDto> getReports(String status, String typeOfReport, LocalDateTime reportAt);
     ReportDto saveReport(ReportRequest reportRequest);
+    ReportDto acceptReport(Long reportId);
     List<Report> getAllReports();
     List<String> getAllStatuses();
     List<String> getAllSeverities();

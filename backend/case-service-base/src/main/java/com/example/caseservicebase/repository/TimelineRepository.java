@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface TimelineRepository extends JpaRepository<Timeline, Long> {
-    Optional<Timeline> findByIdAndIsDeletedFalse(Long id);
+    Optional<Timeline> findByTimelineIdAndIsDeletedFalse(Long timelineId);
     List<Timeline> findAllByIsDeletedFalse();
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface CaseRepository extends JpaRepository<Case, Long> {
-    Optional<Case> findByIdAndIsDeletedFalse(Long id);
+    Optional<Case> findByCaseIdAndIsDeletedFalse(Long caseId);
     List<Case> findAllByIsDeletedFalse();
 }
 

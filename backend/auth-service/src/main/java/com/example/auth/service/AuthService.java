@@ -27,6 +27,7 @@ public class AuthService {
                     )
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println(userDetails);
             String token = jwtService.generateToken(userDetails);
             System.out.println("✅ Token: " + token);
             return token;

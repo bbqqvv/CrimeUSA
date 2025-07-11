@@ -58,7 +58,7 @@ public class TimelineServiceImpl implements TimelineService {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Timeline ID must be a positive non-null value");
         }
-        Timeline timeline = timelineRepository.findByIdAndIsDeletedFalse(id)
+        Timeline timeline = timelineRepository.findByTimelineIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Timeline not found with id = " + id));
         log.info("Retrieved timeline successfully, timelineId={}", id);
         return timeline;
@@ -87,7 +87,7 @@ public class TimelineServiceImpl implements TimelineService {
             throw new IllegalArgumentException("Case Result ID must be a positive value if provided");
         }
 
-        Timeline timeline = timelineRepository.findByIdAndIsDeletedFalse(id)
+        Timeline timeline = timelineRepository.findByTimelineIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Timeline not found with id = " + id));
 
         if (request.getHolidayId() != null) {
@@ -124,7 +124,7 @@ public class TimelineServiceImpl implements TimelineService {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Timeline ID must be a positive non-null value");
         }
-        Timeline timeline = timelineRepository.findByIdAndIsDeletedFalse(id)
+        Timeline timeline = timelineRepository.findByTimelineIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Timeline not found with id = " + id));
         timeline.setIsDeleted(true);
         timelineRepository.save(timeline);

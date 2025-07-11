@@ -21,6 +21,9 @@ public class Report {
     @Column(name = "type_report")
     private String typeReport;
 
+    @Column(name = "severity")
+    private String severity;
+
     private String description;
 
     @Column(name = "case_location")
