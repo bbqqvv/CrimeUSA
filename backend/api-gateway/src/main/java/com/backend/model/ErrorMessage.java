@@ -18,19 +18,21 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorMessage {
-    RESOURCE_NOT_FOUND("Không tìm thấy tài nguyên", 404, HttpStatus.NOT_FOUND),
+    RESOURCE_NOT_FOUND("Not find resource", 404, HttpStatus.NOT_FOUND),
     // Token hêt hạn
     EXPIRED_TOKEN("Token đã hết hạn", 401, HttpStatus.UNAUTHORIZED),
     // KHông có token
     MISSING_TOKEN("Token không được cung cấp", 401, HttpStatus.UNAUTHORIZED),
     // Token không đúng định dạng
-    INVALID_TOKEN("Token không đúng định dạng", 401, HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN("Token not valid", 401, HttpStatus.UNAUTHORIZED),
     // CHữ ký token không hợp lệ
     INVALID_SIGNATURE("Chữ ký token không hợp lệ", 401, HttpStatus.UNAUTHORIZED),
     // Token không hợp lệ
     INVALID_JWT("Token không hợp lệ", 401, HttpStatus.UNAUTHORIZED),
     // Token không có quyền truy cập
     ACCESS_DENIED("Token không có quyền truy cập", 403, HttpStatus.FORBIDDEN),
+
+    SERVICE_UNAVAILABLE("SERVICE_UNAVAILABLE", 503, HttpStatus.SERVICE_UNAVAILABLE)
     ;
     String message;
     int code;

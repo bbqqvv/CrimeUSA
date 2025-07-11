@@ -8,20 +8,17 @@ package com.backend.filters;
 
 /*
  * @description: Filter xác thực JWT cho API Gateway
- * @author: Tran Tan Dat (Chỉnh sửa)
+ * @author: Khuong Pham
  * @version: 1.1
- * @created: 12-April-2025
+ * @created: 7/9/2025
  */
 
 import com.backend.model.ErrorMessage;
 import com.backend.model.OpenApiEndpoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -30,41 +27,36 @@ import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class JwtGlobalFilter implements GlobalFilter, Ordered {
+
+    ReactiveJwtDecoder jwtDecoder;
+
     @Override
     public int getOrder() {
         return -1; // độ ưu tiên cao
     }
 
     private static final Logger logger = LoggerFactory.getLogger(JwtGlobalFilter.class);
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // Danh sách các đường dẫn không cần xác thực
     private final List<OpenApiEndpoint> openApiEndpoints = Arrays.asList(
-            new OpenApiEndpoint("POST", "/api/account/sign-up"),
-            new OpenApiEndpoint("POST", "/api/account/sign-in"),
-            new OpenApiEndpoint("POST", "/api/account/forgot-password"),
-            new OpenApiEndpoint("GET", "/api/v1/products"),
-            new OpenApiEndpoint("GET", "/api/v1/products/**"),
-            new OpenApiEndpoint("POST", "/api/user"),
-            new OpenApiEndpoint("POST", "/api/user/create"),
-            new OpenApiEndpoint("POST", "/api/payment/vn-pay/create-payment"),
-            new OpenApiEndpoint("GET", "/api/payment/vn-pay/payment-info"),
-            new OpenApiEndpoint("GET", "/api/v1/category"),
-            new OpenApiEndpoint("GET", "/api/v1/category/**")
-
+            new OpenApiEndpoint("POST", "/api/v1/auth/login"),
+            new OpenApiEndpoint("POST", "/api/v1/auth/logout")
     );
 
     @Override
@@ -92,103 +84,46 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
                     ErrorMessage.MISSING_TOKEN.getMessage()
             );
         }
-
         String token = authHearde.getFirst().replaceFirst("Bearer ", "");
-        if (token.trim().isEmpty()) {
-            logger.warn("Authentication failed: Missing token for path {}", path);
-            return apiErrorResponse(
-                    exchange,
-                    HttpStatus.UNAUTHORIZED,
-                    ErrorMessage.MISSING_TOKEN.getCode(),
-                    ErrorMessage.MISSING_TOKEN.getMessage()
-            );
-        }
 
-        try {
-            // Xác thực token và kiểm tra hạn sử dụng
-            Claims claims = extractClaims(token);
-
-            // Kiểm tra thời hạn token
-            if (isTokenExpired(claims)) {
-                logger.warn("Authentication failed: Token expired for user {}", claims.getSubject());
-                return apiErrorResponse(
-                        exchange,
-                        HttpStatus.UNAUTHORIZED,
-                        ErrorMessage.EXPIRED_TOKEN.getCode(),
-                        ErrorMessage.EXPIRED_TOKEN.getMessage()
-                );
-            }
-
-            // Lấy thông tin roles từ token
-            List<?> rawRoles = claims.get("roles", List.class);
-            List<String> roles = rawRoles == null
-                    ? Collections.emptyList()
-                    : rawRoles.stream().map(String::valueOf).collect(Collectors.toList());
-            Long userId = claims.get("accountId", Long.class);
-
-            // Kiểm tra quyền truy cập cơ bản
-            if (!hasAccess(path, roles)) {
-                logger.warn("Authorization failed: Insufficient privileges for user {} to access {}",
-                        claims.getSubject(), path);
-                return apiErrorResponse(
-                        exchange,
-                        HttpStatus.FORBIDDEN,
-                        ErrorMessage.ACCESS_DENIED.getCode(),
-                        ErrorMessage.ACCESS_DENIED.getMessage()
-                );
-            }
-
-            logger.info("Successfully authenticated user: {} with roles: {}", claims.getSubject(), roles);
-
-            // Chuyển tiếp thông tin người dùng trong header đến các service phía sau
-            ServerWebExchange modifiedExchange = exchange.mutate()
-                    .request(builder -> builder
-                            .header("X-Auth-UserName", claims.getSubject())
-                            .header("X-Auth-Roles", String.join(",", roles))
-                            .header("X-Auth-UserId", String.valueOf(userId))
-                            .header("X-Auth-Token", token) // Chuyển tiếp token gốc
-                    )
-                    .build();
-
-            // Tiếp tục chuỗi filter
-            return chain.filter(modifiedExchange);
-
-        } catch (ExpiredJwtException e) {
-            logger.warn("Authentication failed: Token expired");
-            return apiErrorResponse(
-                    exchange,
-                    HttpStatus.UNAUTHORIZED,
-                    ErrorMessage.EXPIRED_TOKEN.getCode(),
-                    ErrorMessage.EXPIRED_TOKEN.getMessage()
-            );
-        } catch (JwtException e) {
-            logger.warn("Authentication failed: Invalid token - {}", e.getMessage());
-            return apiErrorResponse(
-                    exchange,
-                    HttpStatus.UNAUTHORIZED,
-                    ErrorMessage.INVALID_TOKEN.getCode(),
-                    ErrorMessage.INVALID_TOKEN.getMessage()
-            );
-        } catch (Exception e) {
-            logger.error("Error processing request", e);
-            return apiErrorResponse(
-                    exchange,
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    5000,
-                    "Lỗi hệ thống: " + e.getMessage()
-            );
-        }
+        return jwtDecoder.decode(token)
+                .flatMap(jwt -> {
+                    // Token is valid (signature verified and not expired)
+                    logger.info("JWT verified successfully: {}", jwt.getSubject());
+                    // Forward validated claims to downstream services
+                    ServerWebExchange mutatedExchange = exchange.mutate()
+                            .request(builder -> {
+                                builder.header("X-Auth-User", jwt.getSubject());
+                                // Forward role and permissions if needed
+                                if (jwt.getClaim("role") != null) {
+                                    builder.header("X-Auth-Role", jwt.getClaim("role").toString());
+                                }
+                                if (jwt.getClaim("permission") != null) {
+                                    builder.header("X-Auth-Permission", jwt.getClaim("permission").toString());
+                                }
+                            }).build();
+                    return chain.filter(mutatedExchange);
+                })
+                .onErrorResume(e -> {
+                    logger.error("JWT validation failed", e);
+                    if (e instanceof JwtValidationException) {
+                        return apiErrorResponse(exchange, HttpStatus.UNAUTHORIZED, 401,
+                                "Invalid token: " + e.getMessage());
+                    }
+                    return apiErrorResponse(exchange, HttpStatus.INTERNAL_SERVER_ERROR, 500,
+                            "Error processing token: " + e.getMessage());
+                });
     }
 
     // Kiểm tra xem đường dẫn có nằm trong danh sách các endpoint không yêu cầu xác thực hay không
     private boolean isOpenEndpoint(String method, String path) {
         return openApiEndpoints.stream()
                 .anyMatch(endpoint -> {
-                    if (!endpoint.getMethod().equalsIgnoreCase(method)) {
+                    if (!endpoint.method().equalsIgnoreCase(method)) {
                         return false;
                     }
 
-                    String pattern = endpoint.getPath();
+                    String pattern = endpoint.path();
                     // Handle ** wildcard
                     if (pattern.endsWith("/**")) {
                         String prefix = pattern.substring(0, pattern.length() - 3);
@@ -199,37 +134,6 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
                     return pattern.equalsIgnoreCase(path);
                 });
     }
-
-    // Trích xuất claims từ token
-    private Claims extractClaims(String token) throws JwtException {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
-        Key key = Keys.hmacShaKeyFor(keyBytes);
-
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    // Kiểm tra xem token đã hết hạn hay chưa
-    private boolean isTokenExpired(Claims claims) {
-        Date expiration = claims.getExpiration();
-        return expiration != null && expiration.before(new Date());
-    }
-
-    private boolean hasAccess(String path, List<String> roles) {
-        // Kiểm tra quyền truy cập cơ bản dựa trên đường dẫn và role
-        // Lưu ý: Đây chỉ là kiểm tra cơ bản, kiểm tra quyền chi tiết nên được thực hiện ở service
-
-        // Ví dụ: Chỉ admin mới có thể truy cập các API quản trị
-//        if (path.startsWith("/api/admin") && !roles.contains("ROLE_ADMIN")) {
-//            return false;
-//        }
-
-        return true;
-    }
-
 
     private Mono<Void> apiErrorResponse(ServerWebExchange exchange, HttpStatus status, int code, String message) {
         exchange.getResponse().setStatusCode(status);
@@ -253,4 +157,5 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
             );
         }
     }
+
 }

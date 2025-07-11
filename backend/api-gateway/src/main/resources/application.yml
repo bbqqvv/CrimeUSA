@@ -8,7 +8,12 @@ spring:
   data:
     redis:
       port: 6379
-      host: ${REDIS_HOST}
+      host: ${REDIS_HOST:localhost}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: lb://auth-service/.well-known/jwks.json
 
   main:
     allow-bean-definition-overriding: true
@@ -22,7 +27,7 @@ spring:
             # Số lượng token tối đa trong 1s
             redis-rate-limiter.burstCapacity: 20
             redis-rate-limiter.requestedTokens: 1
-      #        - StripPrefix=1 # Remove prefix /api-gateway from request path
+        #        - StripPrefix=1 # Remove prefix /api-gateway from request path
         - name: Retry
           args:
             retries: 2
@@ -40,44 +45,28 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: user-service
-          uri: lb://user-service
+        - id: suspect-service
+          uri: lb://suspect-service
           predicates:
-            - Path=/api/user/**
-        - id: product-service
-          uri: lb://product-service
-          predicates:
-            - Path=${app.api-prefix}/products/**,${app.api-prefix}/categories/**
+            - Path=${app.api-prefix}/suspects/**
           filters:
             - PreserveHostHeader
-            - StripPrefix=2 # Remove prefix /api/v1 from request path
-        - id: order-service
-          uri: lb://order-service
-          predicates:
-            - Path=${app.api-prefix}/orders/**,${app.api-prefix}/order-details/**
-          filters:
             - StripPrefix=2 # Remove prefix /api/v1 from request path
         - id: auth-service
           uri: lb://auth-service
           predicates:
-            - Path=/api/account/**
-        - id: payment-service
-          uri: lb://payment-service
-          predicates:
-            - Path=/api/payment/**
-        - id: cart-service
-          uri: lb://cart-service
-          predicates:
-            - Path=/api/carts/**,/api/cart-items/**
-          # Config rate limit for service product-service
+            - Path=${app.api-prefix}/auth/**,${app.api-prefix}/users/**,${app.api-prefix}/roles/**,${app.api-prefix}/permissions/**
           filters:
-            #            - name: CircuitBreaker
-            #              args:
-            #                name: default
-            #                fallbackUri: forward:/fallback/product-service
+            - PreserveHostHeader
+            - StripPrefix=2 # Remove prefix /api/v1 from request path
+          # Config rate limit for service product-service
+          #            - name: CircuitBreaker
+          #              args:
+          #                name: default
+          #                fallbackUri: forward:/fallback/product-service
 eureka:
   instance:
-#    hostname: ${HOST_IP_ADDRESS}
+    #    hostname: ${HOST_IP_ADDRESS}
     hostname: ${HOST_IP_ADDRESS:localhost}
   client:
     service-url:
