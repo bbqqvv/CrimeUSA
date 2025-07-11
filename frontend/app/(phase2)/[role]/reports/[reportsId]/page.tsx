@@ -245,7 +245,7 @@ export default function Page() {
 			<div className="bg-gray-300 rounded-b-lg shadow p-6 pt-10" id="dispatch-time">
 				{/* TIME OF DISPATCHING SECTION */}
 				{/* Simple section with just a label and choose button */}
-				<div className="mb-6 bg-white p-4 rounded-lg">
+				<div className="mb-6 bg-white p-4">
 					<div className="flex justify-between items-center mb-2">
 						<label className="font-semibold text-md">
 							TIME OF DISPATCHING FORCES TO THE SCENE
@@ -256,7 +256,7 @@ export default function Page() {
 
 				{/* TIME OF ARRIVAL SECTION */}
 				{/* Section with time input and AM/PM toggle */}
-				<div className="mb-6 bg-white p-4 rounded-lg" id="arrival-time">
+				<div className="mb-6 bg-white p-4" id="arrival-time">
 					<div className="flex justify-between items-center">
 						<label className="font-semibold text-sm">
 							TIME OF ARRIVAL AT THE SCENE
@@ -380,7 +380,7 @@ export default function Page() {
 
 				{/* PAGE ACTION BUTTONS */}
 				{/* Cancel and Save buttons for the entire form */}
-				<div className="flex justify-end gap-4 bg-white p-4 rounded-lg">
+				<div className="flex justify-end gap-4 bg-white p-4">
 					<Button variant="outline" className="rounded-full">
 						Cancel
 					</Button>

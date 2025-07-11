@@ -168,7 +168,7 @@ export default function Page() {
 
    // Add handlers - would typically open a form modal
    const handleAddStatement = () => {
-      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/statements`);
+      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/statements/details`);
    };
 
    const handleAddSceneDescription = () => {
@@ -375,28 +375,9 @@ export default function Page() {
                />
             </SectionContainer>
 
-            {/* SCENE SKETCH BUTTONS */}
-            <div className="flex justify-end bg-white p-4 mb-8">
-               <ActionButtons
-                  row={{ title: "Scene Sketch" }}
-                  index={0}
-                  onView={() => console.log("View scene sketch")}
-                  onEdit={() => console.log("Edit scene sketch")}
-                  onDelete={() => console.log("Delete scene sketch")}
-               />
-               <Button
-                  size="sm"
-                  variant="outline"
-                  className="rounded-md bg-blue-100 flex items-center justify-center w-30 h-10"
-               >
-                  Upload
-                  <MonitorUp className="ps-1 w-2 h-2" />
-               </Button>
-            </div>
-
             {/* PAGE ACTION BUTTONS */}
             {/* Cancel and Save buttons for the entire form */}
-            <div className="flex justify-end gap-4 bg-white p-4">
+            <div className="flex justify-end gap-4 bg-white p-4 rounded-lg">
                <Button variant="outline" className="rounded-full">
                   Cancel
                </Button>
