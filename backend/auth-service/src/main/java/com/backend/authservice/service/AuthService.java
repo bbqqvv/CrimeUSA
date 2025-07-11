@@ -7,6 +7,10 @@
 package com.backend.authservice.service;
 
 
+import com.nimbusds.jose.JOSEException;
+
+import java.text.ParseException;
+
 /*
  * @description
  * @author: Khuong Pham
@@ -15,4 +19,5 @@ package com.backend.authservice.service;
  */
 public interface AuthService {
     String authenticate(String username, String password);
+    boolean introspect(String token) throws JOSEException, ParseException;
 }

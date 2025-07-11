@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRep;
     UserMapper userMapper;
     RoleRepository roleRep;
+    PasswordEncoder passwordEncoder;
 
     /**
      * Create a new user in the system.
@@ -63,7 +64,6 @@ public class UserServiceImpl implements UserService {
         Role role = roleRep.findRoleByRoleId(request.getRoleId())
                 .orElseThrow(() -> new AppException(ErrorMessage.ROLE_NOT_FOUND));
         // Encode the password and create the user
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         request.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));
 
         // Map the request to a User entity and set the role
@@ -91,15 +91,16 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserRes(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ALL')")
     @Override
     public List<UserResponse> getAllUsers() {
+        log.info("Fetching all users");
         return userRep.getAllByIsDeletedFalse()
                 .stream()
                 .map(userMapper::toUserRes)
                 .toList();
     }
-
+    @PreAuthorize("hasAuthority('AL')")
     @Override
     public UserResponse getMyInfo() {
         String username = SecurityContextHolder.getContext()
