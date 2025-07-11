@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="06d5918f-3a0c-4110-bc13-ca8d63da18ce" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/report-service-base/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service-base/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/controller/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/dto/ReportDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/dto/response/ReportDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/entity/Report.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/entity/Report.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/mapper/ReportMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/mapper/ReportMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/service/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/service/ReportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/service/impl/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/service/impl/ReportServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service-base/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/report-service-base/src/main/resources/application.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="21" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2zccFZXh3XamA3TjIQzZFGfNUYO" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "jusskynn__0907",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/A-Intern_Java_Fullstack/MockProject_062025_Nhom1/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="06d5918f-3a0c-4110-bc13-ca8d63da18ce" name="Changes" comment="" />
+      <created>1752033699585</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1752033699585</updated>
+      <workItem from="1752033700789" duration="211000" />
+      <workItem from="1752033920244" duration="110000" />
+      <workItem from="1752034073379" duration="198000" />
+      <workItem from="1752076842142" duration="33000" />
+      <workItem from="1752076879525" duration="20000" />
+      <workItem from="1752076905419" duration="86000" />
+      <workItem from="1752076993636" duration="210000" />
+      <workItem from="1752077220081" duration="50000" />
+      <workItem from="1752077272188" duration="35000" />
+      <workItem from="1752077314597" duration="378000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/ReportsServiceApplication.java</url>
+          <line>6</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

@@ -1,11 +1,10 @@
 import React from "react";
+import ManageReport from "./manage-report/page";
 
 const AdminDashboardPage = () => {
     return (
         <main>
-            <h1>Admin Dashboard</h1>
-            <p>Welcome to the admin dashboard!</p>
-            {/* Add dashboard widgets or navigation here */}
+            <ManageReport></ManageReport>
         </main>
     );
 };
