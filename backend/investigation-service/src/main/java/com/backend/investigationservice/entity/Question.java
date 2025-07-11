@@ -31,7 +31,6 @@ public class Question {
     @Column(name = "interview_id")
     private UUID interviewId;
 
-
     @Column(name = "is_deleted")
     private boolean isDeleted;
 }

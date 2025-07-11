@@ -15,4 +15,6 @@ public interface InterviewService {
     List<InterviewResponse> getInterviewsByCaseId(UUID caseId);
     Page<InterviewResponse> findAll(String keyword, Pageable pageable);
     Page<InterviewResponse> getInterviewsByCaseId(UUID caseId, Pageable pageable);
-} 
+    InterviewResponse getInterviewById(UUID interviewId);
+    InterviewResponse updateInterview(UUID interviewId, InterviewUpdateRequest request);
+}
