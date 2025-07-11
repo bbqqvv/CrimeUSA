@@ -5,7 +5,7 @@
  */
 package com.example.caseservicebase.repository;
 
-import com.backend.caseservice.model.CaseArrest;
+import com.example.caseservicebase.model.CaseArrest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

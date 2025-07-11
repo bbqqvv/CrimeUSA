@@ -5,8 +5,8 @@
  */
 package com.example.caseservicebase.service;
 
-import com.backend.caseservice.dto.requestDTO.CaseArrestRequestDTO;
-import com.backend.caseservice.model.CaseArrest;
+import com.example.caseservicebase.dto.requestDTO.CaseArrestRequestDTO;
+import com.example.caseservicebase.model.CaseArrest;
 
 import java.util.List;
 

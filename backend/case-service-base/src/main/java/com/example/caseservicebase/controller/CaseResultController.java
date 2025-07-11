@@ -6,12 +6,12 @@
 
 package com.example.caseservicebase.controller;
 
-import com.backend.caseservice.dto.requestDTO.CaseResultRequestDTO;
-import com.backend.caseservice.dto.responseDTO.ResponseData;
-import com.backend.caseservice.exception.InvalidRequestException;
-import com.backend.caseservice.exception.ResourceNotFoundException;
-import com.backend.caseservice.model.CaseResult;
-import com.backend.caseservice.service.CaseResultService;
+import com.example.caseservicebase.dto.requestDTO.CaseResultRequestDTO;
+import com.example.caseservicebase.dto.responseDTO.ResponseData;
+import com.example.caseservicebase.exception.InvalidRequestException;
+import com.example.caseservicebase.exception.ResourceNotFoundException;
+import com.example.caseservicebase.model.CaseResult;
+import com.example.caseservicebase.service.CaseResultService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

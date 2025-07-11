@@ -13,11 +13,11 @@ package com.example.caseservicebase.service.impl;
  * @version 1.0
  */
 
-import com.backend.caseservice.dto.requestDTO.CaseEvidenceRequestDTO;
-import com.backend.caseservice.model.CaseEvidence;
-import com.backend.caseservice.repository.CaseEvidenceRepository;
-import com.backend.caseservice.repository.CaseRepository;
-import com.backend.caseservice.service.CaseEvidenceService;
+import com.example.caseservicebase.dto.requestDTO.CaseEvidenceRequestDTO;
+import com.example.caseservicebase.model.CaseEvidence;
+import com.example.caseservicebase.repository.CaseEvidenceRepository;
+import com.example.caseservicebase.repository.CaseRepository;
+import com.example.caseservicebase.service.CaseEvidenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

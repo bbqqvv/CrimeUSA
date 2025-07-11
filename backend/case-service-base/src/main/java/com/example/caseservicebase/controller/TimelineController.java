@@ -6,12 +6,12 @@
 
 package com.example.caseservicebase.controller;
 
-import com.backend.caseservice.dto.requestDTO.TimelineRequestDTO;
-import com.backend.caseservice.dto.responseDTO.ResponseData;
-import com.backend.caseservice.exception.InvalidRequestException;
-import com.backend.caseservice.exception.ResourceNotFoundException;
-import com.backend.caseservice.model.Timeline;
-import com.backend.caseservice.service.TimelineService;
+import com.example.caseservicebase.dto.requestDTO.TimelineRequestDTO;
+import com.example.caseservicebase.dto.responseDTO.ResponseData;
+import com.example.caseservicebase.exception.InvalidRequestException;
+import com.example.caseservicebase.exception.ResourceNotFoundException;
+import com.example.caseservicebase.model.Timeline;
+import com.example.caseservicebase.service.TimelineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

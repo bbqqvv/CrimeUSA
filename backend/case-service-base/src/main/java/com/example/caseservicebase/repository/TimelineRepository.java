@@ -1,6 +1,6 @@
 package com.example.caseservicebase.repository;
 
-import com.backend.caseservice.model.Timeline;
+import com.example.caseservicebase.model.Timeline;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

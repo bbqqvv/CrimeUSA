@@ -4,14 +4,14 @@
  * Copyright (c) 2025 IUH. All rights reserved
  */
 
-package com.example.caseservicebase.controller;
+package com.example.caseservicebasebase.controller;
 
-import com.backend.caseservice.dto.requestDTO.CaseRequestDTO;
-import com.backend.caseservice.dto.responseDTO.ResponseData;
-import com.backend.caseservice.exception.InvalidRequestException;
-import com.backend.caseservice.exception.ResourceNotFoundException;
-import com.backend.caseservice.model.Case;
-import com.backend.caseservice.service.CaseService;
+import com.example.caseservicebase.dto.requestDTO.CaseRequestDTO;
+import com.example.caseservicebase.dto.responseDTO.ResponseData;
+import com.example.caseservicebase.exception.InvalidRequestException;
+import com.example.caseservicebase.exception.ResourceNotFoundException;
+import com.example.caseservicebase.model.Case;
+import com.example.caseservicebase.service.CaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

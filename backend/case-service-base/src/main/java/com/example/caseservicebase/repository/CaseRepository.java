@@ -1,6 +1,6 @@
 package com.example.caseservicebase.repository;
 
-import com.backend.caseservice.model.Case;
+import com.example.caseservicebase.model.Case;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

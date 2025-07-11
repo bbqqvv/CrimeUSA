@@ -1,7 +1,7 @@
 package com.example.caseservicebase.service;
 
-import com.backend.caseservice.dto.requestDTO.CaseRequestDTO;
-import com.backend.caseservice.model.Case;
+import com.example.caseservicebase.dto.requestDTO.CaseRequestDTO;
+import com.example.caseservicebase.model.Case;
 
 import java.util.List;
 

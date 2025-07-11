@@ -12,7 +12,7 @@ package com.example.caseservicebase.exception;
  * @date : 7/9/2025
  * @version 1.0
  */
-import com.example.caseservicebase.dto.ErrorResponse;
+import com.example.caseservicebase.dto.responseDTO.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

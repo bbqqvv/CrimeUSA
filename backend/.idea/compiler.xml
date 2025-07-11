@@ -21,7 +21,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="auth-service (2)" />
         <module name="auth-service (3)" />
         <module name="auth-service (1) (com.example)" />
       </profile>
@@ -65,10 +64,34 @@
         </processorPath>
         <module name="suspect-service" />
       </profile>
+      <profile name="Annotation profile for auth-service (2)" enabled="true">
+        <sourceOutputDir name="../auth-service/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../auth-service/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+        </processorPath>
+        <module name="auth-service (2)" />
+      </profile>
+      <profile name="Annotation profile for report-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+        </processorPath>
+        <module name="report-service" />
+        <module name="auth-service (1)" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="auth-service (1)" options="-parameters" />
       <module name="auth-service (1) (com.example)" options="-parameters" />
       <module name="auth-service (2)" options="-parameters" />
       <module name="auth-service (3)" options="-parameters" />
@@ -77,6 +100,7 @@
       <module name="evidence-service" options="-parameters" />
       <module name="investigation-service" options="-parameters" />
       <module name="multi-module-project" options="-parameters" />
+      <module name="report-service" options="-parameters" />
       <module name="suspect-service" options="-parameters" />
     </option>
   </component>

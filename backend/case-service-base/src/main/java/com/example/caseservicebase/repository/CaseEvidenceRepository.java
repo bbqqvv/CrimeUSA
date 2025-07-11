@@ -11,7 +11,7 @@ package com.example.caseservicebase.repository;
  * @date : 7/10/2025
  * @version 1.0
  */
-import com.backend.caseservice.model.CaseEvidence;
+import com.example.caseservicebase.model.CaseEvidence;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

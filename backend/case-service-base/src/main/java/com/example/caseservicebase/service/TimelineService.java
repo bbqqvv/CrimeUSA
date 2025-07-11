@@ -1,7 +1,7 @@
 package com.example.caseservicebase.service;
 
-import com.backend.caseservice.dto.requestDTO.TimelineRequestDTO;
-import com.backend.caseservice.model.Timeline;
+import com.example.caseservicebase.dto.requestDTO.TimelineRequestDTO;
+import com.example.caseservicebase.model.Timeline;
 
 import java.util.List;
 

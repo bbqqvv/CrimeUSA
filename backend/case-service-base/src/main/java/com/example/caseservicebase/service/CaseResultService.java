@@ -11,8 +11,8 @@ package com.example.caseservicebase.service;
  * @date : 7/10/2025
  * @version 1.0
  */
-import com.backend.caseservice.dto.requestDTO.CaseResultRequestDTO;
-import com.backend.caseservice.model.CaseResult;
+import com.example.caseservicebase.dto.requestDTO.CaseResultRequestDTO;
+import com.example.caseservicebase.model.CaseResult;
 
 import java.util.List;
 

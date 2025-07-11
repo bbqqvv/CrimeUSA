@@ -6,11 +6,11 @@
 
 package com.example.caseservicebase.service.impl;
 
-import com.backend.caseservice.dto.requestDTO.CaseArrestRequestDTO;
-import com.backend.caseservice.model.CaseArrest;
-import com.backend.caseservice.repository.CaseArrestRepository;
-import com.backend.caseservice.repository.CaseRepository;
-import com.backend.caseservice.service.CaseArrestService;
+import com.example.caseservicebase.dto.requestDTO.CaseArrestRequestDTO;
+import com.example.caseservicebase.model.CaseArrest;
+import com.example.caseservicebase.repository.CaseArrestRepository;
+import com.example.caseservicebase.repository.CaseRepository;
+import com.example.caseservicebase.service.CaseArrestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
