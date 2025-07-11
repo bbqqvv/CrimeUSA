@@ -13,7 +13,7 @@ import java.util.UUID;
 public class VictimInterviewRequest {
     @JsonProperty("victim_id")
     @NotBlank
-    UUID victimId;
+    String victimId;
 
     @JsonProperty("interview_id")
     @NotNull

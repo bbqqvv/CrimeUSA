@@ -60,7 +60,7 @@ public class PhysicalInvestResultController {
     @PreAuthorize("hasAuthority('DELETE_PHYSICAL_RESULT')")
     @Operation(summary = "Delete physical investigation result")
     public ApiResponse<Void> deletePhysicalInvestResult(@Valid @PathVariable String resultId) {
-        physicalInvestResultService.deletePhysicalInvest(resultId);
+        physicalInvestResultService.deletePhysicalInvestByResultId(resultId);
         return ApiResponse.<Void>builder().code(200).message("Deleted").build();
     }
 }

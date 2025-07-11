@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/evidences/{evidenceId}/forensic-invest")
 @Tag(name = "Forensic Investigation", description = "Forensic investigation results")
@@ -62,7 +60,7 @@ public class ForensicInvestResultController {
     @PreAuthorize("hasAuthority('DELETE_FORENSIC_RESULT')")
     @Operation(summary = "Delete forensic investigation result")
     public ApiResponse<Void> deleteForensicInvestResult(@Valid @PathVariable String resultId) {
-        forensicInvestResultService.deleteForensicInvest(resultId);
+        forensicInvestResultService.deleteForensicInvestByResultId(resultId);
         return ApiResponse.<Void>builder().code(200).message("Deleted").build();
     }
 }

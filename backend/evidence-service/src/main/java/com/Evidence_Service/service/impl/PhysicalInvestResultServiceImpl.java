@@ -2,21 +2,27 @@ package com.Evidence_Service.service.impl;
 
 import com.Evidence_Service.dto.PhysicalInvestResultDTO;
 import com.Evidence_Service.event.caller.PhysicalInvestResultCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.KafkaEventPublisher;
 import com.Evidence_Service.mapper.PhysicalInvestResultMapper;
 import com.Evidence_Service.entity.PhysicalInvestResult;
 import com.Evidence_Service.repository.PhysicalInvestResultRepository;
+import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.PhysicalInvestResultService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +30,6 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     private static final Logger log = LoggerFactory.getLogger(PhysicalInvestResultServiceImpl.class);
 
-    private final EvidenceServiceImpl evidenceService;
     private final PhysicalInvestResultRepository physicalInvestResultRepository;
     private final KafkaEventPublisher publisher;
 
@@ -32,11 +37,6 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     @Override
     public PhysicalInvestResultDTO addPhysicalInvestResult(String evidenceId, PhysicalInvestResultDTO dto) {
         try {
-            // Check if evidence exists
-            if (evidenceService.existsByEvidenceId(evidenceId)) {
-                throw new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND);
-            }
-
             // Convert DTO to entity and set evidence ID
             PhysicalInvestResult result = PhysicalInvestResultMapper.toEntity(dto);
             result.setEvidenceId(evidenceId);
@@ -75,7 +75,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     @Override
     public Page<PhysicalInvestResultDTO> getAllPhysicalInvestByEvidenceId(String evidenceId, Pageable pageable) {
         try {
-            return physicalInvestResultRepository.findByEvidenceId(evidenceId, pageable)
+            return physicalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
                     .map(PhysicalInvestResultMapper::toDTO);
         } catch (Exception ex) {
             log.error("Failed to retrieve physical investigation results for evidence ID {}: {}", evidenceId, ex.getMessage(), ex);
@@ -120,10 +120,10 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
     @Override
-    public void deletePhysicalInvest(String resultId) {
+    public void deletePhysicalInvestByResultId(String resultId) {
         try {
             // Find existing result
-            PhysicalInvestResult physicalInvestResult = physicalInvestResultRepository.findByResultId(resultId);
+            PhysicalInvestResult physicalInvestResult = physicalInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId);
             if (physicalInvestResult == null) {
                 throw new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND);
             }
@@ -134,6 +134,63 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
             throw ae;
         } catch (Exception ex) {
             log.error("Failed to delete physical investigation result with ID {}: {}", resultId, ex.getMessage(), ex);
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
+    @Override
+    public boolean existsByEvidenceId(String evidenceId) {
+        try {
+            return physicalInvestResultRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
+    @Override
+    public void deleteByEvidenceId(String evidenceId) {
+        try {
+            List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);
+
+            if (physicalInvestResults == null) throw new AppException(ErrorCode.PHYSICAL_INVEST_RESULT_NOT_FOUND);
+
+            for (PhysicalInvestResult physicalInvestResult : physicalInvestResults) {
+                physicalInvestResult.setDeleted(true);
+                physicalInvestResultRepository.save(physicalInvestResult);
+            }
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void assignPhysicalInvestResult(ResultInvestAssignedEvent event) {
+        try {
+            List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
+
+            if (physicalInvestResults ==  null) {
+                PhysicalInvestResult.builder()
+                        .evidenceId(event.getEvidenceId())
+                        .result(event.getContent())
+                        .uploadFile(event.getUploadFile())
+                        .build();
+            } else {
+                for (PhysicalInvestResult physicalInvestResult : physicalInvestResults) {
+                    physicalInvestResult.setEvidenceId(event.getEvidenceId());
+                    physicalInvestResult.setResult(event.getContent());
+                    physicalInvestResult.setUploadFile(event.getUploadFile());
+                    physicalInvestResultRepository.save(physicalInvestResult);
+                }
+            }
+            log.info("Assigned Investigation");
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

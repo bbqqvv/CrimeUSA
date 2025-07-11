@@ -113,4 +113,6 @@ Thumbs.db
 # Environment files
 
 .env
-/auth-service/target/
+
+keys/*
+!keys/public.pem

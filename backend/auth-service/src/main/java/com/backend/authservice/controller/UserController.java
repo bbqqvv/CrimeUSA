@@ -20,7 +20,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 @Tag(name = "User Query", description = "User API")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -47,7 +47,12 @@ public class UserController {
     @Operation(summary = "Get all users")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAll() {
+        log.info("Get all users");
         var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            log.warn("No authenticated user found");
+        }
+        assert auth != null;
         auth.getAuthorities().forEach(authority ->
                 log.info("User {} has authority: {}", auth.getName(), authority.getAuthority())
         );

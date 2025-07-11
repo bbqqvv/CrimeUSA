@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @SecurityRequirement(name = "X-API-KEY")
 @RestController
 @RequestMapping("/api/v1/evidences")
@@ -24,7 +26,7 @@ public class EvidenceController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> create(@Valid  @RequestBody EvidenceDTO dto) {
+    public ApiResponse<EvidenceDTO> create(@Valid @RequestBody EvidenceDTO dto) {
         return ApiResponse.<EvidenceDTO>builder()
                 .code(200)
                 .message("Created evidence")
@@ -39,6 +41,16 @@ public class EvidenceController {
                 .code(200)
                 .message("Evidence found")
                 .data(evidenceService.getByEvidenceId(evidenceId))
+                .build();
+    }
+
+    @GetMapping("/{ids}")
+    @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
+    public ApiResponse<List<EvidenceDTO>> getByEvidenceIds(@Valid @PathVariable List<String> evidenceIds) {
+        return ApiResponse.<List<EvidenceDTO>>builder()
+                .code(200)
+                .message("Evidence found")
+                .data(evidenceService.getByEvidenceIds(evidenceIds))
                 .build();
     }
 

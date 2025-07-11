@@ -3,9 +3,13 @@ package com.Evidence_Service.mapper;
 import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.event.caller.EvidenceCreatedEvent;
 import com.Evidence_Service.entity.Evidence;
+import com.Evidence_Service.exception.AppException;
+import com.Evidence_Service.exception.ErrorCode;
 
 public class EvidenceMapper {
     public static EvidenceDTO toDTO(Evidence evidence) {
+        if (evidence == null) return null;
+
         return EvidenceDTO.builder()
                 .evidenceId(evidence.getEvidenceId())
                 .description(evidence.getDescription())
@@ -25,6 +29,9 @@ public class EvidenceMapper {
     }
 
     public static Evidence toEntity(EvidenceDTO dto) {
+        if (dto == null) return null;
+
+
         return Evidence.builder()
                 .evidenceId(dto.getEvidenceId())
                 .description(dto.getDescription())
@@ -44,6 +51,8 @@ public class EvidenceMapper {
     }
 
     public static EvidenceCreatedEvent toCreatedEvent(Evidence evidence) {
+        if (evidence == null) return null;
+
         EvidenceCreatedEvent event = new EvidenceCreatedEvent();
         event.setEvidenceId(evidence.getEvidenceId());
         event.setCaseId(event.getCaseId());

@@ -15,9 +15,10 @@ public abstract class BaseInvestResult extends BaseClass{
     @Column(name = "result_id")
     protected String resultId;
 
-    @Column(name = "investigation_plan_id")
-    protected String investigationPlanId;
-
     @Column(name = "evidence_id")
     protected String evidenceId;
+
+    protected String uploadFile;
+
+    protected String result;
 }

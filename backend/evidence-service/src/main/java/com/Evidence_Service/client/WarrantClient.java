@@ -1,34 +1,23 @@
 package com.Evidence_Service.client;
 
+import com.Evidence_Service.config.FeignConfig;
 import com.Evidence_Service.dto.WarrantDTO;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Component
-public class WarrantClient {
+@FeignClient(name = "warrant-service", url = "${warrant-service.url}", configuration = FeignConfig.class)
+public interface WarrantClient {
 
-    private final RestTemplate restTemplate;
-
-    @Value("${warrant-service.url}")
-    private String warrantServiceUrl;
-
-    public WarrantClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public List<WarrantDTO> getWarrantByIds(List<String> ids) {
-        return restTemplate.exchange(
-                warrantServiceUrl + "/api/warrants/by-ids",
-                HttpMethod.POST,
-                new HttpEntity<>(ids),
-                new ParameterizedTypeReference<List<WarrantDTO>>() {}
-        ).getBody();
-    }
+    @PostMapping("/api/warrants/by-ids")
+    List<WarrantDTO> getWarrantByIds(@RequestBody List<String> ids);
 }
 

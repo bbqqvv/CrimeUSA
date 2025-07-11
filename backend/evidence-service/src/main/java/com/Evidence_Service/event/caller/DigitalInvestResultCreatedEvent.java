@@ -23,7 +23,6 @@ public class DigitalInvestResultCreatedEvent {
         DigitalInvestResultCreatedEvent event = new DigitalInvestResultCreatedEvent();
         event.setResultId(dto.getResultId());
         event.setEvidenceId(dto.getEvidenceId());
-        event.setInvestigationPlanId(dto.getInvestigationPlanId());
         event.setDeviceType(dto.getDeviceType());
         event.setAnalystTool(dto.getAnalystTool());
         event.setResult(dto.getResult());

@@ -23,5 +23,4 @@ public class CaseEvidence extends BaseClass {
     @Id
     @Column(name = "evidence_id")
     private String evidenceId;
-
 }

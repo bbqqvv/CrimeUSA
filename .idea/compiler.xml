@@ -15,6 +15,21 @@
         <module name="Suspect-Service" />
         <module name="evidence-service" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="discovery-server" />
+      </profile>
+      <profile name="Annotation profile for common-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="common-service" />
+      </profile>
       <profile name="Annotation profile for investigation-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -26,27 +41,7 @@
         </processorPath>
         <module name="investigation-service" />
       </profile>
-      <profile name="Annotation profile for suspect-service" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
-        </processorPath>
-        <module name="suspect-service" />
-      </profile>
-      <profile name="Annotation profile for multi-module-project" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="common-service" />
-      </profile>
-      <profile name="Annotation profile for Auth Service" enabled="true">
+      <profile name="Annotation profile for case-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -55,9 +50,13 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
+        <module name="auth-service (1) (com.backend)" />
         <module name="auth-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="suspect-service" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -65,10 +64,11 @@
       <module name="Investigation-Service" options="-parameters" />
       <module name="Suspect-Service" options="-parameters" />
       <module name="auth-service" options="-parameters" />
+      <module name="auth-service (1) (com.backend)" options="-parameters" />
       <module name="common-service" options="-parameters" />
+      <module name="discovery-server" options="-parameters" />
       <module name="evidence-service" options="-parameters" />
       <module name="investigation-service" options="-parameters" />
-      <module name="multi-module-project" options="-parameters" />
       <module name="suspect-service" options="-parameters" />
     </option>
   </component>

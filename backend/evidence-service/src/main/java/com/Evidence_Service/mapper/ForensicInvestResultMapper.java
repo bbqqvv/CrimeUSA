@@ -10,7 +10,6 @@ public class ForensicInvestResultMapper {
 
         return ForensicInvestResultDTO.builder()
                 .resultId(entity.getResultId())
-                .investigationPlanId(entity.getInvestigationPlanId())
                 .evidenceId(entity.getEvidenceId())
                 .labName(entity.getLabName())
                 .report(entity.getReport())
@@ -25,7 +24,6 @@ public class ForensicInvestResultMapper {
 
         return ForensicInvestResult.builder()
                 .resultId(dto.getResultId())
-                .investigationPlanId(dto.getInvestigationPlanId())
                 .evidenceId(dto.getEvidenceId())
                 .labName(dto.getLabName())
                 .report(dto.getReport())

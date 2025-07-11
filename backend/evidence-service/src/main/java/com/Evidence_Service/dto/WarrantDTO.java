@@ -1,22 +1,12 @@
 package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class WarrantDTO {
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "Warrant ID cannot be empty")
+    @Size(max = 50, message = "Warrant ID must not exceed 50 characters")
     private String warrantId;
-    @NotBlank
-    private String warrantName;
-    @NotBlank
-    private String attachedFile;
-    @NotNull
-    private LocalDateTime timePublish;
-    @NotBlank
-    private String officerUsername;
 }

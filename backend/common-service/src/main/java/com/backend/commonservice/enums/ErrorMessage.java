@@ -23,7 +23,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorMessage {
-    UNAUTHORIZED("Bạn không có quyền truy cập tài nguyên này", 403, HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED("Bạn không có quyền truy cập tài nguyên này", 403, HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED( "Unauthenticated",403, HttpStatus.UNAUTHORIZED),
     INVALID_DATA("Validation failed", 400, HttpStatus.BAD_REQUEST),
     SUSPECT_STATUS_NOT_FOUND("Suspect status not found", 404, HttpStatus.NOT_FOUND),
     USER_NOT_FOUND("User not found", 404, HttpStatus.NOT_FOUND),

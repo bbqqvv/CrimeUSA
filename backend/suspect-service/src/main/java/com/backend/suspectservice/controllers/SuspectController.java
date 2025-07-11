@@ -35,7 +35,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/v1/suspect")
+@RequestMapping("/suspects")
 @Tag(name = "Suspect Query", description = "Suspect API")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SuspectController {
