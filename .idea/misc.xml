@@ -7,7 +7,6 @@
         <option value="$PROJECT_DIR$/backend/evidence-service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/discovery-server/pom.xml" />
         <option value="$PROJECT_DIR$/backend/auth-service/pom.xml" />
-        <option value="$PROJECT_DIR$/backend/suspect-service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/common-service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/investigation-service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/case-service-base/pom.xml" />

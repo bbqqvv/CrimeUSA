@@ -38,5 +38,8 @@ public class FinancialInvestResultDTO {
     @NotNull(message = "Created at timestamp cannot be null")
     private LocalDateTime createdAt;
 
+    @NotNull(message = "Updated at timestamp cannot be null")
+    private LocalDateTime updatedAt;
+
     private boolean isDeleted;
 }

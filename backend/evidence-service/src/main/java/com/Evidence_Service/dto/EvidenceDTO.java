@@ -42,6 +42,9 @@ public class EvidenceDTO {
     @NotNull(message = "Created at timestamp cannot be null")
     private LocalDateTime createdAt;
 
+    @NotNull(message = "Updated at timestamp cannot be null")
+    private LocalDateTime updatedAt;
+
     @NotBlank(message = "Measure survey ID cannot be empty")
     @Size(max = 50, message = "Measure survey ID must not exceed 50 characters")
     private String measureSurveyId;

@@ -1,8 +1,11 @@
 package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class CaseDTO {
@@ -25,4 +28,10 @@ public class CaseDTO {
     @NotBlank(message = "Severity cannot be empty")
     @Size(max = 20, message = "Severity must not exceed 20 characters")
     private String severity;
+
+    @NotNull(message = "Created at timestamp cannot be null")
+    private LocalDateTime createdAt;
+
+    @NotNull(message = "Updated at timestamp cannot be null")
+    private LocalDateTime updatedAt;
 }

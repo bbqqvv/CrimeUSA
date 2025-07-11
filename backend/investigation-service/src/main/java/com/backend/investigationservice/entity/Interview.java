@@ -58,5 +58,9 @@ public class Interview {
     @Column(name = "file_path")
     private List<String> attachedFiles;
 
+    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
+    private List<WitnessInterview> witnessInterviews;
 
+    @OneToMany(mappedBy = "interview", cascade = CascadeType.ALL)
+    private List<VictimInterview> victimInterviews;
 }
