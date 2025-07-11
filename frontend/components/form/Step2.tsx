@@ -61,6 +61,7 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
   };
 
   const handleSubmit = () => {
+    if (!validateForm()) return;
     setShowConfirm(true);
   };
 
@@ -104,6 +105,7 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
     setShowDelete(true);
   };
 
+
   const handleDeleteYes = () => {
     if (!deleteTarget) return;
     if (deleteTarget.type === 'relevant') {
@@ -119,6 +121,7 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
       setInitialEvidence(updated);
       sessionStorage.setItem('initialEvidence', JSON.stringify(updated));
     }
+
     setShowDelete(false);
     setDeleteTarget(null);
     // KHÔNG reload trang!
@@ -189,6 +192,9 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
                 </SelectItem>
               </SelectContent>
             </Select>
+            {errors.typeOfCrime && (
+              <p className="text-red-500 text-sm mt-1">{errors.typeOfCrime}</p>
+            )}
           </div>
           <div className='space-y-2'>
             <Label htmlFor='severity' className='text-base font-semibold'>
@@ -214,6 +220,9 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
                 <SelectItem value='critical'>Critical</SelectItem>
               </SelectContent>
             </Select>
+            {errors.severity && (
+              <p className="text-red-500 text-sm mt-1">{errors.severity}</p>
+            )}
           </div>
           <div className='space-y-2'>
             <Label htmlFor='datetime' className='text-base font-semibold'>
@@ -500,7 +509,7 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
         </Button>
       </div>
 
-      {/* Modal CONFIRM */}
+      {/* Confirmation Modal */}
       {showConfirm && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'>
           <div className='bg-white rounded-xl shadow-xl p-8 w-full max-w-md'>
@@ -536,7 +545,8 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
           </div>
         </div>
       )}
-      {/* Modal DELETE */}
+
+      {/* Delete Confirmation Modal */}
       {showDelete && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'>
           <div className='bg-white rounded-xl shadow-xl p-8 w-full max-w-md'>
@@ -585,7 +595,7 @@ export default function Step2({ data, onNext, onBack, onUpdate }: any) {
           </div>
         </div>
       )}
-
+      {/* Initial Evidence Modal */}
       {showInitialModal && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30'>
           <div className='bg-white p-4 rounded-xl w-[90%] max-w-4xl max-h-[90vh] overflow-auto'>

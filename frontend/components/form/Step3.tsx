@@ -2,7 +2,6 @@
 'use client'
 import { useState } from 'react';
 import Image from 'next/image';
-import { ReviewReportTable } from '../ReviewReportTable';
 
 export default function Step3({ data, onNext }: any) {
     const [form, setForm] = useState(data);
@@ -28,13 +27,8 @@ export default function Step3({ data, onNext }: any) {
                     />
                     <div className="w-100 h-10 text-center mb-30">
                         <p className="text-wrap">
-                            Your report will be reviewed within 5–10 working days.
-                            Please check the status regularly for updates.
                             Thank you for your submission.
                         </p>
-                    </div>
-                    <div className="mb-50">
-                        <ReviewReportTable></ReviewReportTable>
                     </div>
                 </div>
             </main>

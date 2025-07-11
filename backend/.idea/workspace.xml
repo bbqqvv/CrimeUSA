@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="06d5918f-3a0c-4110-bc13-ca8d63da18ce" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/CaseserviceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/CaseserviceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/config/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/controller/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/entity/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/exception/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/mapper/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/repository/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/security/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/impl/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/CaseServiceBaseApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/controller/CaseArrestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/CaseArrestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/controller/CaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/controller/CaseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/controller/CaseEvidenceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/controller/CaseEvidenceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/controller/CaseResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/controller/CaseResultController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/controller/TimelineController.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/controller/TimelineController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/requestDTO/CaseArrestRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/requestDTO/CaseArrestRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/requestDTO/CaseEvidenceRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/requestDTO/CaseEvidenceRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/requestDTO/CaseRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/requestDTO/CaseRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/requestDTO/CaseResultRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/requestDTO/CaseResultRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/requestDTO/TimelineRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/requestDTO/TimelineRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/responseDTO/ResponseData.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/responseDTO/ResponseData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/dto/responseDTO/ResponseError.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/dto/responseDTO/ResponseError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/exception/BaseException.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/exception/BaseException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/exception/ConflictException.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/exception/ConflictException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/exception/InvalidRequestException.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/exception/InvalidRequestException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/exception/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/exception/ResourceNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/model/Case.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/model/Case.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/model/CaseArrest.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/model/CaseArrest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/model/CaseEvidence.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/model/CaseEvidence.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/model/CaseResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/model/CaseResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/model/Timeline.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/model/Timeline.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/repository/CaseArrestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/repository/CaseArrestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/repository/CaseEvidenceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/repository/CaseEvidenceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/repository/CaseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/repository/CaseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/repository/CaseResultRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/repository/CaseResultRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/repository/TimelineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/repository/TimelineRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/CaseArrestService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/CaseArrestService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/CaseEvidenceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/CaseEvidenceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/CaseResultService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/CaseResultService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/CaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/CaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/TimelineService.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/TimelineService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/impl/CaseArrestServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/impl/CaseArrestServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/impl/CaseEvidenceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/impl/CaseEvidenceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/impl/CaseResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/impl/CaseResultServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/impl/CaseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/impl/CaseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case-service-base/src/main/java/com/example/caseservicebase/service/impl/TimelineServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/case-service-base/src/main/java/com/backend/caseservice/service/impl/TimelineServiceImpl.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="21" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2zccFZXh3XamA3TjIQzZFGfNUYO" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "NhomCon1__layout",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/admin/Desktop/New folder (3)/MockProject_062025_Nhom1/backend/case-service-base/src/main/java/com/backend/caseservice",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\Desktop\New folder (3)\MockProject_062025_Nhom1\backend\case-service-base\src\main\java\com\backend\caseservice" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
+    <configuration name="AuthServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="auth-service (2)" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.auth.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="auth-service (1)" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.auth.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="06d5918f-3a0c-4110-bc13-ca8d63da18ce" name="Changes" comment="" />
+      <created>1752033699585</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1752033699585</updated>
+      <workItem from="1752033700789" duration="211000" />
+      <workItem from="1752033920244" duration="110000" />
+      <workItem from="1752034073379" duration="198000" />
+      <workItem from="1752076842142" duration="33000" />
+      <workItem from="1752076879525" duration="20000" />
+      <workItem from="1752076905419" duration="86000" />
+      <workItem from="1752076993636" duration="210000" />
+      <workItem from="1752077220081" duration="50000" />
+      <workItem from="1752077272188" duration="35000" />
+      <workItem from="1752077314597" duration="378000" />
+      <workItem from="1752208164784" duration="256000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/report-service-base/src/main/java/com/backend/reportservice/ReportsServiceApplication.java</url>
+          <line>6</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
