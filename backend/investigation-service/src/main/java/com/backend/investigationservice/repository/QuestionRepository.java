@@ -6,7 +6,7 @@
 
 package com.backend.investigationservice.repository;
 
-import com.backend.investigationservice.model.Question;
+import com.backend.investigationservice.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

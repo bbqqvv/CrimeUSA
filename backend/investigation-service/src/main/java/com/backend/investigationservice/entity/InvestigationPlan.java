@@ -1,9 +1,8 @@
-package com.backend.investigationservice.model;
+package com.backend.investigationservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data

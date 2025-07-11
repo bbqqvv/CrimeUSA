@@ -1,7 +1,7 @@
 package com.backend.investigationservice.repository;
 
-import com.backend.investigationservice.model.WitnessInterview;
-import com.backend.investigationservice.model.WitnessInterviewId;
+import com.backend.investigationservice.entity.WitnessInterview;
+import com.backend.investigationservice.entity.WitnessInterviewId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

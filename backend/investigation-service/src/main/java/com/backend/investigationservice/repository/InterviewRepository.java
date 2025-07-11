@@ -1,6 +1,6 @@
 package com.backend.investigationservice.repository;
 
-import com.backend.investigationservice.model.Interview;
+import com.backend.investigationservice.entity.Interview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

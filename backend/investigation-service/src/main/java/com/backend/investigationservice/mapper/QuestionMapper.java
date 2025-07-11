@@ -1,7 +1,7 @@
 package com.backend.investigationservice.mapper;
 import com.backend.investigationservice.dto.request.QuestionCreationRequest;
 import com.backend.investigationservice.dto.response.QuestionResponse;
-import com.backend.investigationservice.model.Question;
+import com.backend.investigationservice.entity.Question;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

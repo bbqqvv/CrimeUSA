@@ -1,4 +1,4 @@
-package com.backend.investigationservice.model;
+package com.backend.investigationservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
