@@ -3,6 +3,7 @@ package com.Evidence_Service.controller;
 import com.Evidence_Service.dto.FinancialInvestResultDTO;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.FinancialInvestResultService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -41,6 +44,8 @@ class FinancialInvestResultControllerTest {
 
     @BeforeEach
     void setUp() {
+        objectMapper.addMixIn(PageImpl.class, PageImplMixin.class);
+
         financialInvestResultDTO = FinancialInvestResultDTO.builder()
                 .resultId("result1")
                 .evidenceId("evidence1")
@@ -54,6 +59,10 @@ class FinancialInvestResultControllerTest {
                 .build();
     }
 
+    @JsonIgnoreProperties({"pageable"})
+    private interface PageImplMixin {
+    }
+
     @Test
     @WithMockUser(authorities = "ADD_FINANCIAL_RESULT")
     void createFinancialInvestResult_Success() throws Exception {
@@ -62,7 +71,8 @@ class FinancialInvestResultControllerTest {
 
         mockMvc.perform(post("/api/v1/evidences/evidence1/financial-invest")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(financialInvestResultDTO)))
+                        .content(objectMapper.writeValueAsString(financialInvestResultDTO))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(201))
                 .andExpect(jsonPath("$.message").value("Created"))
@@ -74,7 +84,11 @@ class FinancialInvestResultControllerTest {
     @Test
     @WithMockUser(authorities = "VIEW_FINANCIAL_RESULT")
     void getAllFinancialInvestResults_Success() throws Exception {
-        Page<FinancialInvestResultDTO> page = new PageImpl<>(Collections.singletonList(financialInvestResultDTO));
+        Page<FinancialInvestResultDTO> page = new PageImpl<>(
+                Collections.singletonList(financialInvestResultDTO),
+                PageRequest.of(0, 10),
+                1
+        );
         when(financialInvestResultService.getAllFinancialInvestByEvidenceId(eq("evidence1"), any(Pageable.class)))
                 .thenReturn(page);
 
@@ -111,7 +125,8 @@ class FinancialInvestResultControllerTest {
 
         mockMvc.perform(put("/api/v1/evidences/evidence1/financial-invest/result1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(financialInvestResultDTO)))
+                        .content(objectMapper.writeValueAsString(financialInvestResultDTO))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Updated"))
@@ -125,7 +140,8 @@ class FinancialInvestResultControllerTest {
     void deleteFinancialInvestResult_Success() throws Exception {
         doNothing().when(financialInvestResultService).deleteFinancialInvestByResultId("result1");
 
-        mockMvc.perform(delete("/api/v1/evidences/evidence1/financial-invest/result1"))
+        mockMvc.perform(delete("/api/v1/evidences/evidence1/financial-invest/result1")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Deleted"));

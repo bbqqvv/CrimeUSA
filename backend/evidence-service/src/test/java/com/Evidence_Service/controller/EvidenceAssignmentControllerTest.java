@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -86,7 +87,8 @@ class EvidenceAssignmentControllerTest {
 
         mockMvc.perform(put("/api/v1/evidences/evidence1/assign-suspect")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(suspectDTO)))
+                        .content(objectMapper.writeValueAsString(suspectDTO))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Assigned suspect"))
@@ -102,7 +104,8 @@ class EvidenceAssignmentControllerTest {
 
         mockMvc.perform(put("/api/v1/evidences/evidence1/assign-case")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(caseDTO)))
+                        .content(objectMapper.writeValueAsString(caseDTO))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Assigned case"))
@@ -118,7 +121,8 @@ class EvidenceAssignmentControllerTest {
 
         mockMvc.perform(put("/api/v1/evidences/evidence1/assign-warrant")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(warrantDTO)))
+                        .content(objectMapper.writeValueAsString(warrantDTO))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Assigned warrant"))

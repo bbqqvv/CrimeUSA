@@ -14,9 +14,11 @@ public class RecordInfoMapper {
                 .evidenceId(entity.getEvidenceId())
                 .typeName(entity.getTypeName())
                 .source(entity.getSource())
+                .dateCollected(entity.getCreatedAt())
                 .summary(entity.getSummary())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
+                .isDeleted(entity.isDeleted())
                 .build();
     }
 
@@ -27,7 +29,11 @@ public class RecordInfoMapper {
                 .evidenceId(dto.getEvidenceId())
                 .typeName(dto.getTypeName())
                 .source(dto.getSource())
+                .createdAt(dto.getDateCollected())
                 .summary(dto.getSummary())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt())
+                .isDeleted(dto.isDeleted())
                 .build();
     }
 }

@@ -1,8 +1,10 @@
 package com.Evidence_Service.controller;
 
 import com.Evidence_Service.dto.DigitalInvestResultDTO;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.DigitalInvestResultService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,8 @@ class DigitalInvestResultControllerTest {
 
     @BeforeEach
     void setUp() {
+        objectMapper.addMixIn(PageImpl.class, PageImplMixin.class);
+
         digitalInvestResultDTO = DigitalInvestResultDTO.builder()
                 .resultId("result1")
                 .evidenceId("evidence1")
@@ -55,6 +59,9 @@ class DigitalInvestResultControllerTest {
                 .isDeleted(false)
                 .build();
     }
+    @JsonIgnoreProperties({"pageable"})
+    private interface PageImplMixin {
+    }
 
     @Test
     @WithMockUser(authorities = "ADD_DIGITAL_RESULT")
@@ -64,7 +71,8 @@ class DigitalInvestResultControllerTest {
 
         mockMvc.perform(post("/api/v1/evidences/evidence1/digital-invest")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(digitalInvestResultDTO)))
+                        .content(objectMapper.writeValueAsString(digitalInvestResultDTO))
+                        .with(csrf())) // Thêm token CSRF
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(201))
                 .andExpect(jsonPath("$.message").value("Digital investigation result created"))
@@ -113,7 +121,8 @@ class DigitalInvestResultControllerTest {
 
         mockMvc.perform(put("/api/v1/evidences/evidence1/digital-invest/result1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(digitalInvestResultDTO)))
+                        .content(objectMapper.writeValueAsString(digitalInvestResultDTO))
+                        .with(csrf())) // Thêm token CSRF
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Digital investigation result updated"))
@@ -127,7 +136,8 @@ class DigitalInvestResultControllerTest {
     void deleteDigitalInvestResult_Success() throws Exception {
         doNothing().when(digitalInvestResultService).deleteDigitalInvestByResultId("result1");
 
-        mockMvc.perform(delete("/api/v1/evidences/evidence1/digital-invest/result1"))
+        mockMvc.perform(delete("/api/v1/evidences/evidence1/digital-invest/result1")
+                        .with(csrf())) // Thêm token CSRF
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Digital investigation result deleted"));

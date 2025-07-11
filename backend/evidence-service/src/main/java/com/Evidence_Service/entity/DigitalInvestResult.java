@@ -12,7 +12,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DigitalInvestResult extends BaseInvestResult {
+    @Column(name = "device_type")
     private String deviceType;
+
+    @Column(name = "analyst_tool")
     private String analystTool;
+
+    @Column(name = "result")
     private String result;
 }
