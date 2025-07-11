@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-export const Hero: React.FC = () => {
+export const Hero = () => {
   const slides = [
     '/images/banner1.png',
     '/images/banner2.png',
@@ -32,7 +32,7 @@ export const Hero: React.FC = () => {
               alt={`NYPD Officers Slide ${currentSlide + 1}`}
               className="w-full h-full object-cover transition-opacity duration-1000"
             />
-            
+
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent z-10"></div>
 
