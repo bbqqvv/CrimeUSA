@@ -3,6 +3,7 @@ package com.Evidence_Service.service;
 import com.Evidence_Service.dto.*;
 import com.Evidence_Service.event.listener.AnalysisResultEvent;
 import com.Evidence_Service.event.caller.EvidenceCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,9 +15,17 @@ public interface EvidenceService {
     EvidenceDTO createEvidence(EvidenceDTO dto);
 
     EvidenceDTO getByEvidenceId(String evidenceId);
+    List<EvidenceDTO> getByEvidenceIds(List<String> evidenceIds);
+
+    void assignInvestResultByInvestigationPlanId(ResultInvestAssignedEvent event);
+
+    void deleteInvestResultByInvestigationPlanId(String investigationPlanId, String type) ;
+
     EvidenceDTO updateEvidence(EvidenceDTO dto);
 
     void deleteByEvidenceId(String evidenceId);
+    void deleteByInvestigationPlanId(String investigationPlanId);
+
 
     EvidenceDTO assignCase(String evidenceId, CaseDTO dto);
     EvidenceDTO assignSuspect(String evidenceId, SuspectDTO dto);

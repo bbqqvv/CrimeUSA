@@ -4,13 +4,15 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/backend/Evidence-Service/pom.xml" />
-        <option value="$PROJECT_DIR$/backend/multi-module-project/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/evidence-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/discovery-server/pom.xml" />
         <option value="$PROJECT_DIR$/backend/auth-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/suspect-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/common-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/investigation-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/case-service-base/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="24" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22" project-jdk-type="JavaSDK" />
 </project>

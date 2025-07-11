@@ -73,7 +73,7 @@ public class DigitalInvestResultController {
     @PreAuthorize("hasAuthority('DELETE_DIGITAL_RESULT')")
     @Operation(summary = "Delete digital investigation result")
     public ApiResponse<Void> deleteDigitalInvestResult(@Valid @PathVariable String resultId) {
-        digitalInvestResultService.deleteDigitalInvest(resultId);
+        digitalInvestResultService.deleteDigitalInvestByResultId(resultId);
         return ApiResponse.<Void>builder()
                 .code(200)
                 .message("Digital investigation result deleted")

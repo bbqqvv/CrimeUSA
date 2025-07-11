@@ -3,12 +3,12 @@ package com.backend.investigationservice.mapper;
 import com.backend.investigationservice.dto.request.InterviewCreationRequest;
 import com.backend.investigationservice.dto.response.InterviewResponse;
 import com.backend.investigationservice.dto.response.QuestionResponse;
-import com.backend.investigationservice.model.Interview;
-import com.backend.investigationservice.model.Question;
+import com.backend.investigationservice.entity.Interview;
+import com.backend.investigationservice.entity.Question;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
+
 @Component
 public class InterviewMapper {
 

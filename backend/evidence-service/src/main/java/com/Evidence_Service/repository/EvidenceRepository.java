@@ -20,7 +20,7 @@ public interface EvidenceRepository extends JpaRepository<Evidence, String> {
     Page<Evidence> findAllNotDeleted(Pageable pageable);
 
 
-    List<Evidence> findByInvestigationPlanId(String investigationPlanId);
+    List<Evidence> findAllByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
 
     List<Evidence> findByReportIdAndIsDeletedFalse(String reportId);
 
@@ -28,7 +28,7 @@ public interface EvidenceRepository extends JpaRepository<Evidence, String> {
 
     List<Evidence> findByMeasureSurveyIdAndIsDeletedFalse(String measureSurveyId);
 
-    List<Evidence> findByIsDeletedFalse();
+    List<Evidence> findAllByIsDeletedFalse();
 
     Optional<Evidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
 
@@ -36,8 +36,6 @@ public interface EvidenceRepository extends JpaRepository<Evidence, String> {
 
     List<Evidence> findAllByMeasureSurveyIdAndIsDeletedFalse(String measureSurveyId);
 
-    List<Evidence> findByDescriptionContainingIgnoreCaseAndIsDeletedFalse(String keyword);
-
-    List<Evidence> findByInvestigationPlanIdAndIsDeletedFalse(String investigationPlanId);
+    List<Evidence> findAllByDescriptionContainingIgnoreCaseAndIsDeletedFalse(String keyword);
 
 }

@@ -1,13 +1,15 @@
 package com.Evidence_Service.service;
 
 import com.Evidence_Service.dto.DigitalInvestResultDTO;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface DigitalInvestResultService {
     DigitalInvestResultDTO addDigitalInvestResult(String evidenceId, DigitalInvestResultDTO dto);
+
+    void assignDigitalInvestResult(ResultInvestAssignedEvent resultInvestAssignedEvent);
+
 
     DigitalInvestResultDTO getDigitalInvestByResultId(String resultId);
 
@@ -15,5 +17,9 @@ public interface DigitalInvestResultService {
 
     DigitalInvestResultDTO updateDigitalInvest(String evidenceId, String resultId, DigitalInvestResultDTO dto);
 
-    void deleteDigitalInvest(String resultId);
+    void deleteDigitalInvestByResultId(String resultId);
+
+    boolean existsByEvidenceId(String evidenceId);
+
+    void deleteByEvidenceId(String evidenceId);
 }

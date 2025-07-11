@@ -10,12 +10,12 @@ import java.util.List;
 @Repository
 public interface SuspectEvidenceRepository extends JpaRepository<SuspectEvidence, SuspectEvidenceId> {
 
-    List<SuspectEvidence> findByEvidenceId(String evidenceId);
+    List<SuspectEvidence> findAllByEvidenceId(String evidenceId);
 
     boolean existsBySuspectIdAndEvidenceId(String suspectId, String evidenceId);
     boolean existsBySuspectIdAndIsDeletedFalse(String suspectId);
 
-    List<SuspectEvidence> findBySuspectIdAndIsDeletedFalse(String suspectId);
-    List<SuspectEvidence> findByEvidenceIdAndIsDeletedFalse(String evidenceId);
+    List<SuspectEvidence> findAllBySuspectIdAndIsDeletedFalse(String suspectId);
+    List<SuspectEvidence> findAllByEvidenceIdAndIsDeletedFalse(String evidenceId);
     void deleteBySuspectIdAndEvidenceId(String suspectId, String evidenceId);
 }

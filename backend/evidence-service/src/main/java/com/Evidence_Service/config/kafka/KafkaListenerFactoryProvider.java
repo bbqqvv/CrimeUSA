@@ -91,4 +91,14 @@ public class KafkaListenerFactoryProvider {
     public ConcurrentKafkaListenerContainerFactory<String, WarrantDeletedEvent> warrantDeletedKafkaListenerFactory() {
         return buildFactory(WarrantDeletedEvent.class, "evidence-service");
     }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ResultInvestAssignedEvent> investigationAssignedKafkaListenerFactory() {
+        return buildFactory(ResultInvestAssignedEvent.class, "evidence-service");
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, DeleteInvestResultEvent> investigationDeletedKafkaListenerFactory() {
+        return buildFactory(DeleteInvestResultEvent.class, "evidence-service");
+    }
 }

@@ -2,21 +2,27 @@ package com.Evidence_Service.service.impl;
 
 import com.Evidence_Service.dto.FinancialInvestResultDTO;
 import com.Evidence_Service.event.caller.FinancialInvestResultCreatedEvent;
+import com.Evidence_Service.event.listener.ResultInvestAssignedEvent;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.KafkaEventPublisher;
 import com.Evidence_Service.mapper.FinancialInvestResultMapper;
 import com.Evidence_Service.entity.FinancialInvestResult;
 import com.Evidence_Service.repository.FinancialInvestResultRepository;
+import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.FinancialInvestResultService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +30,6 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     private static final Logger log = LoggerFactory.getLogger(FinancialInvestResultServiceImpl.class);
 
-    private final EvidenceServiceImpl evidenceService;
     private final FinancialInvestResultRepository financialInvestResultRepository;
     private final KafkaEventPublisher publisher;
 
@@ -33,11 +38,6 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
     public FinancialInvestResultDTO addFinancialInvestResult(String evidenceId, FinancialInvestResultDTO dto) {
         try {
             log.info("Adding financial investigation result for evidence ID: {}", evidenceId);
-            // Check if evidence exists
-            if (evidenceService.existsByEvidenceId(evidenceId)) {
-                log.warn("Evidence not found for ID: {}", evidenceId);
-                throw new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND);
-            }
 
             // Convert DTO to entity and set evidence ID
             FinancialInvestResult result = FinancialInvestResultMapper.toEntity(dto);
@@ -80,12 +80,40 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
         }
     }
 
+    @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
+    @Override
+    public void assignFinancialInvestResult(ResultInvestAssignedEvent event) {
+        try {
+            List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
+
+            if (financialInvestResults ==  null) {
+                FinancialInvestResult.builder()
+                        .evidenceId(event.getEvidenceId())
+                        .result(event.getContent())
+                        .uploadFile(event.getUploadFile())
+                        .build();
+            } else {
+                for (FinancialInvestResult financialInvestResult : financialInvestResults) {
+                    financialInvestResult.setEvidenceId(event.getEvidenceId());
+                    financialInvestResult.setResult(event.getContent());
+                    financialInvestResult.setUploadFile(event.getUploadFile());
+                    financialInvestResultRepository.save(financialInvestResult);
+                }
+            }
+            log.info("Assigned Investigation");
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Cacheable(value = "financialInvestResultsByEvidence", key = "#evidenceId + '-' + #pageable.pageNumber + '-' + #pageable.pageSize")
     @Override
     public Page<FinancialInvestResultDTO> getAllFinancialInvestByEvidenceId(String evidenceId, Pageable pageable) {
         try {
             log.info("Retrieving all financial investigation results for evidence ID: {}", evidenceId);
-            Page<FinancialInvestResultDTO> results = financialInvestResultRepository.findByEvidenceId(evidenceId, pageable)
+            Page<FinancialInvestResultDTO> results = financialInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId, pageable)
                     .map(FinancialInvestResultMapper::toDTO);
             log.info("Successfully retrieved {} financial investigation results for evidence ID: {}", results.getTotalElements(), evidenceId);
             return results;
@@ -121,11 +149,11 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
-    public void deleteFinancialInvest(String resultId) {
+    public void deleteFinancialInvestByResultId(String resultId) {
         try {
             log.info("Deleting financial investigation result with ID: {}", resultId);
             // Find existing result
-            FinancialInvestResult financialInvestResult = financialInvestResultRepository.findByResultId(resultId);
+            FinancialInvestResult financialInvestResult = financialInvestResultRepository.findByResultIdAndIsDeletedFalse(resultId);
             if (financialInvestResult == null) {
                 throw new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND);
             }
@@ -137,6 +165,36 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
             throw ae;
         } catch (Exception ex) {
             log.error("Failed to delete financial investigation result with ID {}: {}", resultId, ex.getMessage(), ex);
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public boolean existsByEvidenceId(String evidenceId) {
+        try {
+            return financialInvestResultRepository.existsByEvidenceIdAndIsDeletedFalse(evidenceId);
+        } catch (AppException e) {
+            throw  e;
+        } catch (Exception e) {
+            throw  new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
+    @Override
+    public void deleteByEvidenceId(String evidenceId) {
+        try {
+            List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);
+
+            if (financialInvestResults == null) throw new AppException(ErrorCode.FINANCIAL_INVEST_RESULT_NOT_FOUND);
+
+            for(FinancialInvestResult financialInvestResult : financialInvestResults) {
+                financialInvestResult.setDeleted(true);
+                financialInvestResultRepository.save(financialInvestResult);
+            }
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

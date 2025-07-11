@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Tag(name = "Permission Query", description = "Permission API")
 @RestController
-@RequestMapping("/api/v1/permissions")
+@RequestMapping("/permissions")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 @Slf4j

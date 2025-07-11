@@ -2,33 +2,41 @@ package com.Evidence_Service.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FinancialInvestResultDTO {
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Result ID cannot be empty")
+    @Size(max = 50, message = "Result ID must not exceed 50 characters")
     private String resultId;
 
-    @NotBlank
-    private String investigationPlanId;
-
-    @NotBlank
+    @NotBlank(message = "Evidence ID cannot be empty")
+    @Size(max = 50, message = "Evidence ID must not exceed 50 characters")
     private String evidenceId;
 
-    @NotBlank
+    @NotBlank(message = "Summary cannot be empty")
+    @Size(max = 500, message = "Summary must not exceed 500 characters")
     private String summary;
 
-    @NotBlank
+    @NotBlank(message = "Attached file cannot be empty")
+    @Size(max = 255, message = "Attached file path must not exceed 255 characters")
     private String attachedFile;
 
-    @NotNull
+    @NotBlank(message = "Image URL cannot be empty")
+    @Size(max = 255, message = "Image URL must not exceed 255 characters")
+    private String imageUrl;
+
+    @NotBlank(message = "Notes cannot be empty")
+    @Size(max = 1000, message = "Notes must not exceed 1000 characters")
+    private String notes;
+
+    @NotNull(message = "Created at timestamp cannot be null")
     private LocalDateTime createdAt;
+
     private boolean isDeleted;
 }

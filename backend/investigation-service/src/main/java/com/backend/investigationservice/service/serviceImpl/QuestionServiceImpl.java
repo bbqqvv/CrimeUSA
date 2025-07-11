@@ -8,7 +8,7 @@ package com.backend.investigationservice.service.serviceImpl;
 
 import com.backend.investigationservice.dto.response.QuestionResponse;
 import com.backend.investigationservice.mapper.QuestionMapper;
-import com.backend.investigationservice.model.Question;
+import com.backend.investigationservice.entity.Question;
 import com.backend.investigationservice.repository.InterviewRepository;
 import com.backend.investigationservice.repository.QuestionRepository;
 import com.backend.investigationservice.service.QuestionService;
@@ -17,9 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

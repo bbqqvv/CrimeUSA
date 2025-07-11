@@ -26,7 +26,7 @@ import java.util.Optional;
 @Hidden
 public interface PermissionRepository extends JpaRepository<Permission, String> {
     @NativeQuery("SELECT p.`description` FROM permission p join roles_permissions rp on p.permission_id = rp.permission_id where rp.role_id = :roleId and p.is_deleted = false")
-    Optional<String> findDescriptionByRoleId(@Param("roleId") String roleId);
+    String findDescriptionByRoleId(@Param("roleId") String roleId);
 
     Optional<Permission> findByDescription(String description);
 

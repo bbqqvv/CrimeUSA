@@ -60,7 +60,7 @@ public class FinancialInvestResultController {
     @PreAuthorize("hasAuthority('DELETE_FINANCIAL_RESULT')")
     @Operation(summary = "Delete financial investigation result")
     public ApiResponse<Void> deleteFinancialInvestResult(@Valid @PathVariable String resultId) {
-        financialInvestResultService.deleteFinancialInvest(resultId);
+        financialInvestResultService.deleteFinancialInvestByResultId(resultId);
         return ApiResponse.<Void>builder().code(200).message("Deleted").build();
     }
 }

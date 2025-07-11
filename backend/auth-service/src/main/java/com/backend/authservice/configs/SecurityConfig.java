@@ -6,11 +6,19 @@
 
 package com.backend.authservice.configs;
 
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,86 +26,95 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.crypto.spec.SecretKeySpec;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
-/*
- * @description
- * @author: Khuong Pham
- * @date:   7/9/2025
- * @version:    1.0
- */
 @Configuration
 @EnableWebSecurity
-@Slf4j
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @NonFinal // This field not initialized in constructor
-    @Value("${jwt.secret-key}")
-    String secretKey;
+    private static final String[] PUBLIC_ENDPOINTS = {"/auth/**",};
+
+    @NonFinal
+    @Value("${rsa.key.private}")
+    RSAPrivateKey privateKey;
+
+    @NonFinal
+    @Value("${rsa.key.public}")
+    RSAPublicKey publicKey;
+
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/login").permitAll()
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers("/.well-known/jwks.json").permitAll() // Cho phép truy cập JWKS
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated())
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        )
-                );
-        return http.build();
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(
+                        Customizer.withDefaults()))
+                .oauth2ResourceServer(oauth2 -> {
+                    oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()));
+                })
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
     }
 
-    /*
-     * Creates a JwtDecoder bean using the secret key for JWT validation.
-     *
-     * @return JwtDecoder instance
-     */
     @Bean
-    JwtDecoder jwtDecoder() {
-        log.info("Creating JWT Decoder with secret key");
-        SecretKeySpec key = new SecretKeySpec(secretKey.getBytes(), "HS256");
-        return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(
-                        MacAlgorithm.HS256)
+    public JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder
+                .withPublicKey(publicKey)
                 .build();
     }
 
-    /*
-     * Creates a PasswordEncoder bean using BCrypt with a strength of 10.
-     *
-     * @return PasswordEncoder instance
-     */
     @Bean
-    PasswordEncoder passwordEncoder() {
-        log.info("Creating Password Encoder");
+    public JwtEncoder jwtEncoder() {
+        RSAKey rsaKey = new RSAKey.Builder(publicKey)
+                .privateKey(privateKey)
+                .build();
+        JWKSource<SecurityContext> jmk = new ImmutableJWKSet<>(
+                new JWKSet(rsaKey)
+        );
+        return new NimbusJwtEncoder(jmk);
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
 
-    /*
-     * Customizes the JWT authentication converter to use a prefix for roles.
+    /**
+     * Configures the JwtAuthenticationConverter to extract authorities from the JWT token.
+     * It sets the authorities claim name to "permission" and removes the authority prefix.
      *
-     * @return JwtAuthenticationConverter with custom role prefix
+     * @return JwtAuthenticationConverter configured to extract authorities from JWT tokens.
      */
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
-        log.info("Creating JWT Authentication Converter");
-        JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthoritiesClaimName("role");
-        converter.setAuthorityPrefix("ROLE_");
-        JwtAuthenticationConverter jconverter = new JwtAuthenticationConverter();
-        jconverter.setJwtGrantedAuthoritiesConverter(converter);
-        return jconverter;
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("permission");
+        grantedAuthoritiesConverter.setAuthorityPrefix("");
+
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
     }
+
+
 }

@@ -7,20 +7,18 @@ import com.Evidence_Service.client.WarrantClient;
 import com.Evidence_Service.dto.*;
 import com.Evidence_Service.event.caller.EvidenceCreatedEvent;
 import com.Evidence_Service.event.caller.EvidenceDeletedEvent;
-import com.Evidence_Service.event.listener.AnalysisResultEvent;
-import com.Evidence_Service.event.listener.CaseAssignedEvent;
-import com.Evidence_Service.event.listener.SuspectAssignedEvent;
-import com.Evidence_Service.event.listener.WarrantAssignedEvent;
+import com.Evidence_Service.event.listener.*;
 import com.Evidence_Service.exception.AppException;
 import com.Evidence_Service.exception.ErrorCode;
 import com.Evidence_Service.kafka.EventPublisher;
 import com.Evidence_Service.mapper.EvidenceMapper;
 import com.Evidence_Service.entity.*;
 import com.Evidence_Service.repository.*;
-import com.Evidence_Service.service.EvidenceService;
+import com.Evidence_Service.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.Evidence_Service.mapper.EvidenceMapper.toDTO;
 import static com.Evidence_Service.mapper.EvidenceMapper.toEntity;
@@ -49,6 +49,11 @@ public class EvidenceServiceImpl implements EvidenceService {
     private final WarrantClient warrantClient;
     private final SuspectClient suspectClient;
     private final EventPublisher eventPublisher;
+    private final DigitalInvestResultService digitalInvestResultService;
+    private final FinancialInvestResultService financialInvestResultService;
+    private final PhysicalInvestResultService physicalInvestResultService;
+    private final ForensicInvestResultService forensicInvestResultService;
+    private final RecordInfoService recordInfoService;
 
     @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
@@ -57,6 +62,7 @@ public class EvidenceServiceImpl implements EvidenceService {
             log.info("Starting evidence creation with data: {}", dto);
             // Convert DTO to entity for database storage
             Evidence entity = toEntity(dto);
+            assert entity != null;
             Evidence saved = evidenceRepository.save(entity);
             // Publish event to notify evidence creation
             eventPublisher.send("evidence.created", EvidenceMapper.toCreatedEvent(saved));
@@ -77,11 +83,30 @@ public class EvidenceServiceImpl implements EvidenceService {
             evidence.setDeleted(true);
             evidence.setStatus(EvidenceStatus.DELETED);
             evidenceRepository.save(evidence);
-            // Publish event to notify evidence deletion
+
+            // Publish event instead of direct service call
             eventPublisher.send("evidence.deleted", new EvidenceDeletedEvent());
+
             log.info("Successfully deleted evidence with ID: {}", evidenceId);
         } catch (Exception ex) {
             log.error("Failed to delete evidence with ID {}: {}", evidenceId, ex.getMessage(), ex);
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void deleteByInvestigationPlanId(String investigationPlanId) {
+        try {
+            List<Evidence> evidences = evidenceRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+
+            for (Evidence evidence : evidences) {
+                evidence.setDeleted(true);
+                evidenceRepository.save(evidence);
+            }
+            log.info("Deleted by investigationPlan");
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
@@ -184,6 +209,100 @@ public class EvidenceServiceImpl implements EvidenceService {
     }
 
     @Override
+    public List<EvidenceDTO> getByEvidenceIds(List<String> evidenceIds) {
+        try {
+            List<Evidence> evidences = evidenceRepository.findAllById(evidenceIds);
+            return evidences.stream()
+                    .map(EvidenceMapper::toDTO)
+                    .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
+    @Override
+    public void assignInvestResultByInvestigationPlanId(ResultInvestAssignedEvent event) {
+        try {
+            List<Evidence> evidences = evidenceRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(event.getInvestigationPlanId());
+
+            if (evidences == null) {
+                Evidence evidence = new Evidence();
+                evidence.setInvestigationPlanId(event.getInvestigationPlanId());
+                createInvestResultByType(event, evidence.getEvidenceId());
+                evidenceRepository.save(evidence);
+            } else {
+                for (Evidence evidence : evidences) {
+                    createInvestResultByType(event, evidence.getEvidenceId());
+                }
+            }
+        } catch (Exception e){
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void createInvestResultByType(ResultInvestAssignedEvent event, String evidenceId) {
+        try {
+            switch (event.getType()) {
+                case "physical":
+                    physicalInvestResultService.addPhysicalInvestResult(evidenceId, PhysicalInvestResultDTO.builder()
+                            .imageUrl(event.getUploadFile())
+                            .notes(event.getContent())
+                            .build());
+                case "digital":
+                    digitalInvestResultService.addDigitalInvestResult(evidenceId, DigitalInvestResultDTO.builder()
+                            .imageUrl(event.getUploadFile())
+                            .notes(event.getContent())
+                            .build());
+                case "financial":
+                    financialInvestResultService.addFinancialInvestResult(evidenceId, FinancialInvestResultDTO.builder()
+                            .imageUrl(event.getUploadFile())
+                            .notes(event.getContent())
+                            .build());
+                case "forensic":
+                    forensicInvestResultService.addForensicInvestResult(evidenceId, ForensicInvestResultDTO.builder()
+                            .imageUrl(event.getUploadFile())
+                            .notes(event.getContent())
+                            .build());
+                default:
+                    log.info("Handling create InvestResult False");
+            }
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
+    @Override
+    public void deleteInvestResultByInvestigationPlanId(String investigationPlanId, String type) {
+        try {
+            List<Evidence> evidences = evidenceRepository.findAllByInvestigationPlanIdAndIsDeletedFalse(investigationPlanId);
+
+            for (Evidence evidence : evidences) {
+                switch (type) {
+                    case "physical":
+                        physicalInvestResultService.deleteByEvidenceId(evidence.getEvidenceId());
+                    case "digital":
+                        digitalInvestResultService.deleteByEvidenceId(evidence.getEvidenceId());
+                    case "financial":
+                        financialInvestResultService.deleteByEvidenceId(evidence.getEvidenceId());
+                    case "forensic":
+                        forensicInvestResultService.deleteByEvidenceId(evidence.getEvidenceId());
+                    default:
+                        log.info("Handling UpdateInvestResult False");
+                }
+            }
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
+    @Override
     public boolean existsByEvidenceId(String evidenceId) {
         try {
             log.info("Checking if evidence exists with ID: {}", evidenceId);
@@ -196,12 +315,13 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void deleteByReportId(String reportId) {
         try {
             log.info("Deleting evidence by report ID: {}", reportId);
             // Find all evidence associated with the report
-            List<ReportEvidence> reportEvidences = reportEvidenceRepository.findByReportIdAndIsDeletedFalse(reportId);
+            List<ReportEvidence> reportEvidences = reportEvidenceRepository.findAllByReportIdAndIsDeletedFalse(reportId);
             reportEvidences.forEach(reportEvidence -> reportEvidence.setDeleted(true));
             reportEvidenceRepository.saveAll(reportEvidences);
             log.info("Successfully deleted evidence for report ID: {}", reportId);
@@ -211,12 +331,13 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void deleteByCaseId(String caseId) {
         try {
             log.info("Deleting evidence by case ID: {}", caseId);
             // Find all evidence associated with the case
-            List<CaseEvidence> caseEvidences = caseEvidenceRepository.findByCaseIdAndIsDeletedFalse(caseId);
+            List<CaseEvidence> caseEvidences = caseEvidenceRepository.findAllByCaseIdAndIsDeletedFalse(caseId);
             caseEvidences.forEach(caseEvidence -> caseEvidence.setDeleted(true));
             caseEvidenceRepository.saveAll(caseEvidences);
             log.info("Successfully deleted evidence for case ID: {}", caseId);
@@ -226,12 +347,13 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void deleteByWarrantId(String warrantId) {
         try {
             log.info("Deleting evidence by warrant ID: {}", warrantId);
             // Find all evidence associated with the warrant
-            List<WarrantEvidence> warrantEvidences = warrantEvidenceRepository.findByWarrantIdAndIsDeletedFalse(warrantId);
+            List<WarrantEvidence> warrantEvidences = warrantEvidenceRepository.findAllByWarrantIdAndIsDeletedFalse(warrantId);
             warrantEvidences.forEach(warrantEvidence -> warrantEvidence.setDeleted(true));
             warrantEvidenceRepository.saveAll(warrantEvidences);
             log.info("Successfully deleted evidence for warrant ID: {}", warrantId);
@@ -241,12 +363,13 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void deleteBySuspectId(String suspectId) {
         try {
             log.info("Deleting evidence by suspect ID: {}", suspectId);
             // Find all evidence associated with the suspect
-            List<SuspectEvidence> suspectEvidences = suspectEvidenceRepository.findBySuspectIdAndIsDeletedFalse(suspectId);
+            List<SuspectEvidence> suspectEvidences = suspectEvidenceRepository.findAllBySuspectIdAndIsDeletedFalse(suspectId);
             suspectEvidences.forEach(suspectEvidence -> suspectEvidence.setDeleted(true));
             suspectEvidenceRepository.saveAll(suspectEvidences);
             log.info("Successfully deleted evidence for suspect ID: {}", suspectId);
@@ -285,7 +408,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         try {
             log.info("Retrieving suspects for evidence ID: {}", evidenceId);
             // Get list of suspect IDs associated with evidence
-            List<String> suspectIds = suspectEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
+            List<String> suspectIds = suspectEvidenceRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId)
                     .stream()
                     .map(SuspectEvidence::getSuspectId)
                     .toList();
@@ -303,7 +426,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         try {
             log.info("Retrieving warrants for evidence ID: {}", evidenceId);
             // Get list of warrant IDs associated with evidence
-            List<String> warrantIds = warrantEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
+            List<String> warrantIds = warrantEvidenceRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId)
                     .stream()
                     .map(WarrantEvidence::getWarrantId)
                     .toList();
@@ -321,7 +444,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         try {
             log.info("Retrieving cases for evidence ID: {}", evidenceId);
             // Get list of case IDs associated with evidence
-            List<String> caseIds = caseEvidenceRepository.findByEvidenceIdAndIsDeletedFalse(evidenceId)
+            List<String> caseIds = caseEvidenceRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId)
                     .stream()
                     .map(CaseEvidence::getCaseId)
                     .toList();
@@ -339,7 +462,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         try {
             log.info("Retrieving reports for evidence ID: {}", evidenceId);
             // Get list of report IDs associated with evidence
-            List<String> reportIds = reportEvidenceRepository.findByReportIdAndIsDeletedFalse(evidenceId)
+            List<String> reportIds = reportEvidenceRepository.findAllByReportIdAndIsDeletedFalse(evidenceId)
                     .stream()
                     .map(ReportEvidence::getReportId)
                     .toList();
@@ -352,12 +475,13 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void removeSuspectFromEvidence(String suspectId) {
         try {
             log.info("Removing suspect {} from evidence", suspectId);
             // Find and mark suspect-evidence relationships as deleted
-            List<SuspectEvidence> suspectEvidenceList = suspectEvidenceRepository.findBySuspectIdAndIsDeletedFalse(suspectId);
+            List<SuspectEvidence> suspectEvidenceList = suspectEvidenceRepository.findAllBySuspectIdAndIsDeletedFalse(suspectId);
             suspectEvidenceList.forEach(suspectEvidence -> {
                 suspectEvidence.setDeleted(true);
                 suspectEvidence.setDetachedAt(LocalDateTime.now());
@@ -370,6 +494,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void saveEvidenceFromEvent(EvidenceCreatedEvent event) {
         try {
@@ -403,6 +528,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void assignSuspectToEvidence(String evidenceId, String suspectId) {
         try {
@@ -416,6 +542,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void assignCaseToEvidence(String evidenceId, String caseId) {
         try {
@@ -429,6 +556,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void assignWarrantToEvidence(String evidenceId, String warrantId) {
         try {
@@ -442,6 +570,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void assignReportToEvidence(String evidenceId, String reportId) {
         try {
@@ -457,6 +586,7 @@ public class EvidenceServiceImpl implements EvidenceService {
         }
     }
 
+    @CacheEvict(value = {"evidence", "evidenceByCaseSuspect"}, allEntries = true)
     @Override
     public void softDeleteByMeasureSurveyId(String measureSurveyId) {
         try {

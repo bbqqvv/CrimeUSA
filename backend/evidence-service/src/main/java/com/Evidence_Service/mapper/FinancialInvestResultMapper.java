@@ -10,7 +10,6 @@ public class FinancialInvestResultMapper {
 
         return FinancialInvestResultDTO.builder()
                 .resultId(entity.getResultId())
-                .investigationPlanId(entity.getInvestigationPlanId())
                 .evidenceId(entity.getEvidenceId())
                 .summary(entity.getSummary())
                 .attachedFile(entity.getAttachedFile())
@@ -24,7 +23,6 @@ public class FinancialInvestResultMapper {
 
         return FinancialInvestResult.builder()
                 .resultId(dto.getResultId())
-                .investigationPlanId(dto.getInvestigationPlanId())
                 .evidenceId(dto.getEvidenceId())
                 .summary(dto.getSummary())
                 .attachedFile(dto.getAttachedFile())
