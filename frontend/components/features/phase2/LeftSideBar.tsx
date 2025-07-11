@@ -224,7 +224,7 @@ export default function LeftSidebar() {
                                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                             )}
                         >
-                            <span className="font-medium text-sm">Scene Information</span>
+                            <span className="font-medium text-sm">Field Report Summary</span>
                         </button>
                     </div>
                 </div>

@@ -45,7 +45,7 @@ export function SectionContainer({
 }: SectionContainerProps) {
   return (
     // Main container with white background and padding
-    <div className={`${className} bg-white p-4`}>
+    <div className={`${className} bg-white p-4 rounded-lg`}>
       
       {/* SECTION HEADER */}
       {/* Contains the label and optional ADD button */}

@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Trash2, ExternalLink } from "lucide-react";
-import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/phase2/hooks";
+import { fetchFieldReport, saveFieldReport } from "@/store/phase2/slices/fieldReportSlice";
+import { FieldReportForm } from "@/components/form/FieldReportForm";
+import { useToast } from "@/components/ui/use-toast";
 import { DeleteEvidenceModal } from "@/components/features/phase2/DeleteEvidenceModal";
-import { SubmitSuccessModal } from "@/components/features/phase2/SubmitSuccessModal"; // 🆕 Import success modal
+import { SubmitSuccessModal } from "@/components/features/phase2/SubmitSuccessModal";
 import { SectionContainer } from "@/components/features/phase2/SectionContainer";
-import { DataTable } from "@/components/features/phase2/DataTable";
-import { ActionButtons } from "@/components/features/phase2/ActionButtons";
 
 /**
  * FIELD REPORT PAGE
@@ -27,405 +26,136 @@ import { ActionButtons } from "@/components/features/phase2/ActionButtons";
  * - Navigation to related pages
  */
 
-// Mock data for the field report
-const fieldReportData = {
-   reportDetails: "Traffic accident investigation at the intersection of Main Street and Oak Avenue. Two vehicles involved: a blue sedan (License: ABC-123) and a white SUV (License: XYZ-789). The blue sedan appears to have run a red light while the SUV was making a legal left turn. Initial assessment shows moderate damage to both vehicles. No fatalities reported, but minor injuries to the SUV driver who was transported to General Hospital for evaluation. Scene was secured and traffic redirected through alternate routes.",
-   levelAssessment: {
-      urgency: "URGENT",
-      description: "Priority investigation required due to potential traffic light malfunction reported by witnesses. Heavy traffic area with history of similar incidents. Immediate analysis needed to determine if infrastructure improvements are necessary to prevent future accidents."
-   }
-};
-
-// Mock data for images and videos
-const mediaFiles = [
-   {
-      fileName: "scene_overview.jpg",
-      type: "Image",
-      capturedBy: "Officer Martinez",
-      timestamp: "2024-07-03 14:25:30",
-      size: "2.4 MB"
-   },
-   {
-      fileName: "vehicle_damage_sedan.jpg",
-      type: "Image", 
-      capturedBy: "Officer Martinez",
-      timestamp: "2024-07-03 14:28:15",
-      size: "1.8 MB"
-   },
-   {
-      fileName: "witness_statement.mp4",
-      type: "Video",
-      capturedBy: "Detective Johnson", 
-      timestamp: "2024-07-03 15:10:22",
-      size: "45.2 MB"
-   },
-   {
-      fileName: "traffic_light_view.jpg",
-      type: "Image",
-      capturedBy: "Officer Chen",
-      timestamp: "2024-07-03 14:32:45", 
-      size: "2.1 MB"
-   }
-];
-
-// Mock data for overview sections
-const initialResponseOverview = [
-   {
-      field: "Dispatch Time",
-      value: "14:15 PM"
-   },
-   {
-      field: "Arrival Time", 
-      value: "14:25 PM"
-   },
-   {
-      field: "First Responding Officer",
-      value: "Officer Martinez - Badge #4521"
-   },
-   {
-      field: "Status",
-      value: "Scene Secured"
-   }
-];
-
-const sceneInformationOverview = [
-   {
-      field: "Location",
-      value: "Main Street & Oak Avenue Intersection"
-   },
-   {
-      field: "Weather Conditions",
-      value: "Clear, 72°F"
-   },
-   {
-      field: "Witnesses",
-      value: "3 witnesses interviewed"
-   },
-   {
-      field: "Evidence Collected",
-      value: "Physical evidence secured"
-   }
-];
-
 export default function FieldReportPage() {
-   const router = useRouter();
    const params = useParams();
+   const router = useRouter();
+   const dispatch = useAppDispatch();
+   const { toast } = useToast();
+
+   const { data: fieldReport, isLoading, isSaving, error } = useAppSelector(
+      (state) => state.fieldReport
+   );
+
    const [isEditing, setIsEditing] = useState(false);
-   const [editableData, setEditableData] = useState(fieldReportData);
-   
-   // State for controlling modals
    const [showDeleteModal, setShowDeleteModal] = useState(false);
-   const [showSuccessModal, setShowSuccessModal] = useState(false); // 🆕 Success modal state
+   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-   // Check if data has content
-   const hasContent = () => {
-      return editableData.reportDetails.trim() !== "" ||
-             editableData.levelAssessment.description.trim() !== "";
-   };
+   const reportId = params.reportsId as string;
+   const role = params.role as string;
 
-   const handleBack = () => {
-      // Navigate back to reports overview
-      router.push(`/${params.role}/reports/${params.reportsId}`);
-   };
+   useEffect(() => {
+      if (reportId) {
+         dispatch(fetchFieldReport(reportId));
+      }
+   }, [dispatch, reportId]);
 
-   const handleEdit = () => {
-      setIsEditing(!isEditing);
-   };
+   useEffect(() => {
+      if (error) {
+         toast({
+            title: "Error",
+            description: error,
+            variant: "destructive",
+         });
+      }
+   }, [error, toast]);
 
-   const handleSave = () => {
-      // TODO: Save field report to database/API
-      console.log("Saving field report:", editableData);
-      setIsEditing(false);
-      
-      // 🆕 Show success modal after saving
-      setShowSuccessModal(true);
-   };
-
-   const handleCancel = () => {
-      // Reset to original data
-      setEditableData(fieldReportData);
-      setIsEditing(false);
-   };
-
-   const handleClearAll = () => {
-      // Clear all data when in edit mode
-      setEditableData({
-         reportDetails: "",
-         levelAssessment: {
-            urgency: "NOT URGENT",
-            description: ""
-         }
-      });
-   };
-
-   const handleInputChange = (field: string, value: string) => {
-      if (field.startsWith('levelAssessment.')) {
-         const subField = field.split('.')[1];
-         setEditableData(prev => ({
-            ...prev,
-            levelAssessment: {
-               ...prev.levelAssessment,
-               [subField]: value
-            }
-         }));
-      } else {
-         setEditableData(prev => ({
-            ...prev,
-            [field]: value
-         }));
+   const handleFormSubmit = async (data: any) => {
+      try {
+         await dispatch(saveFieldReport({ reportId, data })).unwrap();
+         setIsEditing(false);
+         setShowSuccessModal(true);
+         toast({
+            title: "Success",
+            description: "Field report saved successfully",
+         });
+      } catch (error) {
+         // Error handled by Redux and useEffect
       }
    };
 
-   // Navigation functions
-   const handleInitialResponseDetails = () => {
-      router.push(`/${params.role}/reports/${params.reportsId}/initial-response`);
+   const handleBack = () => {
+      router.push(`/${role}/reports/${reportId}`);
    };
 
-   const handleSceneInformationDetails = () => {
-      router.push(`/${params.role}/reports/${params.reportsId}/scene-information`);
-   };
-
-   const handleMediaView = (media: any, index: number) => {
-      router.push(`/${params.role}/reports/${params.reportsId}/scene-information/media`);
-   };
-
-   // Delete handlers
-   const handleDeleteClick = () => {
+   const handleDelete = () => {
       setShowDeleteModal(true);
    };
 
-   const handleConfirmDelete = () => {
-      console.log("Deleting field report");
-      router.push(`/${params.role}/reports/${params.reportsId}`);
+   const handleConfirmDelete = async () => {
+      // TODO: Implement delete API call
+      router.push(`/${role}/reports/${reportId}`);
       setShowDeleteModal(false);
    };
 
-   const handleCloseModal = () => {
-      setShowDeleteModal(false);
-   };
+   if (isLoading) {
+      return (
+         <div className="flex-1 p-6">
+            <div className="animate-pulse space-y-4">
+               <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+               <div className="h-64 bg-gray-200 rounded"></div>
+            </div>
+         </div>
+      );
+   }
 
-   // 🆕 Success modal handlers
-   const handleSuccessClose = () => {
-      setShowSuccessModal(false);
-   };
+   function handleViewStatement(): void {
+      router.push(`/${role}/reports/${reportId}/initial-response`);
+   }
 
-   const handleSuccessContinue = () => {
-      // Navigate to reports overview after success
-      router.push(`/${params.role}/reports/${params.reportsId}`);
-   };
-
-   // Column configurations
-   const overviewColumns = [
-      { key: "field", label: "Field" },
-      { key: "value", label: "Value" }
-   ];
-
-   const mediaColumns = [
-      { key: "fileName", label: "File Name" },
-      { key: "type", label: "Type" },
-      { key: "capturedBy", label: "Captured By" },
-      { key: "timestamp", label: "Timestamp" },
-      { key: "size", label: "Size" }
-   ];
+   function handleViewScene(): void {
+      router.push(`/${role}/reports/${reportId}/scene-information`);
+   }
 
    return (
       <main className="flex-1 p-6">
          {/* Header */}
          <h1 className="text-3xl font-bold text-center bg-blue-100 text-blue-900 px-4 py-2 rounded-t-lg shadow">
-            FIELD REPORT - CASE #{params.reportsId}
+            FIELD REPORT - CASE #{reportId}
          </h1>
 
-         {/* Main Content Container */}
-         <div className="bg-gray-300 rounded-b-lg shadow p-6 pt-10">
-
-            {/* INITIAL RESPONSE OVERVIEW SECTION */}
-            <div className="mb-6 bg-white p-4">
-               <div className="flex justify-between items-center mb-4">
-                  <label className="font-semibold text-md">
-                     INITIAL RESPONSE
-                  </label>
-                  <Button
-                     variant="outline"
-                     size="sm"
-                     onClick={handleInitialResponseDetails}
-                     className="flex items-center gap-2 rounded-full bg-blue-100"
-                  >
-                     <ExternalLink className="w-4 h-4" />
-                     Details
-                  </Button>
-               </div>
-               <DataTable
-                  columns={overviewColumns}
-                  data={initialResponseOverview}
-               />
-            </div>
-
-            {/* SCENE INFORMATION OVERVIEW SECTION */}
-            <div className="mb-6 bg-white p-4">
-               <div className="flex justify-between items-center mb-4">
-                  <label className="font-semibold text-md">
-                     SCENE INFORMATION
-                  </label>
-                  <Button
-                     variant="outline"
-                     size="sm"
-                     onClick={handleSceneInformationDetails}
-                     className="flex items-center gap-2 rounded-full bg-blue-100"
-                  >
-                     <ExternalLink className="w-4 h-4" />
-                     Details
-                  </Button>
-               </div>
-               <DataTable
-                  columns={overviewColumns}
-                  data={sceneInformationOverview}
-               />
-            </div>
-
-            {/* REPORT DETAILS SECTION */}
-            <div className="mb-6 bg-white p-4">
-               <label className="block font-semibold text-md mb-4">
-                  REPORT DETAILS
-               </label>
-               {isEditing ? (
-                  <Textarea
-                     value={editableData.reportDetails}
-                     onChange={(e) => handleInputChange('reportDetails', e.target.value)}
-                     placeholder="Enter detailed report information..."
-                     className="w-full rounded-lg border-gray-300"
-                     rows={8}
-                  />
-               ) : (
-                  <div className="text-sm text-gray-900 bg-gray-50 p-4 rounded-lg leading-relaxed min-h-[12rem] whitespace-pre-line">
-                     {editableData.reportDetails || <span className="text-gray-500 italic">No report details provided</span>}
-                  </div>
-               )}
-            </div>
-
-            {/* IMAGES AND VIDEOS TABLE SECTION */}
+         <div className="bg-gray-300 rounded-b-lg shadow p-6 pt-10 space-y-6">
             <SectionContainer
-               label="IMAGES AND VIDEOS"
-               onAdd={() => router.push(`/${params.role}/reports/${params.reportsId}/scene-information/media`)}
-               addButtonText="Add Media"
-            >
-               <DataTable
-                  columns={mediaColumns}
-                  data={mediaFiles}
-                  actions={(row, index) => (
-                     <ActionButtons
-                        row={row}
-                        index={index}
-                        onView={handleMediaView}
-                        // No edit/delete for this view - just viewing
-                     />
-                  )}
-               />
+               label="INITIAL RESPONSE"
+               onAdd={handleViewStatement}
+               addButtonText="Detail"
+               icon={false} // No icon for this button
+            > <span></span>
             </SectionContainer>
 
-            {/* LEVEL ASSESSMENT SECTION */}
-            <div className="mb-6 bg-white p-4">
-               <div className="flex justify-between items-center mb-4">
-                  <label className="font-semibold text-md">
-                     LEVEL ASSESSMENT
-                  </label>
-                  <div className="flex items-center gap-3">
-                     <span className="text-sm font-medium text-gray-700">Priority Level:</span>
-                     {isEditing ? (
-                        <select
-                           value={editableData.levelAssessment.urgency}
-                           onChange={(e) => handleInputChange('levelAssessment.urgency', e.target.value)}
-                           className="rounded-lg border border-gray-300 px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                           <option value="URGENT">URGENT</option>
-                           <option value="NOT URGENT">NOT URGENT</option>
-                        </select>
-                     ) : (
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                           editableData.levelAssessment.urgency === "URGENT" 
-                              ? "bg-red-100 text-red-800" 
-                              : "bg-gray-100 text-gray-800"
-                        }`}>
-                           {editableData.levelAssessment.urgency}
-                        </span>
-                     )}
-                  </div>
-               </div>
-               {isEditing ? (
-                  <Textarea
-                     value={editableData.levelAssessment.description}
-                     onChange={(e) => handleInputChange('levelAssessment.description', e.target.value)}
-                     placeholder="Enter assessment description..."
-                     className="w-full rounded-lg border-gray-300"
-                     rows={5}
-                  />
-               ) : (
-                  <div className="text-sm text-gray-900 bg-gray-50 p-4 rounded-lg leading-relaxed min-h-[8rem] whitespace-pre-line">
-                     {editableData.levelAssessment.description || <span className="text-gray-500 italic">No assessment description provided</span>}
-                  </div>
-               )}
-            </div>
+            <SectionContainer
+               label="SCENE INFORMATION"
+               onAdd={handleViewScene}
+               addButtonText="Detail"
+               icon={false} // No icon for this button
+            > <span></span>
+            </SectionContainer>
 
-            {/* ACTION BUTTONS */}
-            <div className="flex justify-between items-center bg-white p-4">
-               {/* Back Button - Left Side */}
-               <Button
-                  variant="outline"
-                  onClick={handleBack}
-                  className="flex items-center gap-2 rounded-full"
-               >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Reports
-               </Button>
+            {/* Field Report Form */}
+            <FieldReportForm
+               initialData={fieldReport}
+               onSubmit={handleFormSubmit}
+               isLoading={isSaving}
+               onCancel={() => setIsEditing(false)}
+            />
 
-               {/* Edit/Save/Cancel and Delete Buttons - Right Side */}
-               <div className="flex gap-4">
-                  {isEditing ? (
-                     <>
-                        <Button variant="outline" onClick={handleCancel} className="rounded-full">
-                           Cancel
-                        </Button>
-                        <Button variant="outline" onClick={handleClearAll} className="rounded-full text-red-600 hover:text-red-700">
-                           Clear All
-                        </Button>
-                        <Button onClick={handleSave} className="rounded-full">
-                           Save Report
-                        </Button>
-                     </>
-                  ) : (
-                     <Button onClick={handleEdit} className="rounded-full">
-                        Edit Report
-                     </Button>
-                  )}
-
-                  <Button
-                     variant="destructive"
-                     onClick={handleDeleteClick}
-                     className="flex items-center gap-2 rounded-full"
-                     disabled={!hasContent()}
-                  >
-                     <Trash2 className="w-4 h-4" />
-                     Delete
-                  </Button>
-               </div>
-            </div>
+            {/* Media Files Section
+        <MediaFilesSection reportId={reportId} role={role} /> */}
          </div>
 
-         {/* DELETE CONFIRMATION MODAL */}
+         {/* Modals */}
          <DeleteEvidenceModal
             isOpen={showDeleteModal}
-            onClose={handleCloseModal}
+            onClose={() => setShowDeleteModal(false)}
             onConfirm={handleConfirmDelete}
             evidenceName="this field report"
          />
 
-         {/* 🆕 SUBMIT SUCCESS MODAL */}
          <SubmitSuccessModal
             isOpen={showSuccessModal}
-            onClose={handleSuccessClose}
-            onContinue={handleSuccessContinue}
+            onClose={() => setShowSuccessModal(false)}
             title="Field Report Saved Successfully!"
-            itemName={`Case #${params.reportsId} Field Report`}
-            message="Your field report has been successfully saved and added to the case file. All details, assessments, and linked evidence are now part of the official investigation record."
+            itemName={`Case #${reportId} Field Report`}
+            message="Your field report has been successfully saved."
          />
       </main>
    );
