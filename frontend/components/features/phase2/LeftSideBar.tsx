@@ -35,11 +35,11 @@ import {
 export default function LeftSidebar() {
     const router = useRouter();
     const params = useParams();
-    
+
     // Get role and reportsId from URL parameters
     const role = params.role as string;
     const reportsId = params.reportsId as string;
-    
+
     const [initialResponseOpen, setInitialResponseOpen] = useState(true);
     const [sceneInfoOpen, setSceneInfoOpen] = useState(false);
     const [investigationOpen, setInvestigationOpen] = useState(false);
@@ -70,7 +70,7 @@ export default function LeftSidebar() {
                             >
                                 <span className="font-medium text-sm">Initial Response</span>
                             </button>
-                            
+
                             <CollapsibleTrigger asChild>
                                 <button
                                     className={cn(
@@ -90,7 +90,7 @@ export default function LeftSidebar() {
                                 </button>
                             </CollapsibleTrigger>
                         </div>
-                        
+
                         <CollapsibleContent className="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up">
                             <div className="border-t border-gray-300 bg-white">
                                 <button
@@ -208,6 +208,25 @@ export default function LeftSidebar() {
                             </div>
                         </CollapsibleContent>
                     </Collapsible>
+                </div>
+            </div>
+
+            {/* FIELD REPORT SUMMARY SECTION */}
+            <div className="pt-3 px-3">
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="flex">
+                        <button
+                            onClick={() => handleNavigation('/field-report')}
+                            className={cn(
+                                "flex-1 text-left p-3 transition-all duration-200 hover:bg-blue-200",
+                                sceneInfoOpen
+                                    ? "bg-blue-100 text-blue-900"
+                                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            )}
+                        >
+                            <span className="font-medium text-sm">Scene Information</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </aside>

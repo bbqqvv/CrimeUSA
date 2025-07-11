@@ -24,6 +24,7 @@
  */
 
 import LeftSidebar from "@/components/features/phase2/LeftSideBar";
+import { ReduxProvider } from "@/providers/ReduxProvider";
 
 export default function Page({
   children,
@@ -33,14 +34,16 @@ export default function Page({
   return (
     // Main container with flex layout and full height
     <div className="flex min-h-screen bg-gray-100">
-      
-      {/* LEFT SIDEBAR */}
-      {/* Persistent navigation sidebar that appears on all pages */}
-      <LeftSidebar />
-      
-      {/* MAIN CONTENT AREA */}
-      {/* This is where individual page components will be rendered */}
-      {children}
+      <ReduxProvider>
+
+        {/* LEFT SIDEBAR */}
+        {/* Persistent navigation sidebar that appears on all pages */}
+        <LeftSidebar />
+
+        {/* MAIN CONTENT AREA */}
+        {/* This is where individual page components will be rendered */}
+        {children}
+      </ReduxProvider>
     </div>
-   );
+  );
 }
