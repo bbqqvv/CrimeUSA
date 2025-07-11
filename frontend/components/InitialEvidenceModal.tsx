@@ -15,7 +15,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function InitialEvidenceForm({
+export default function InitialEvidenceModal({
   onClose,
   onSubmitted,
 }: {
@@ -99,9 +99,9 @@ export default function InitialEvidenceForm({
 
   const handleCancel = () => {
     // router.push('/reporter') // Quay lại trang chính reporter
-   // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
-   // router.push('/reporter')
-   if (onClose) onClose();
+    // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại step 2
+    // router.push('/reporter')
+    if (onClose) onClose();
   }
 
   const formatFileSize = (size: number) => `${(size / 1024).toFixed(0)} KB`;
@@ -113,7 +113,7 @@ export default function InitialEvidenceForm({
     });
 
   return (
-    <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
+    <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl">
       <CardContent>
         <h2 className="text-2xl font-bold text-center mb-2">
           Initial Evidence

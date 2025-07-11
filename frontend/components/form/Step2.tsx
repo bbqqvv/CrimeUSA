@@ -1,8 +1,5 @@
-// Step1.tsx
-
-import InitialEvidenceForm from "@/components/form/InitialEvidenceForm"
-import RelevantPartiesForm from "@/components/form/RelevantPartiesForm"
-
+// Step2.tsx
+import InitialEvidenceModal from "@/components/InitialEvidenceModal";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,7 +29,7 @@ import {
 import { format } from "date-fns";
 import { Edit, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-// import Calendar hoặc DatePicker nếu có
+import RelevantPartiesModal from "../RelevantPartiesModal";
 
 export default function Step2({ data, onNext, onBack }: any) {
   const [form, setForm] = useState(data);
@@ -47,20 +44,96 @@ export default function Step2({ data, onNext, onBack }: any) {
   const [relevantParties, setRelevantParties] = useState<any[]>([]);
   const [initialEvidence, setInitialEvidence] = useState<any[]>([]);
   const router = useRouter();
-  const [showForm, setShowForm] = useState(false);
   const [showInitialModal, setShowInitialModal] = useState(false);
   const [showRelevantModal, setShowRelevantModal] = useState(false);
-  const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const [selectedParty, setSelectedParty] = useState<any>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Load saved data from sessionStorage on component mount
+  useEffect(() => {
+    const savedRelevant = sessionStorage.getItem("relevantParties");
+    const savedEvidence = sessionStorage.getItem("initialEvidence");
+
+    if (savedRelevant) {
+      setRelevantParties(JSON.parse(savedRelevant));
+    }
+    if (savedEvidence) {
+      setInitialEvidence(JSON.parse(savedEvidence));
+    }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+
+    // Clear error when field is filled
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setForm({ ...form, [name]: value });
+
+    // Clear error when field is selected
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleDateChange = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+
+    // Clear error when date is selected
+    if (errors.datetime) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.datetime;
+        return newErrors;
+      });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!form.typeOfCrime) {
+      newErrors.typeOfCrime = "Type of crime is required";
+    }
+
+    if (!form.severity) {
+      newErrors.severity = "Severity is required";
+    }
+
+    if (!date) {
+      newErrors.datetime = "Date of occurrence is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = () => {
+    if (!validateForm()) return;
     setShowConfirm(true);
   };
 
   const handleConfirmYes = () => {
     setShowConfirm(false);
-    onNext(form);
+    // Include the date in the form data before submitting
+    const formData = {
+      ...form,
+      datetime: date ? format(date, "yyyy-MM-dd") : null
+    };
+    onNext(formData);
   };
 
   const handleDeleteRelevant = (id: number) => {
@@ -72,9 +145,10 @@ export default function Step2({ data, onNext, onBack }: any) {
     setDeleteTarget({ id, type: "initial" });
     setShowDelete(true);
   };
-  const [selectedParty, setSelectedParty] = useState<any>(null)
+
   const handleDeleteYes = () => {
     if (!deleteTarget) return;
+
     if (deleteTarget.type === "relevant") {
       const updated = relevantParties.filter(
         (item: any) => item.id !== deleteTarget.id
@@ -88,9 +162,9 @@ export default function Step2({ data, onNext, onBack }: any) {
       setInitialEvidence(updated);
       sessionStorage.setItem("initialEvidence", JSON.stringify(updated));
     }
+
     setShowDelete(false);
     setDeleteTarget(null);
-    // KHÔNG reload trang!
   };
 
   return (
@@ -104,12 +178,17 @@ export default function Step2({ data, onNext, onBack }: any) {
           </h2>
           <div className="flex-1 border-t border-gray-300" />
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+          {/* Type of Crime */}
           <div className="space-y-2">
             <Label htmlFor="typeOfCrime" className="text-base font-semibold">
               Type of crime <span className="text-red-500">*</span>
             </Label>
-            <Select>
+            <Select
+              onValueChange={(value) => handleSelectChange("typeOfCrime", value)}
+              value={form.typeOfCrime}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
@@ -132,12 +211,20 @@ export default function Step2({ data, onNext, onBack }: any) {
                 </SelectItem>
               </SelectContent>
             </Select>
+            {errors.typeOfCrime && (
+              <p className="text-red-500 text-sm mt-1">{errors.typeOfCrime}</p>
+            )}
           </div>
+
+          {/* Severity */}
           <div className="space-y-2">
             <Label htmlFor="severity" className="text-base font-semibold">
               Severity <span className="text-red-500">*</span>
             </Label>
-            <Select>
+            <Select
+              onValueChange={(value) => handleSelectChange("severity", value)}
+              value={form.severity}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
@@ -148,41 +235,60 @@ export default function Step2({ data, onNext, onBack }: any) {
                 <SelectItem value="critical">Critical</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="datetime" className="text-base font-semibold">
-              Datetime of occurrence <span className="text-red-500">*</span>
-            </Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  {date ? (
-                    format(date, "dd/MM/yyyy")
-                  ) : (
-                    <span className="text-muted-foreground">Choose</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="address" className="text-base font-semibold">
-              Detailed address
-            </Label>
-            <Input type="text" name="address" className="w-full" placeholder="Enter detailed address" />
+            {errors.severity && (
+              <p className="text-red-500 text-sm mt-1">{errors.severity}</p>
+            )}
           </div>
         </div>
+
+        {/* Date of Occurrence */}
+        <div className="mt-6 space-y-2">
+          <Label htmlFor="datetime" className="text-base font-semibold">
+            Datetime of occurrence <span className="text-red-500">*</span>
+          </Label>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-normal"
+              >
+                {date ? (
+                  format(date, "dd/MM/yyyy")
+                ) : (
+                  <span className="text-muted-foreground">Choose</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={handleDateChange}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+          {errors.datetime && (
+            <p className="text-red-500 text-sm mt-1">{errors.datetime}</p>
+          )}
+        </div>
+
+        {/* Detailed Address */}
+        <div className="mt-6 space-y-2">
+          <Label htmlFor="address" className="text-base font-semibold">
+            Detailed address
+          </Label>
+          <Input
+            type="text"
+            name="address"
+            className="w-full"
+            placeholder="Enter detailed address"
+            value={form.address || ""}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Description */}
         <div className="mt-6 space-y-2">
           <Label htmlFor="description" className="text-base font-semibold">
             Description of the incident
@@ -191,216 +297,174 @@ export default function Step2({ data, onNext, onBack }: any) {
             name="description"
             placeholder="Briefly describe what happened, including key facts such as time, location, and main events."
             className="w-full"
+            value={form.description || ""}
+            onChange={handleChange}
           />
         </div>
       </div>
 
-      <div className="w-full max-w-screen-md mx-auto py-8">
-        {/* Relevant Parties */}
-        <div className="my-8">
-          <div className="flex items-center mb-4">
-            <div className="flex-1 border-t border-gray-300" />
-            <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
-              Relevant Parties
-            </h2>
-            <div className="flex-1 border-t border-gray-300" />
-          </div>
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-[#F8F8F8]">
-                  <TableHead className="text-center font-semibold">
-                    ID
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Relevant Role
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Name
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Statement
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Attachments
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Action
-                  </TableHead>
+      {/* Relevant Parties */}
+      <div className="my-8">
+        <div className="flex items-center mb-4">
+          <div className="flex-1 border-t border-gray-300" />
+          <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
+            Relevant Parties
+          </h2>
+          <div className="flex-1 border-t border-gray-300" />
+        </div>
+        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#F8F8F8]">
+                <TableHead className="text-center font-semibold">ID</TableHead>
+                <TableHead className="text-center font-semibold">Relevant Role</TableHead>
+                <TableHead className="text-center font-semibold">Name</TableHead>
+                <TableHead className="text-center font-semibold">Statement</TableHead>
+                <TableHead className="text-center font-semibold">Attachments</TableHead>
+                <TableHead className="text-center font-semibold">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {relevantParties.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-gray-400">
+                    No data
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {relevantParties.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      className="text-center text-gray-400"
-                    >
-                      No data
+              ) : (
+                relevantParties.map((party: any) => (
+                  <TableRow key={party.id} className="border-t border-gray-200">
+                    <TableCell className="text-center font-medium">
+                      #{party.id}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {party.relation}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {party.fullname || "—"}
+                    </TableCell>
+                    <TableCell className="text-center max-w-xs truncate">
+                      {party.description || "—"}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <span className="text-[#3B82F6]">
+                        {party.attachments}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <button
+                        className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
+                        onClick={() => {
+                          setSelectedParty(party);
+                          setShowRelevantModal(true);
+                        }}
+                      >
+                        <Edit size={18} />
+                      </button>
+                      <button
+                        className="inline-flex items-center text-[#F44336] hover:text-red-700"
+                        onClick={() => handleDeleteRelevant(party.id)}
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </TableCell>
                   </TableRow>
-                ) : (
-                  relevantParties.map((party: any) => (
-                    <TableRow
-                      key={party.id}
-                      className="border-t border-gray-200"
-                    >
-                      <TableCell className="text-center font-medium">
-                        #{party.id}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {party.relation}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {party.fullname || "—"}
-                      </TableCell>
-                      <TableCell className="text-center max-w-xs truncate">
-                        {party.description || "—"}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <span className="text-[#3B82F6]">
-                          {party.attachments}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <button
-                          className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
-                          onClick={() => {
-                            setSelectedParty(party)         // <== set dữ liệu cần sửa
-                            setShowRelevantModal(true)      // mở modal
-                          }}
-                        >
-                          <Edit size={18} />
-                        </button>
-                        <button
-                          className="inline-flex items-center text-[#F44336] hover:text-red-700"
-                          onClick={() => handleDeleteRelevant(party.id)}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex justify-end mt-2">
-
-            <Button
-              variant="outline"
-              className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-              onClick={() => setShowRelevantModal(true)}
-            >
-              ADD
-            </Button>
-          </div>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex justify-end mt-2">
+          <Button
+            variant="outline"
+            className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
+            onClick={() => setShowRelevantModal(true)}
+          >
+            ADD
+          </Button>
         </div>
       </div>
 
       {/* Initial Evidence */}
-      {
-        <div className="my-8">
-          <div className="flex items-center mb-4">
-            <div className="flex-1 border-t border-gray-300" />
-            <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
-              Initial Evidence
-            </h2>
-            <div className="flex-1 border-t border-gray-300" />
-          </div>
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-[#F8F8F8]">
-                  <TableHead className="text-center font-semibold">
-                    ID
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Types of Evidence
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Location
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Description
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Attachments
-                  </TableHead>
-                  <TableHead className="text-center font-semibold">
-                    Action
-                  </TableHead>
+      <div className="my-8">
+        <div className="flex items-center mb-4">
+          <div className="flex-1 border-t border-gray-300" />
+          <h2 className="mx-4 font-semibold text-lg sm:text-2xl">
+            Initial Evidence
+          </h2>
+          <div className="flex-1 border-t border-gray-300" />
+        </div>
+        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#F8F8F8]">
+                <TableHead className="text-center font-semibold">ID</TableHead>
+                <TableHead className="text-center font-semibold">Types of Evidence</TableHead>
+                <TableHead className="text-center font-semibold">Location</TableHead>
+                <TableHead className="text-center font-semibold">Description</TableHead>
+                <TableHead className="text-center font-semibold">Attachments</TableHead>
+                <TableHead className="text-center font-semibold">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {initialEvidence.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-gray-400">
+                    No data
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {initialEvidence.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      className="text-center text-gray-400"
-                    >
-                      No data
+              ) : (
+                initialEvidence.map((evidence: any) => (
+                  <TableRow key={evidence.id} className="border-t border-gray-200">
+                    <TableCell className="text-center font-medium">
+                      #{evidence.id}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {evidence.evidenceType}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {evidence.location}
+                    </TableCell>
+                    <TableCell className="text-center max-w-xs truncate">
+                      {evidence.description}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <span className="text-[#3B82F6]">
+                        {evidence.attachments}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <button
+                        className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
+                        onClick={() => router.push(`/reporter/initial?id=${evidence.id}`)}
+                      >
+                        <Edit size={18} />
+                      </button>
+                      <button
+                        className="inline-flex items-center text-[#F44336] hover:text-red-700"
+                        onClick={() => handleDeleteEvidence(evidence.id)}
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </TableCell>
                   </TableRow>
-                ) : (
-                  initialEvidence.map((evidence: any) => (
-                    <TableRow
-                      key={evidence.id}
-                      className="border-t border-gray-200"
-                    >
-                      <TableCell className="text-center font-medium">
-                        #{evidence.id}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {evidence.evidenceType}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {evidence.location}
-                      </TableCell>
-                      <TableCell className="text-center max-w-xs truncate">
-                        {evidence.description}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <span className="text-[#3B82F6]">
-                          {evidence.attachments}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <button
-                          className="inline-flex items-center mr-2 text-[#6C63FF] hover:text-blue-700"
-                          onClick={() =>
-                            router.push(`/reporter/initial?id=${evidence.id}`)
-                          }
-                        >
-                          <Edit size={18} />
-                        </button>
-                        <button
-                          className="inline-flex items-center text-[#F44336] hover:text-red-700"
-                          onClick={() => handleDeleteEvidence(evidence.id)}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex justify-end mt-2">
-
-            <Button
-              variant="outline"
-              className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
-              onClick={() => setShowInitialModal(true)}
-            >
-              ADD
-            </Button>
-          </div>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
-      }
+        <div className="flex justify-end mt-2">
+          <Button
+            variant="outline"
+            className="bg-[#F3F6F9] text-[#434343] font-semibold rounded-md px-8"
+            onClick={() => setShowInitialModal(true)}
+          >
+            ADD
+          </Button>
+        </div>
+      </div>
 
-      {/* Nút điều hướng */}
+      {/* Navigation Buttons */}
       <div className="flex justify-end gap-4 mt-8">
         <Button variant="outline" className="w-32" onClick={onBack}>
           Back
@@ -410,7 +474,7 @@ export default function Step2({ data, onNext, onBack }: any) {
         </Button>
       </div>
 
-      {/* Modal CONFIRM */}
+      {/* Confirmation Modal */}
       {showConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md">
@@ -436,17 +500,15 @@ export default function Step2({ data, onNext, onBack }: any) {
               <Button variant="outline" onClick={() => setShowConfirm(false)}>
                 Cancel
               </Button>
-              <Button
-                className="bg-black text-white"
-                onClick={handleConfirmYes}
-              >
+              <Button className="bg-black text-white" onClick={handleConfirmYes}>
                 Yes
               </Button>
             </div>
           </div>
         </div>
       )}
-      {/* Modal DELETE */}
+
+      {/* Delete Confirmation Modal */}
       {showDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md">
@@ -479,11 +541,12 @@ export default function Step2({ data, onNext, onBack }: any) {
         </div>
       )}
 
+      {/* Relevant Parties Modal */}
 
       {showRelevantModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white p-4 rounded-xl w-[90%] max-w-4xl max-h-[90vh] overflow-auto">
-            <RelevantPartiesForm
+            <RelevantPartiesModal
               onClose={() => setShowRelevantModal(false)}
               onSubmitted={() => {
                 setShowRelevantModal(false);
@@ -494,11 +557,11 @@ export default function Step2({ data, onNext, onBack }: any) {
           </div>
         </div>
       )}
-
+      {/* Initial Evidence Modal */}
       {showInitialModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white p-4 rounded-xl w-[90%] max-w-4xl max-h-[90vh] overflow-auto">
-            <InitialEvidenceForm
+            <InitialEvidenceModal
               onClose={() => setShowInitialModal(false)}
               onSubmitted={() => {
                 setShowInitialModal(false);
@@ -509,9 +572,6 @@ export default function Step2({ data, onNext, onBack }: any) {
           </div>
         </div>
       )}
-
-
     </div>
-
   );
 }

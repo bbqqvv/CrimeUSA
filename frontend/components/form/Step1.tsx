@@ -22,18 +22,34 @@ type Props = {
 
 export default function Step1({ data, onNext }: Props) {
     const [localData, setLocalData] = useState<FormData>(data);
+    const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setLocalData((prev) => ({ ...prev, [id]: value }));
+        setErrors((prev) => ({ ...prev, [id]: '' })); // clear error on change
     };
 
     const handleRelationshipChange = (value: string) => {
         setLocalData((prev) => ({ ...prev, relationship: value }));
+        setErrors((prev) => ({ ...prev, relationship: '' }));
+    };
+
+    const validate = () => {
+        const newErrors: Partial<Record<keyof FormData, string>> = {};
+        if (!localData.fullName.trim()) newErrors.fullName = 'this field is required.';
+        if (!localData.email.trim()) newErrors.email = 'this field is required.';
+        if (!localData.phone.trim()) newErrors.phone = 'this field is required.';
+        if (!localData.relationship.trim()) newErrors.relationship = 'this field is required.';
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleNextClick = () => {
-        onNext(localData);
+        if (validate()) {
+            onNext(localData);
+        }
     };
 
     const relationshipOptions = [
@@ -55,19 +71,22 @@ export default function Step1({ data, onNext }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
                 <div className="space-y-2">
                     <Label htmlFor="fullName">Full name <span className="text-red-500">*</span></Label>
-                    <Input id="fullName" value={localData.fullName} onChange={handleChange} required placeholder='E.g., John Michael Doe' />
+                    <Input id="fullName" value={localData.fullName} onChange={handleChange} placeholder='E.g., John Michael Doe' />
+                    {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
-                    <Input id="email" type="email" value={localData.email} onChange={handleChange} required placeholder='E.g., john.doe@example.com' />
+                    <Input id="email" type="email" value={localData.email} onChange={handleChange} placeholder='E.g., john.doe@example.com' />
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="phone">Phone number <span className="text-red-500">*</span></Label>
-                    <Input id="phone" value={localData.phone} onChange={handleChange} required placeholder='E.g., +1 (555) 123-4567' />
+                    <Input id="phone" value={localData.phone} onChange={handleChange} placeholder='E.g., +1 (555) 123-4567' />
+                    {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="address">Address</Label>
-                    <Input id="address" value={localData.address} onChange={handleChange} required placeholder='E.g., 123 Main St, Anytown, USA' />
+                    <Input id="address" value={localData.address} onChange={handleChange} placeholder='E.g., 123 Main St, Anytown, USA' />
                 </div>
             </div>
 
@@ -90,12 +109,13 @@ export default function Step1({ data, onNext }: Props) {
                         </div>
                     ))}
                 </RadioGroup>
+                {errors.relationship && <p className="text-red-500 text-sm">{errors.relationship}</p>}
             </div>
 
             {/* Next Button */}
             <div className="flex justify-end mt-12">
                 <Button
-                    className="w-40 h-[50px] bg-[#434343] text-white font-semibold rounded-lg"
+                    className="w-32 bg-black text-white font-semibold rounded-lg"
                     onClick={handleNextClick}
                 >
                     Next

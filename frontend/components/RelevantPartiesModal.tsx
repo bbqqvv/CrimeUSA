@@ -15,7 +15,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function RelevantPartiesForm({
+export default function RelevantPartiesModal({
   onClose,
   onSubmitted,
 }: {
@@ -94,7 +94,7 @@ export default function RelevantPartiesForm({
     }
     sessionStorage.setItem('relevantParties', JSON.stringify([...relevantParties, newParty]))
     // router.push('/reporter') // Quay lại trang chính reporter
-   // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
+    // sessionStorage.setItem('resumeStep', '2') //  Ghi nhớ cần quay lại Step 2
     // router.push('/reporter')                  //  Quay lại MultiStepForm
     if (onSubmitted) onSubmitted();
     if (onClose) onClose();
@@ -116,7 +116,7 @@ export default function RelevantPartiesForm({
     });
 
   return (
-    <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
+    <Card className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl ">
       <CardContent>
         <h2 className="text-2xl font-bold text-center mb-2">
           Relevant Parties
