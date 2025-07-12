@@ -7,6 +7,8 @@ import com.Evidence_Service.mapper.RecordInfoMapper;
 import com.Evidence_Service.entity.RecordInfo;
 import com.Evidence_Service.repository.RecordInfoRepository;
 import com.Evidence_Service.service.RecordInfoService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -27,18 +31,46 @@ public class RecordInfoServiceImpl implements RecordInfoService {
 
     private final RecordInfoRepository recordInfoRepository;
     private final RecordInfoMapper recordInfoMapper;
+    private final Validator validator;
 
     @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
     public RecordInfoDTO createRecordInfo(RecordInfoDTO dto) {
+        // Fallback validation
+        Set<jakarta.validation.ConstraintViolation<RecordInfoDTO>> violations = validator.validate(dto);
+        if (!violations.isEmpty()) {
+            log.error("Validation failed for RecordInfoDTO: {}", violations);
+            throw new AppException(ErrorCode.INVALID_KEY, "Invalid RecordInfoDTO: " + violations);
+        }
+
         try {
-            // Convert DTO to entity and generate unique ID
+            // Convert DTO to entity
             RecordInfo entity = recordInfoMapper.toEntity(dto);
+            if (entity == null) {
+                log.error("Failed to map DTO to entity: {}", dto);
+                throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to map RecordInfoDTO to entity");
+            }
+            // Generate unique ID
             entity.setRecordInfoId(UUID.randomUUID().toString());
-            return recordInfoMapper.toDTO(recordInfoRepository.save(entity));
+            // Set timestamps if not provided
+            if (entity.getCreatedAt() == null) {
+                entity.setCreatedAt(LocalDateTime.now());
+            }
+            if (entity.getUpdatedAt() == null) {
+                entity.setUpdatedAt(LocalDateTime.now());
+            }
+            // Save entity
+            RecordInfo savedEntity = recordInfoRepository.save(entity);
+            // Map to DTO
+            RecordInfoDTO result = recordInfoMapper.toDTO(savedEntity);
+            if (result == null) {
+                log.error("Failed to map saved entity to DTO: {}", savedEntity);
+                throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to map saved entity to RecordInfoDTO");
+            }
+            return result;
         } catch (Exception ex) {
             log.error("Failed to create record info: {}", ex.getMessage(), ex);
-            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Failed to create record info: " + ex.getMessage());
         }
     }
 

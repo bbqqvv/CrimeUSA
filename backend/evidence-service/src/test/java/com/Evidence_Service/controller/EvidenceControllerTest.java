@@ -3,6 +3,7 @@ package com.Evidence_Service.controller;
 import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.EvidenceService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -42,6 +44,8 @@ class EvidenceControllerTest {
 
     @BeforeEach
     void setUp() {
+        objectMapper.addMixIn(PageImpl.class, PageImplMixin.class);
+
         evidenceDTO = EvidenceDTO.builder()
                 .evidenceId("evidence1")
                 .description("Test evidence")
@@ -60,6 +64,10 @@ class EvidenceControllerTest {
                 .build();
     }
 
+    @JsonIgnoreProperties({"pageable"})
+    private interface PageImplMixin {
+    }
+
     @Test
     @WithMockUser(authorities = "ADD_EVIDENCE")
     void createEvidence_Success() throws Exception {
@@ -67,9 +75,10 @@ class EvidenceControllerTest {
 
         mockMvc.perform(post("/api/v1/evidences")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(evidenceDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
+                        .content(objectMapper.writeValueAsString(evidenceDTO))
+                        .with(csrf()))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.code").value(201))
                 .andExpect(jsonPath("$.message").value("Created evidence"))
                 .andExpect(jsonPath("$.data.evidenceId").value("evidence1"));
 
@@ -96,7 +105,8 @@ class EvidenceControllerTest {
         when(evidenceService.getByEvidenceIds(Collections.singletonList("evidence1")))
                 .thenReturn(Collections.singletonList(evidenceDTO));
 
-        mockMvc.perform(get("/api/v1/evidences/evidence1"))
+        mockMvc.perform(get("/api/v1/evidences/by-ids")
+                        .param("ids", "evidence1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Evidence found"))
@@ -108,7 +118,11 @@ class EvidenceControllerTest {
     @Test
     @WithMockUser(authorities = "VIEW_EVIDENCE")
     void getByCaseOrSuspect_Success() throws Exception {
-        Page<EvidenceDTO> page = new PageImpl<>(Collections.singletonList(evidenceDTO));
+        Page<EvidenceDTO> page = new PageImpl<>(
+                Collections.singletonList(evidenceDTO),
+                PageRequest.of(0, 10),
+                1
+        );
         when(evidenceService.getAllEvidence(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/api/v1/evidences")
@@ -116,7 +130,7 @@ class EvidenceControllerTest {
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.message").value("List evidence by case of suspect"))
+                .andExpect(jsonPath("$.message").value("List evidence by case or suspect"))
                 .andExpect(jsonPath("$.data.content[0].evidenceId").value("evidence1"));
 
         verify(evidenceService).getAllEvidence(any(Pageable.class));
@@ -129,7 +143,8 @@ class EvidenceControllerTest {
 
         mockMvc.perform(put("/api/v1/evidences/evidence1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(evidenceDTO)))
+                        .content(objectMapper.writeValueAsString(evidenceDTO))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Updated evidence"))
@@ -143,7 +158,8 @@ class EvidenceControllerTest {
     void deleteByEvidenceId_Success() throws Exception {
         doNothing().when(evidenceService).deleteByEvidenceId("evidence1");
 
-        mockMvc.perform(delete("/api/v1/evidences/evidence1"))
+        mockMvc.perform(delete("/api/v1/evidences/evidence1")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.message").value("Deleted evidence"));

@@ -22,6 +22,7 @@ public enum ErrorCode {
     BAD_GATEWAY(502, "Bad gateway", HttpStatus.BAD_GATEWAY),
     SERVICE_UNAVAILABLE(503, "Service unavailable", HttpStatus.SERVICE_UNAVAILABLE),
     INTERNAL_SERVER_ERROR(9999, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
+    BAD_REQUEST(400, "Bad request", HttpStatus.BAD_REQUEST),
 
     // ===== RECORD INFO =====
     RECORD_INFO_NOT_FOUND(4004, "Record info not found", HttpStatus.NOT_FOUND),

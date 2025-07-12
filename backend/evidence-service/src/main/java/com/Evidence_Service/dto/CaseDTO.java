@@ -3,11 +3,13 @@ package com.Evidence_Service.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class CaseDTO {
     @NotBlank(message = "Case ID cannot be empty")
     @Size(max = 50, message = "Case ID must not exceed 50 characters")
