@@ -25,5 +25,6 @@ public class Permission {
     boolean isDeleted = false;
 
     @ManyToMany(mappedBy = "permissions")
+    @ToString.Exclude
     Set<Role> roles;
 }

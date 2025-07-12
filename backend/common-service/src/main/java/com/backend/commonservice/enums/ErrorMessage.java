@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorMessage {
     UNAUTHORIZED("Bạn không có quyền truy cập tài nguyên này", 403, HttpStatus.UNAUTHORIZED),
     UNAUTHENTICATED( "Unauthenticated",403, HttpStatus.UNAUTHORIZED),
+    INVALID_TOKEN("Invalid token", 401, HttpStatus.UNAUTHORIZED),
     INVALID_DATA("Validation failed", 400, HttpStatus.BAD_REQUEST),
     SUSPECT_STATUS_NOT_FOUND("Suspect status not found", 404, HttpStatus.NOT_FOUND),
     USER_NOT_FOUND("User not found", 404, HttpStatus.NOT_FOUND),

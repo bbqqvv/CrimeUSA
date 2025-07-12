@@ -1,6 +1,6 @@
 package com.Evidence_Service.controller;
 
-import com.Evidence_Service.dto.*;
+import com.Evidence_Service.dto.EvidenceDTO;
 import com.Evidence_Service.dto.response.ApiResponse;
 import com.Evidence_Service.service.EvidenceService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,70 +28,74 @@ public class EvidenceController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADD_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> create(@Valid @RequestBody EvidenceDTO dto) {
-        return ApiResponse.<EvidenceDTO>builder()
-                .code(200)
+    public ResponseEntity<ApiResponse<EvidenceDTO>> create(@Valid @RequestBody EvidenceDTO dto) {
+        ApiResponse<EvidenceDTO> response = ApiResponse.<EvidenceDTO>builder()
+                .code(HttpStatus.CREATED.value())
                 .message("Created evidence")
                 .data(evidenceService.createEvidence(dto))
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{evidenceId}")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> getByEvidenceId(@Valid @PathVariable String evidenceId) {
-        return ApiResponse.<EvidenceDTO>builder()
-                .code(200)
+    public ResponseEntity<ApiResponse<EvidenceDTO>> getByEvidenceId(@Valid @PathVariable String evidenceId) {
+        ApiResponse<EvidenceDTO> response = ApiResponse.<EvidenceDTO>builder()
+                .code(HttpStatus.OK.value())
                 .message("Evidence found")
                 .data(evidenceService.getByEvidenceId(evidenceId))
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{ids}")
+    @GetMapping("/by-ids")
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<List<EvidenceDTO>> getByEvidenceIds(@Valid @PathVariable List<String> evidenceIds) {
-        return ApiResponse.<List<EvidenceDTO>>builder()
-                .code(200)
+    public ResponseEntity<ApiResponse<List<EvidenceDTO>>> getByEvidenceIds(@Valid @RequestParam List<String> ids) {
+        ApiResponse<List<EvidenceDTO>> response = ApiResponse.<List<EvidenceDTO>>builder()
+                .code(HttpStatus.OK.value())
                 .message("Evidence found")
-                .data(evidenceService.getByEvidenceIds(evidenceIds))
+                .data(evidenceService.getByEvidenceIds(ids))
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping
     @PreAuthorize("hasAuthority('VIEW_EVIDENCE')")
-    public ApiResponse<Page<EvidenceDTO>> getByCaseOrSuspect(@Valid
+    public ResponseEntity<ApiResponse<Page<EvidenceDTO>>> getByCaseOrSuspect(
             @RequestParam(required = false) String caseId,
             @RequestParam(required = false) String suspectId,
             @RequestParam(defaultValue = "0", required = false) int page,
-            @RequestParam(defaultValue = "10", required = false) int size
-    ) {
+            @RequestParam(defaultValue = "10", required = false) int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<EvidenceDTO> result = evidenceService.getAllEvidence(pageable);
-        return ApiResponse.<Page<EvidenceDTO>>builder()
-                .code(200)
-                .message("List evidence by case of suspect")
+        ApiResponse<Page<EvidenceDTO>> response = ApiResponse.<Page<EvidenceDTO>>builder()
+                .code(HttpStatus.OK.value())
+                .message("List evidence by case or suspect")
                 .data(result)
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{evidenceId}")
     @PreAuthorize("hasAuthority('EDIT_EVIDENCE')")
-    public ApiResponse<EvidenceDTO> updateEvidence(@Valid @PathVariable String evidenceId, @RequestBody EvidenceDTO dto) {
+    public ResponseEntity<ApiResponse<EvidenceDTO>> updateEvidence(@Valid @PathVariable String evidenceId, @Valid @RequestBody EvidenceDTO dto) {
         dto.setEvidenceId(evidenceId);
-        return ApiResponse.<EvidenceDTO>builder()
-                .code(200)
+        ApiResponse<EvidenceDTO> response = ApiResponse.<EvidenceDTO>builder()
+                .code(HttpStatus.OK.value())
                 .message("Updated evidence")
                 .data(evidenceService.updateEvidence(dto))
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{evidenceId}")
     @PreAuthorize("hasAuthority('DELETE_EVIDENCE')")
-    public ApiResponse<Void> deleteByEvidenceId(@Valid @PathVariable String evidenceId) {
+    public ResponseEntity<ApiResponse<Void>> deleteByEvidenceId(@Valid @PathVariable String evidenceId) {
         evidenceService.deleteByEvidenceId(evidenceId);
-        return ApiResponse.<Void>builder()
-                .code(200)
+        ApiResponse<Void> response = ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
                 .message("Deleted evidence")
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
-

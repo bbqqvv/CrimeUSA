@@ -6,27 +6,25 @@
 
 package com.backend.authservice.service.serviceImpl;
 
+import com.backend.authservice.dto.request.IntrospectRequest;
 import com.backend.authservice.entity.User;
 import com.backend.authservice.repository.PermissionRepository;
 import com.backend.authservice.repository.UserRepository;
 import com.backend.authservice.service.AuthService;
 import com.backend.commonservice.enums.ErrorMessage;
 import com.backend.commonservice.model.AppException;
-import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
-import org.springframework.security.oauth2.jwt.JwsHeader;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
+import java.util.UUID;
 
 /*
  * @description
@@ -43,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     UserRepository userRep;
     PermissionRepository permissionRep;
     JwtEncoder jwtEncoder;
+    JwtDecoder jwtDecoder;
     PasswordEncoder passwordEncoder;
 
     /**
@@ -68,16 +67,23 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * Introspect a JWT token to check its validity and expiration.
+     * Introspect a JWT token to retrieve its claims.
      *
-     * @param token The JWT token to introspect.
-     * @return true if the token is valid and not expired, false otherwise.
-     * @throws JOSEException  if there is an error verifying the token.
-     * @throws ParseException if there is an error parsing the token.
+     * @param request The introspect request containing the token.
+     * @throws AppException if the token is invalid or expired.
      */
     @Override
-    public boolean introspect(String token) throws JOSEException, ParseException {
-        return true;
+    public void logout(IntrospectRequest request) {
+        try {
+            Jwt jwt = jwtDecoder.decode(request.getToken());
+            String jti = jwt.getId();
+            Date expiration = jwt.getExpiresAt() != null ? Date.from(jwt.getExpiresAt()) : null;
+            log.info("Logout success for token: {}", jti);
+            log.info("Logout success for token: {}", expiration);
+        } catch (JwtException e) {
+            log.error("Invalid token during logout: {}", e.getMessage());
+            throw new AppException(ErrorMessage.INVALID_TOKEN);
+        }
     }
 
     /**
@@ -97,6 +103,7 @@ public class AuthServiceImpl implements AuthService {
                 .expiresAt(now.plus(Duration.ofMinutes(30)))
                 .claim("role", user.getRole().getDescription()) // Assuming User has a getRoles() method
                 .claim("permission", r)
+                .id(UUID.randomUUID().toString())
                 .subject(user.getUserName())
                 .build();
         return jwtEncoder.encode(JwtEncoderParameters.from(header, claimsSet)).getTokenValue();

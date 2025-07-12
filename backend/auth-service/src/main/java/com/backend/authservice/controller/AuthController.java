@@ -1,6 +1,7 @@
 package com.backend.authservice.controller;
 
 import com.backend.authservice.dto.request.AuthRequest;
+import com.backend.authservice.dto.request.IntrospectRequest;
 import com.backend.authservice.dto.response.AuthResponse;
 import com.backend.authservice.service.AuthService;
 import com.nimbusds.jose.JOSEException;
@@ -50,18 +51,10 @@ public class AuthController {
             description = "Logout user from the system"
     )
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<?> logout(@RequestBody @Valid IntrospectRequest request)
+    {
+        log.info("AuthController Logout request ");
+        authService.logout(request);
         return ResponseEntity.ok("Logout success");
-    }
-
-    @Operation(
-            summary = "Introspect Token",
-            description = "Check if the provided token is valid or not"
-    )
-    @PostMapping("/introspect")
-    public ResponseEntity<Boolean> introspect(@RequestBody String token) throws ParseException, JOSEException {
-        log.info("Introspect token: {}", token);
-        boolean isValid = authService.introspect(token);
-        return ResponseEntity.ok(isValid);
     }
 }

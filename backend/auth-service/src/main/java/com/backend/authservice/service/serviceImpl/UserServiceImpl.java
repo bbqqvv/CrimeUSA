@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
      * @return The created user response.
      * @throws AppException if the username already exists or the role is not found.
      */
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @Override
     public UserResponse createUser(UserCreationRequest request) {
