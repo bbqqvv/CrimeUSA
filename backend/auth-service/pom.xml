@@ -30,6 +30,11 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>com.backend</groupId>
+            <artifactId>common-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- JWT -->
         <!-- JWT 0.11.5 (Không dùng javax.xml.bind) -->
         <dependency>

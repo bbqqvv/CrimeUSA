@@ -6,10 +6,8 @@
 
 package com.backend.suspectservice.dto.request;
 
-import com.backend.commonservice.enums.SuspectStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;

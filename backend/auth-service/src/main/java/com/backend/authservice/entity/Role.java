@@ -24,6 +24,7 @@ public class Role {
     boolean isDeleted = false;
 
     @OneToMany(mappedBy = "role")
+    @ToString.Exclude
     Set<User> users;
 
     @ManyToMany
@@ -32,5 +33,6 @@ public class Role {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
+    @ToString.Exclude
     Set<Permission> permissions;
 }

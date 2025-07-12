@@ -7,6 +7,7 @@
 package com.backend.authservice.service;
 
 
+import com.backend.authservice.dto.request.IntrospectRequest;
 import com.nimbusds.jose.JOSEException;
 
 import java.text.ParseException;
@@ -19,5 +20,6 @@ import java.text.ParseException;
  */
 public interface AuthService {
     String authenticate(String username, String password);
-    boolean introspect(String token) throws JOSEException, ParseException;
+
+    void logout(IntrospectRequest token);
 }
