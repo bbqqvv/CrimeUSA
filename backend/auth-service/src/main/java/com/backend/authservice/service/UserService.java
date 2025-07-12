@@ -8,6 +8,7 @@ package com.backend.authservice.service;
 
 
 import com.backend.authservice.dto.request.UserCreationRequest;
+import com.backend.authservice.dto.request.UserUpdateRequest;
 import com.backend.authservice.dto.response.UserResponse;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface UserService {
     UserResponse getUserByUsername(String username);
     List<UserResponse> getAllUsers();
     UserResponse getMyInfo();
+    UserResponse updateUser(String username, UserUpdateRequest userCreationRequest);
+    void deleteUser(String username);
 }

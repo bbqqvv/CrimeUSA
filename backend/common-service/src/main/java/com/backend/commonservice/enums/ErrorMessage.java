@@ -34,6 +34,7 @@ public enum ErrorMessage {
     PERMISSION_NOT_FOUND("Permission not found", 404, HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND("Role not found", 404, HttpStatus.NOT_FOUND),
     INVALID_CREDENTIALS("username or password invalid", 401, HttpStatus.UNAUTHORIZED),
+    ROLE_ALREADY_EXISTS("Role already exists", 409, HttpStatus.CONFLICT),
     ;
     String message;
     int code;

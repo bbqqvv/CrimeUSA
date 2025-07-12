@@ -7,6 +7,7 @@
 package com.backend.authservice.service.serviceImpl;
 
 import com.backend.authservice.dto.request.UserCreationRequest;
+import com.backend.authservice.dto.request.UserUpdateRequest;
 import com.backend.authservice.dto.response.UserResponse;
 import com.backend.authservice.entity.Role;
 import com.backend.authservice.entity.User;
@@ -15,10 +16,11 @@ import com.backend.authservice.repository.RoleRepository;
 import com.backend.authservice.repository.UserRepository;
 import com.backend.authservice.service.UserService;
 import com.backend.commonservice.enums.ErrorMessage;
-import com.backend.commonservice.model.AppException;
+import com.backend.commonservice.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
      * @return The created user response.
      * @throws AppException if the username already exists or the role is not found.
      */
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ALL')")
     @Transactional
     @Override
     public UserResponse createUser(UserCreationRequest request) {
@@ -86,8 +88,6 @@ public class UserServiceImpl implements UserService {
         log.info("Fetching user with username: {}", username);
         User user = userRep.findUserByUserName(username)
                 .orElseThrow(() -> new AppException(ErrorMessage.USER_NOT_FOUND));
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        passwordEncoder.matches(user.getPasswordHash(), user.getPasswordHash());
         return userMapper.toUserRes(user);
     }
 
@@ -100,11 +100,55 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::toUserRes)
                 .toList();
     }
-    @PreAuthorize("hasAuthority('AL')")
+//    @PostAuthorize("returnObject.userName == authentication.name or hasAuthority('ALL')")
     @Override
     public UserResponse getMyInfo() {
         String username = SecurityContextHolder.getContext()
                 .getAuthentication().getName();
         return getUserByUsername(username);
+    }
+
+
+    /**
+     * Update user details by username.
+     *
+     * @param username The username of the user to update.
+     * @param request  The user update request containing updated user details.
+     * @return The updated user response.
+     * @throws AppException if the user is not found.
+     */
+    @Override
+    public UserResponse updateUser(String username, UserUpdateRequest request) {
+        log.info("Updating user with username: {}", username);
+        User existingUser = userRep.findUserByUserName(username)
+                .orElseThrow(() -> new AppException(ErrorMessage.USER_NOT_FOUND));
+
+        // Update user details
+        existingUser.setFullName(request.getFullName());
+        existingUser.setEmail(request.getEmail());
+        existingUser.setPhoneNumber(request.getPhoneNumber());
+
+        // Save the updated user
+        User updatedUser = userRep.save(existingUser);
+        return userMapper.toUserRes(updatedUser);
+    }
+
+    /**
+     * Delete a user by username.
+     *
+     * @param username The username of the user to delete.
+     * @throws AppException if the user is not found.
+     */
+    @PreAuthorize("hasAuthority('ALL')")
+    @Transactional
+    @Override
+    public void deleteUser(String username) {
+        log.info("Deleting user with username: {}", username);
+        User user = userRep.findUserByUserName(username)
+                .orElseThrow(() -> new AppException(ErrorMessage.USER_NOT_FOUND));
+        // Soft delete the user by setting isDeleted to true
+        user.setDeleted(true);
+        userRep.save(user);
+        log.info("User with username {} has been deleted", username);
     }
 }

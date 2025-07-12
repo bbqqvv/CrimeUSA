@@ -16,10 +16,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
  * @description
@@ -70,7 +73,7 @@ public class PermissionController {
     ) {
         PermissionResponse response = permissionService.createPermission(request);
         log.info("Permission created successfully: {}", response);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
@@ -84,9 +87,48 @@ public class PermissionController {
             description = "Deletes a permission by its ID."
     )
     @DeleteMapping("/{permissionId}")
-    public ResponseEntity<Void> deletePermission(@PathVariable String permissionId) {
+    public ResponseEntity<Map<String, String>> deletePermission(@PathVariable String permissionId) {
         permissionService.deletePermission(permissionId);
         log.info("Permission with ID {} deleted successfully", permissionId);
-        return ResponseEntity.noContent().build();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Permission deleted successfully");
+        return ResponseEntity.ok(response);
+    }
+    /**
+     * Retrieves a permission by its description.
+     *
+     * @param description the description of the permission to retrieve
+     * @return the permission response
+     */
+    @Operation(
+            summary = "Get Permission by Description",
+            description = "Retrieves a permission by its description."
+    )
+    @GetMapping("/description/{description}")
+    public ResponseEntity<PermissionResponse> getByDescription(@PathVariable String description) {
+        PermissionResponse response = permissionService.getByDescription(description);
+        log.info("Retrieved permission by description: {}", response);
+        return ResponseEntity.ok(response);
+    }
+    /**
+     * Updates a permission by its ID.
+     *
+     * @param permissionId the ID of the permission to update
+     * @param request      the permission creation request with updated details
+     * @return the updated permission response
+     */
+    @Operation(
+            summary = "Update Permission",
+            description = "Updates a permission by its ID."
+    )
+    @PutMapping("/{permissionId}")
+    public ResponseEntity<PermissionResponse> updatePermission(
+            @PathVariable String permissionId,
+            @RequestBody @Valid PermissionCreationRequest request
+    ) {
+        PermissionResponse response = permissionService.updatePermission(permissionId, request);
+        log.info("Permission with ID {} updated successfully: {}", permissionId, response);
+        return ResponseEntity.ok(response);
     }
 }

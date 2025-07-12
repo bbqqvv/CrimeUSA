@@ -12,7 +12,7 @@ import com.backend.authservice.repository.PermissionRepository;
 import com.backend.authservice.repository.UserRepository;
 import com.backend.authservice.service.AuthService;
 import com.backend.commonservice.enums.ErrorMessage;
-import com.backend.commonservice.model.AppException;
+import com.backend.commonservice.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;

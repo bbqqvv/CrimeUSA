@@ -8,17 +8,20 @@ import java.util.Set;
 
 @Entity
 @Table(name = "role")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
+@EqualsAndHashCode(of = "roleId")
 public class Role {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     String roleId;
+    @Column(nullable = false, unique = true)
     String description;
     @Column(name = "is_deleted", nullable = false)
     boolean isDeleted = false;

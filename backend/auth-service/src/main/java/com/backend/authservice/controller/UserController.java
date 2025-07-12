@@ -44,7 +44,9 @@ public class UserController {
      * @method: Get all Users
      * @description: Returns a list of all users in the system.
      */
-    @Operation(summary = "Get all users")
+    @Operation(summary = "Get all users",
+            description = "Returns a list of all users in the system. " +
+                    "This endpoint is secured and requires authentication.")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAll() {
         log.info("Get all users");
@@ -63,9 +65,21 @@ public class UserController {
      * @method: Create a new User
      * @description: Create a new user with the provided details.
      */
-    @Operation(summary = "Create a new user", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(summary = "Create a new user"
+    , description = "Create a new user with the provided details.")
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserCreationRequest user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+    /*
+     * @method: Delete a User
+     * @description: Deletes a user by their ID.
+     */
+    @Operation(summary = "Delete a user", description = "Deletes a user by their ID. ")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        log.info("Delete user with ID: {}", id);
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

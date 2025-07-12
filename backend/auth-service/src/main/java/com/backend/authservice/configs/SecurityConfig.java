@@ -42,7 +42,14 @@ import java.security.interfaces.RSAPublicKey;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_ENDPOINTS = {"/auth/**",};
+    private static final String[] PUBLIC_ENDPOINTS = {"/auth/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/.well-known/jwks.json",
+            "/users",
+            "/actuator/**" // Cho phép truy cập các endpoint actuator
+    };
 
     @NonFinal
     @Value("${rsa.key.private}")
@@ -55,9 +62,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/.well-known/jwks.json").permitAll() // Cho phép truy cập JWKS
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+        httpSecurity.authorizeHttpRequests(
+                request ->
+                        request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(
                         Customizer.withDefaults()))

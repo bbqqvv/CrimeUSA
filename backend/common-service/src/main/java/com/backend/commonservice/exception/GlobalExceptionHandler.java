@@ -8,7 +8,6 @@ package com.backend.commonservice.exception;
 
 import com.backend.commonservice.dto.response.ApiResponseDTO;
 import com.backend.commonservice.enums.ErrorMessage;
-import com.backend.commonservice.model.AppException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -89,6 +88,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handle AccessDeniedException to return a structured error response.
+     *
+     * @return a ResponseEntity containing the error details
+     */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, Object>> handleAccessDeniedException() {
         Map<String, Object> errors = new LinkedHashMap<>();

@@ -43,8 +43,8 @@ public class RoleController {
      * @method: Get role by roleId
      * @description: Returns the role information for the given roleId.
      */
-    @Operation(summary = "Get role by roleId"
-            , description = "Returns the role information for the given roleId."
+    @Operation(summary = "Get all role"
+            , description = "Returns the list of all roles."
     )
     @GetMapping
     public ResponseEntity<List<RoleResponse>> getAllRoles() {
@@ -61,6 +61,36 @@ public class RoleController {
         log.info("Creating new role with name: {}", roleCreationRequest.getDescription());
         RoleResponse createdRole = roleService.createRole(roleCreationRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRole);
+    }
+
+    @Operation(summary = "Get role by description"
+            , description = "Returns the role information for the given description."
+    )
+    @GetMapping("/description/{description}")
+    public ResponseEntity<RoleResponse>  getRoleByDescription(@PathVariable String description) {
+        log.info("Fetching role with description: {}", description);
+        RoleResponse role = roleService.getRoleByDescription(description);
+        return ResponseEntity.ok(role);
+    }
+
+    @Operation(summary = "Update role by roleId"
+            , description = "Update the role information for the given roleId."
+    )
+    @PutMapping("/{roleId}")
+    public ResponseEntity<RoleResponse> updateRole(@PathVariable String roleId,
+                                                   @RequestBody @Valid RoleCreationRequest roleCreationRequest) {
+        log.info("Updating role with ID: {}", roleId);
+        RoleResponse updatedRole = roleService.updateRole(roleId, roleCreationRequest);
+        return ResponseEntity.ok(updatedRole);
+    }
+    @Operation(summary = "Delete role by roleId"
+            , description = "Delete the role for the given roleId."
+    )
+    @DeleteMapping("/{roleId}")
+    public ResponseEntity<Void> deleteRole(@PathVariable String roleId) {
+        log.info("Deleting role with ID: {}", roleId);
+        roleService.deleteRole(roleId);
+        return ResponseEntity.noContent().build();
     }
 
 }

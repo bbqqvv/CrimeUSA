@@ -22,7 +22,7 @@ import java.util.Optional;
  * @date:   7/8/2025
  * @version:    1.0
  */
-@RepositoryRestResource
+@RepositoryRestResource(exported = false)
 @Hidden
 public interface PermissionRepository extends JpaRepository<Permission, String> {
     @NativeQuery("SELECT p.`description` FROM permission p join roles_permissions rp on p.permission_id = rp.permission_id where rp.role_id = :roleId and p.is_deleted = false")

@@ -23,5 +23,10 @@ public interface RoleService {
 
     List<RoleResponse> getAllRoles();
 
+    RoleResponse getRoleByDescription(String description);
+
     RoleResponse createRole(RoleCreationRequest roleCreationRequest);
+
+    void deleteRole(String roleId);
+    RoleResponse updateRole(String roleId, RoleCreationRequest roleCreationRequest);
 }

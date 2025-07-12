@@ -11,6 +11,7 @@ import com.backend.authservice.dto.request.PermissionCreationRequest;
 import com.backend.authservice.dto.response.PermissionResponse;
 import com.backend.authservice.entity.Permission;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /*
  * @description
@@ -20,6 +21,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface PermissionMapper {
-    PermissionResponse toPerRes(Permission permission);
-    Permission toPer(PermissionCreationRequest per);
+    PermissionResponse toPermissionRes(Permission permission);
+    Permission toPermission(PermissionCreationRequest per);
 }
