@@ -174,4 +174,17 @@ public class ReportControllerTest {
                 .andExpect(jsonPath("$.message").value("Report accepted successfully"))
                 .andExpect(jsonPath("$.data.reportId").value(validReportId));
     }
+
+    @Test
+    @WithMockUser(username = "user", authorities = {"REPORT_REJECT"})
+    void rejectReport() throws Exception {
+        when(reportService.acceptReport(validReportId)).thenReturn(sampleReportDto);
+
+        mockMvc.perform(put("/api/v1/reports/reject/" + validReportId)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.message").value("Report rejected successfully"))
+                .andExpect(jsonPath("$.data.reportId").value(validReportId));
+    }
 }

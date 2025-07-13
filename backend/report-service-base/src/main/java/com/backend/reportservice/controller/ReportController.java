@@ -119,6 +119,17 @@ public class ReportController {
                 .build();
     }
 
+    @PutMapping("/accept/{id}")
+    @PreAuthorize("hasAuthority('REPORT_REJECT')")
+    public ApiResponse<ReportDto> rejectReport(@PathVariable String id) {
+        ReportDto rejectedReport = reportService.rejectReport(id);
+        return ApiResponse.<ReportDto>builder()
+                .code(HttpStatus.OK.value())
+                .message("Report accepted successfully")
+                .data(rejectedReport)
+                .build();
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('REPORT_DELETE')")
     public ApiResponse<Void> deleteReport(@PathVariable String id) {

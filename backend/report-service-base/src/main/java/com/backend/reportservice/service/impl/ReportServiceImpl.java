@@ -153,6 +153,35 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional
     @CacheEvict(value = "reports", allEntries = true)
+    public ReportDto rejectReport(String id) {
+        try {
+            // Accept a report by updating its status
+            logger.info("Rejecting report with ID: {}", id);
+            Report report = reportRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+            report.setStatus(Status.REJECTED);
+            Report updatedReport = reportRepository.save(report);
+            ReportDto reportDto = reportMapper.toDto(updatedReport);
+            // Send Kafka event for report acceptance
+            reportKafkaProducer.sendReportDeleted(ReportDto.builder()
+                            .reportId(id)
+                    .build());
+            logger.info("Report REJECTED successfully: {}", reportDto);
+            return reportDto;
+        } catch (AppException e) {
+            // Log specific error for report not found
+            logger.error("Report not found with ID: {}", id, e);
+            throw e;
+        } catch (Exception e) {
+            // Log unexpected errors during report acceptance
+            logger.error("Error APPROVED report with ID: {}: {}", id, e.getMessage(), e);
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    @Transactional
+    @CacheEvict(value = "reports", allEntries = true)
     public void deleteReport(String id) {
         try {
             // Delete a report by ID

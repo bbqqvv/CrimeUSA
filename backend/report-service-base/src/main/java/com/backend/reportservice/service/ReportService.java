@@ -14,6 +14,8 @@ public interface ReportService {
     ReportDto getReportById(String id);
     ReportDto createReport(ReportRequest reportRequest);
     ReportDto acceptReport(String id);
+    ReportDto rejectReport(String id);
+
     void deleteReport(String id);
     List<String> getAllStatuses();
     List<String> getAllSeverities();
