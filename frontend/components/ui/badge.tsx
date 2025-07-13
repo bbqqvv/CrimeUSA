@@ -1,6 +1,6 @@
 // src/components/ui/Badge.tsx
 interface BadgeProps {
-  status: 'Approved' | 'Pending' | 'Rejected';
+  status: 'Approved' | 'Pending' | 'Rejected' | 'Urgnent' | 'Not Urgent';
 }
 
 const Badge = ({ status }: BadgeProps) => {
@@ -9,6 +9,8 @@ const Badge = ({ status }: BadgeProps) => {
     Approved: 'bg-green-100 text-green-800',
     Pending: 'bg-yellow-100 text-yellow-800',
     Rejected: 'bg-red-100 text-red-800',
+    Urgnent: 'bg-orange-100 text-orange-800',
+    'Not Urgent': 'bg-blue-100 text-blue-800',
   };
 
   return <span className={`${baseClasses} ${statusClasses[status]}`}>{status}</span>;
