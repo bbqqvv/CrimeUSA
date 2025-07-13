@@ -19,6 +19,6 @@ COPY --from=auth-builder /app/auth-service/target/*.jar ./auth-service.jar
 EXPOSE 8090
 
 # Run the jar file
-ENTRYPOINT ["java","-jar","auth-service.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=docker","-jar","auth-service.jar"]
 
 
