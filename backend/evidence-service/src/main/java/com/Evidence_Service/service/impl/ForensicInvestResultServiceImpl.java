@@ -11,6 +11,7 @@ import com.Evidence_Service.entity.ForensicInvestResult;
 import com.Evidence_Service.repository.ForensicInvestResultRepository;
 import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.ForensicInvestResultService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
+    @Transactional
     public ForensicInvestResultDTO addForensicInvestResult(String evidenceId, ForensicInvestResultDTO dto) {
         try {
             log.info("Adding forensic investigation result for evidence ID: {}", evidenceId);
@@ -63,6 +65,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
+    @Transactional
     public void assignForensicInvestResult(ResultInvestAssignedEvent event) {
         try {
             List<ForensicInvestResult> forensicInvestResults = forensicInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
@@ -123,6 +126,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
+    @Transactional
     public ForensicInvestResultDTO updateForensicInvest(String evidenceId, String resultId, ForensicInvestResultDTO dto) {
         try {
             log.info("Updating forensic investigation result with ID: {} for evidence ID: {}", resultId, evidenceId);
@@ -146,6 +150,7 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
 
     @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteForensicInvestByResultId(String resultId) {
         try {
             log.info("Deleting forensic investigation result with ID: {}", resultId);
@@ -175,7 +180,9 @@ public class ForensicInvestResultServiceImpl implements ForensicInvestResultServ
         }
     }
 
+    @CacheEvict(value = {"forensicInvestResult", "forensicInvestResultsByEvidence", "forensicInvestResultsByInvestigation"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteByEvidenceId(String evidenceId) {
         try {
             List<ForensicInvestResult> forensicInvestResults = forensicInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);

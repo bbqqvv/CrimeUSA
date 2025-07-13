@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/backend/report-service-base/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/evidence-service/pom.xml" />
       </list>
     </option>
   </component>

@@ -28,6 +28,8 @@ public enum ErrorCode {
     RECORD_INFO_NOT_FOUND(4004, "Record info not found", HttpStatus.NOT_FOUND),
 
     // ===== INVESTIGATION RESULTS =====
+    INVALID_INVESTIGATION_TYPE(110, "INVALID_INVESTIGATION_TYPE", HttpStatus.NOT_FOUND),
+    DIGITAL_INVEST_RESULT_ALREADY_EXISTS(105, "DIGITAL_INVEST_RESULT_ALREADY_EXISTS", HttpStatus.BAD_REQUEST),
     DIGITAL_INVEST_RESULT_NOT_FOUND(100, "Digital investigation result not found", HttpStatus.NOT_FOUND),
     FORENSIC_INVEST_RESULT_NOT_FOUND(101, "Forensic investigation result not found", HttpStatus.NOT_FOUND),
     FINANCIAL_INVEST_RESULT_NOT_FOUND(111, "Financial investigation result not found", HttpStatus.NOT_FOUND),

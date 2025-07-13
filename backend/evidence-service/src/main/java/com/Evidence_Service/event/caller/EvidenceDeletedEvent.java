@@ -14,4 +14,8 @@ public class EvidenceDeletedEvent {
     private String reportId;
     private String suspectId;
     private LocalDateTime deletedAt;
+
+    public EvidenceDeletedEvent(String evidenceId){
+        this.evidenceId = evidenceId;
+    }
 }

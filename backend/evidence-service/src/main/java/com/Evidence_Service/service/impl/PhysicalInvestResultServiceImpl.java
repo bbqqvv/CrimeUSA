@@ -11,6 +11,7 @@ import com.Evidence_Service.entity.PhysicalInvestResult;
 import com.Evidence_Service.repository.PhysicalInvestResultRepository;
 import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.PhysicalInvestResultService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public PhysicalInvestResultDTO addPhysicalInvestResult(String evidenceId, PhysicalInvestResultDTO dto) {
         try {
             // Convert DTO to entity and set evidence ID
@@ -98,6 +100,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public PhysicalInvestResultDTO updatePhysicalInvest(String evidenceId, String resultId, PhysicalInvestResultDTO dto) {
         try {
             // Find existing result
@@ -120,6 +123,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
 
     @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void deletePhysicalInvestByResultId(String resultId) {
         try {
             // Find existing result
@@ -151,6 +155,7 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
     }
     @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteByEvidenceId(String evidenceId) {
         try {
             List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);
@@ -168,7 +173,9 @@ public class PhysicalInvestResultServiceImpl implements PhysicalInvestResultServ
         }
     }
 
+    @CacheEvict(value = {"physicalInvestResult", "physicalInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void assignPhysicalInvestResult(ResultInvestAssignedEvent event) {
         try {
             List<PhysicalInvestResult> physicalInvestResults = physicalInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
