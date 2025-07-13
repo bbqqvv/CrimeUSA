@@ -119,7 +119,7 @@ public class ReportController {
                 .build();
     }
 
-    @PutMapping("/accept/{id}")
+    @PutMapping("/reject/{id}")
     @PreAuthorize("hasAuthority('REPORT_REJECT')")
     public ApiResponse<ReportDto> rejectReport(@PathVariable String id) {
         ReportDto rejectedReport = reportService.rejectReport(id);
