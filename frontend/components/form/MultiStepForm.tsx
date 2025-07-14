@@ -1,7 +1,7 @@
 // MultiStepForm.tsx
 import { useState } from 'react';
 import Step1 from './Step1';
-// import Step2 from './Step2';
+import Step2 from './Step2';
 import Step3 from './Step3';
 import StepIndicator from '../ui/StepIndicator';
 import { useEffect } from 'react';
@@ -86,15 +86,15 @@ export default function MultiStepForm() {
       <div className='mt-10'>
         {step === 1 && <Step1 data={formData} onNext={handleNext} />}
         {step === 2 && (
-          <div>
-            <h1>Step 2</h1>
-          </div>
-          // <Step2
-          //   data={formData}
-          //   onBack={handleBack}
-          //   onNext={nextStep} // chỉ điều khiển chuyển bước
-          //   onUpdate={updateFormData}
-          // />
+          // <div>
+          //   <h1>Step 2</h1>
+          // </div>
+          <Step2
+            data={formData}
+            onBack={handleBack}
+            onNext={nextStep} // chỉ điều khiển chuyển bước
+            onUpdate={updateFormData}
+          />
         )}
         {step === 3 && (
           <Step3 data={formData} onBack={handleBack} onSubmit={handleSubmit} />

@@ -133,7 +133,7 @@ export default function InitialEvidenceModal({
                 <SelectTrigger id="evidenceType" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                   <SelectItem value="physical">Physical Evidence</SelectItem>
                   <SelectItem value="biological">
                     Biological Evidence

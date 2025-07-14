@@ -62,7 +62,7 @@ export default function IncidentInfoForm({
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                             <SelectItem value="crimes-against-persons">Crimes Against Persons</SelectItem>
                             <SelectItem value="crimes-against-property">Crimes Against Property</SelectItem>
                             <SelectItem value="white-collar-crimes">White-Collar Crimes</SelectItem>
@@ -83,7 +83,7 @@ export default function IncidentInfoForm({
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select an option" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                             <SelectItem value="minor">Minor</SelectItem>
                             <SelectItem value="moderate">Moderate</SelectItem>
                             <SelectItem value="serious">Serious</SelectItem>
