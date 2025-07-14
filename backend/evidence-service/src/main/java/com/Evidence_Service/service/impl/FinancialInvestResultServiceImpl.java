@@ -11,6 +11,7 @@ import com.Evidence_Service.entity.FinancialInvestResult;
 import com.Evidence_Service.repository.FinancialInvestResultRepository;
 import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.FinancialInvestResultService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public FinancialInvestResultDTO addFinancialInvestResult(String evidenceId, FinancialInvestResultDTO dto) {
         try {
             log.info("Adding financial investigation result for evidence ID: {}", evidenceId);
@@ -82,6 +84,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void assignFinancialInvestResult(ResultInvestAssignedEvent event) {
         try {
             List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(event.getEvidenceId());
@@ -125,6 +128,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public FinancialInvestResultDTO updateFinancialInvest(String evidenceId, String resultId, FinancialInvestResultDTO dto) {
         try {
             log.info("Updating financial investigation result with ID: {} for evidence ID: {}", resultId, evidenceId);
@@ -149,6 +153,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteFinancialInvestByResultId(String resultId) {
         try {
             log.info("Deleting financial investigation result with ID: {}", resultId);
@@ -182,6 +187,7 @@ public class FinancialInvestResultServiceImpl implements FinancialInvestResultSe
 
     @CacheEvict(value = {"financialInvestResult", "financialInvestResultsByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteByEvidenceId(String evidenceId) {
         try {
             List<FinancialInvestResult> financialInvestResults = financialInvestResultRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);

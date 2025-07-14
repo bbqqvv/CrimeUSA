@@ -1,5 +1,6 @@
 package com.backend.reportservice.entity;
 
+import com.backend.reportservice.enums.Status;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,12 +12,12 @@ import java.time.LocalDateTime;
 public class Report {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "report_id")
-    private Long id;
+    private String reportId;
 
     @Column(name = "case_id")
-    private Long caseId;
+    private String caseId;
 
     @Column(name = "type_report")
     private String typeReport;
@@ -41,7 +42,9 @@ public class Report {
     @Column(name = "reporter_phonenumber")
     private String reporterPhoneNumber;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 
     @Column(name = "officer_approve_username")
     private String officerApproveUsername;

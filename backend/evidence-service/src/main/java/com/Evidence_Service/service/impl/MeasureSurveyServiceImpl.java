@@ -8,6 +8,7 @@ import com.Evidence_Service.entity.MeasureSurvey;
 import com.Evidence_Service.repository.MeasureSurveyRepository;
 import com.Evidence_Service.service.EvidenceService;
 import com.Evidence_Service.service.MeasureSurveyService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class MeasureSurveyServiceImpl implements MeasureSurveyService {
     private final EvidenceService evidenceService;
 
     @Override
+    @Transactional
     @CacheEvict(value = {"measureSurvey", "measureSurveyByEvidence"}, allEntries = true)
     public MeasureSurveyDTO createMeasureSurvey(MeasureSurveyDTO dto) {
         try {
@@ -69,6 +71,7 @@ public class MeasureSurveyServiceImpl implements MeasureSurveyService {
 
 
     @Override
+    @Transactional
     @CacheEvict(value = {"measureSurvey", "measureSurveyByEvidence"}, allEntries = true)
     public MeasureSurveyDTO updateMeasureSurvey(String measureSurveyId, MeasureSurveyDTO dto) {
         try {
@@ -93,6 +96,7 @@ public class MeasureSurveyServiceImpl implements MeasureSurveyService {
      * Also soft-deletes all Evidence entities related to this MeasureSurvey.
      */
     @Override
+    @Transactional
     @CacheEvict(value = {"measureSurvey", "measureSurveyByEvidence"}, allEntries = true)
     public void deleteMeasureSurveyByMeasureSurveyId(String measureSurveyId) {
         try {

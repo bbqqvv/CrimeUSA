@@ -7,6 +7,7 @@ import com.Evidence_Service.mapper.RecordInfoMapper;
 import com.Evidence_Service.entity.RecordInfo;
 import com.Evidence_Service.repository.RecordInfoRepository;
 import com.Evidence_Service.service.RecordInfoService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class RecordInfoServiceImpl implements RecordInfoService {
 
     @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public RecordInfoDTO createRecordInfo(RecordInfoDTO dto) {
         // Fallback validation
         Set<jakarta.validation.ConstraintViolation<RecordInfoDTO>> violations = validator.validate(dto);
@@ -116,6 +118,7 @@ public class RecordInfoServiceImpl implements RecordInfoService {
 
     @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public RecordInfoDTO updateRecordInfo(String recordInfoId, RecordInfoDTO dto) {
         try {
             // Find existing record
@@ -137,6 +140,7 @@ public class RecordInfoServiceImpl implements RecordInfoService {
 
     @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteRecordInfoByRecordInfoId(String recordInfoId) {
         try {
             // Check if record exists
@@ -164,7 +168,9 @@ public class RecordInfoServiceImpl implements RecordInfoService {
         }
     }
 
+    @CacheEvict(value = {"recordInfo", "recordInfoByEvidence"}, allEntries = true)
     @Override
+    @Transactional
     public void deleteByEvidenceId(String evidenceId) {
         try {
             List<RecordInfo> recordInfo = recordInfoRepository.findAllByEvidenceIdAndIsDeletedFalse(evidenceId);

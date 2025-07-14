@@ -33,16 +33,12 @@ export default function Page({
 }) {
   return (
     // Main container with flex layout and full height
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 w-full max-w-screen overflow-x-auto">
       <ReduxProvider>
-
-        {/* LEFT SIDEBAR */}
-        {/* Persistent navigation sidebar that appears on all pages */}
-        <LeftSidebar />
-
-        {/* MAIN CONTENT AREA */}
-        {/* This is where individual page components will be rendered */}
-        {children}
+      {/* LEFT SIDEBAR */}
+      <LeftSidebar />
+      {/* MAIN CONTENT AREA */}
+      {children}
       </ReduxProvider>
     </div>
   );
