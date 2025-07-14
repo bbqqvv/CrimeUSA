@@ -153,7 +153,7 @@ export default function RelevantPartiesModal({
                 <SelectTrigger id="relation" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                   <SelectItem value="witness">Witness</SelectItem>
                   <SelectItem value="victim">Victim</SelectItem>
                   <SelectItem value="suspect">Suspect</SelectItem>
@@ -172,7 +172,7 @@ export default function RelevantPartiesModal({
                 <SelectTrigger id="gender" className="w-full">
                   <SelectValue placeholder="Select an option" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="unknown">Unknown</SelectItem>

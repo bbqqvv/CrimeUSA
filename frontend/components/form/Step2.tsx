@@ -192,7 +192,7 @@ export default function Step2({ data, onNext, onBack }: any) {
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                 <SelectItem value="crimes-against-persons">
                   Crimes Against Persons
                 </SelectItem>
@@ -228,7 +228,7 @@ export default function Step2({ data, onNext, onBack }: any) {
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-gray-200 rounded-md shadow-md">
                 <SelectItem value="minor">Minor</SelectItem>
                 <SelectItem value="moderate">Moderate</SelectItem>
                 <SelectItem value="serious">Serious</SelectItem>
