@@ -259,7 +259,7 @@ export default function Step2({ data, onNext, onBack }: any) {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0 bg-white border border-gray-200 rounded-md shadow-md" align="start">
               <Calendar
                 mode="single"
                 selected={date}
