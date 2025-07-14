@@ -1,5 +1,5 @@
 import React from "react";
-import ManageReport from "./manage-report/page";
+import ManageReport from "@/app/(admin)/dashboard/manage-report/components/ManageReport";
 
 const AdminDashboardPage = () => {
     return (
