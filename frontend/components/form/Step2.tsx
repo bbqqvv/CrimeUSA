@@ -31,7 +31,7 @@ import { Edit, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import RelevantPartiesModal from "../RelevantPartiesModal";
 
-export default function Step2({ data, onNext, onBack }: any) {
+export default function Step2({ data, onNext, onBack, isSubmitting = false, submitError = null }: any) {
   const [form, setForm] = useState(data);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [open, setOpen] = useState(false);
@@ -465,12 +465,27 @@ export default function Step2({ data, onNext, onBack }: any) {
       </div>
 
       {/* Navigation Buttons */}
+      {submitError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center font-medium mt-6">
+          Failed to submit: {submitError}
+        </div>
+      )}
       <div className="flex justify-end gap-4 mt-8">
-        <Button variant="outline" className="w-32" onClick={onBack}>
+        <Button variant="outline" className="w-32" onClick={onBack} disabled={isSubmitting}>
           Back
         </Button>
-        <Button className="w-32 bg-black text-white" onClick={handleSubmit}>
-          Submit
+        <Button className="w-32 bg-black text-white hover:bg-black/90 flex items-center justify-center gap-2" onClick={handleSubmit} disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Submitting...
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </div>
 
