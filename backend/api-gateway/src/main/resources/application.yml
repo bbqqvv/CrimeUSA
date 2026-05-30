@@ -58,7 +58,42 @@ spring:
             - Path=${app.api-prefix}/auth/**,${app.api-prefix}/users/**,${app.api-prefix}/roles/**,${app.api-prefix}/permissions/**
           filters:
             - PreserveHostHeader
-            - StripPrefix=2 # Remove prefix /api/v1 from request path
+            - StripPrefix=2
+        - id: evidence-service
+          uri: lb://evidence-service
+          predicates:
+            - Path=${app.api-prefix}/evidences/**
+          filters:
+            - PreserveHostHeader
+            - StripPrefix=2
+        - id: holiday-service
+          uri: lb://holiday-service
+          predicates:
+            - Path=${app.api-prefix}/holidays/**
+          filters:
+            - PreserveHostHeader
+            - StripPrefix=2
+        - id: case-service
+          uri: lb://case-service
+          predicates:
+            - Path=${app.api-prefix}/cases/**
+          filters:
+            - PreserveHostHeader
+            - StripPrefix=2
+        - id: investigation-service
+          uri: lb://investigation-service
+          predicates:
+            - Path=${app.api-prefix}/investigations/**
+          filters:
+            - PreserveHostHeader
+            - StripPrefix=2
+        - id: report-service
+          uri: lb://report-service
+          predicates:
+            - Path=${app.api-prefix}/reports/**
+          filters:
+            - PreserveHostHeader
+            - StripPrefix=2
           # Config rate limit for service product-service
           #            - name: CircuitBreaker
           #              args:

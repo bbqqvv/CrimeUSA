@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@FeignClient(name = "warrant-service", url = "${warrant-service.url}", configuration = FeignConfig.class)
+@FeignClient(name = "warrant-service", configuration = FeignConfig.class)
 public interface WarrantClient {
 
     @PostMapping("/api/warrants/by-ids")

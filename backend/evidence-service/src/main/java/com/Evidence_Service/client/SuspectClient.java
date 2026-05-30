@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@FeignClient(name = "suspect-service", url = "${suspect-service.url}", configuration = FeignConfig.class)
+@FeignClient(name = "suspect-service", configuration = FeignConfig.class)
 public interface SuspectClient {
 
     @PostMapping("/api/suspects/by-ids")
