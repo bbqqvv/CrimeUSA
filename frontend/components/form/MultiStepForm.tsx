@@ -24,14 +24,8 @@ export default function MultiStepForm() {
     incidentDate: '',
     incidentAddress: '',
     incidentDescription: '',
-    relevantParties:
-      typeof window !== 'undefined'
-        ? JSON.parse(sessionStorage.getItem('relevantParties') || '[]')
-        : [],
-    initialEvidence:
-      typeof window !== 'undefined'
-        ? JSON.parse(sessionStorage.getItem('initialEvidence') || '[]')
-        : [],
+    relevantParties: [] as any[],
+    initialEvidence: [] as any[],
   });
 
   const handleNext = (data: any) => {
@@ -114,6 +108,17 @@ export default function MultiStepForm() {
       setStep(resumeStep);
       setMaxStepReached(resumeStep);
       sessionStorage.removeItem('resumeStep');
+    }
+
+    // Load saved data from sessionStorage safely after mount to avoid hydration mismatch
+    const savedRelevant = sessionStorage.getItem('relevantParties');
+    const savedEvidence = sessionStorage.getItem('initialEvidence');
+    if (savedRelevant || savedEvidence) {
+      setFormData((prev) => ({
+        ...prev,
+        relevantParties: savedRelevant ? JSON.parse(savedRelevant) : [],
+        initialEvidence: savedEvidence ? JSON.parse(savedEvidence) : [],
+      }));
     }
   }, []);
 
