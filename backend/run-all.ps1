@@ -68,6 +68,9 @@ $env:REDIS_PORT = "6379"
 # Bypasses the Spring Cloud Compatibility Verifier version checks
 $env:SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED = "false"
 
+# Forces Eureka clients to register using their IP address rather than machine hostname, resolving local DNS resolution errors
+$env:EUREKA_INSTANCE_PREFER_IP_ADDRESS = "true"
+
 # Cloudinary properties needed for image uploading initialization.
 # Fall back to safe dummy values only if they are not already defined (e.g. from local .env or system env)
 if (-not $env:CLOUD_NAME) { $env:CLOUD_NAME = "dummy_cloud" }
