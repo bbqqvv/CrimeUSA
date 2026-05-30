@@ -32,7 +32,7 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
             "/swagger-ui/**",
             "/v3/api-docs",
             "/v3/api-docs/**",
-            "/api/v1/reports"
+            "/reports"
     );
 
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
