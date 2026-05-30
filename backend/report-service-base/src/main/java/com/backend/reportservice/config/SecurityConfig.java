@@ -38,6 +38,7 @@ public class SecurityConfig {
                                 "/v3/api-docs"
                         ).permitAll()
                         .requestMatchers("/internal/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/reports").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtTokenVerifier, ApiKeyAuthFilter.class);

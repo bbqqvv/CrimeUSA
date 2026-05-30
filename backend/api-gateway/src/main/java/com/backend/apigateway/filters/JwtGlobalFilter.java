@@ -56,7 +56,8 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
     // Danh sách các đường dẫn không cần xác thực
     private final List<OpenApiEndpoint> openApiEndpoints = Arrays.asList(
             new OpenApiEndpoint("POST", "/api/v1/auth/login"),
-            new OpenApiEndpoint("POST", "/api/v1/auth/logout")
+            new OpenApiEndpoint("POST", "/api/v1/auth/logout"),
+            new OpenApiEndpoint("POST", "/api/v1/reports")
     );
 
     @Override
