@@ -70,9 +70,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT");
                 return;
             }
-        } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing Authorization header");
-            return;
         }
 
         chain.doFilter(request, response);
