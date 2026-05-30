@@ -58,6 +58,18 @@ export default function Step1({ data, onNext }: Props) {
         { value: 'suspect', label: 'Suspect' },
     ];
 
+    const handleQuickFill = () => {
+        const mockReporter: FormData = {
+            fullName: 'Bui Quoc Van',
+            email: 'vanbui@example.com',
+            phone: '0966467356',
+            address: '123 Nguyen Hue St, District 1, HCMC',
+            relationship: 'witness'
+        };
+        setLocalData(mockReporter);
+        setErrors({});
+    };
+
     return (
         <div className="w-full max-w-screen-md mx-auto">
             {/* Title */}
@@ -113,7 +125,15 @@ export default function Step1({ data, onNext }: Props) {
             </div>
 
             {/* Next Button */}
-            <div className="flex justify-end mt-12">
+            <div className="flex justify-end gap-4 mt-12">
+                <Button
+                    type="button"
+                    variant="outline"
+                    className="w-32 border-dashed border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600 font-semibold rounded-lg"
+                    onClick={handleQuickFill}
+                >
+                    ⚡ Quick Fill
+                </Button>
                 <Button
                     className="w-32 bg-black text-white font-semibold rounded-lg"
                     onClick={handleNextClick}

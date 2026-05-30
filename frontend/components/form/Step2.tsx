@@ -49,6 +49,18 @@ export default function Step2({ data, onNext, onBack, isSubmitting = false, subm
   const [selectedParty, setSelectedParty] = useState<any>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const handleQuickFill = () => {
+    setForm({
+      ...form,
+      typeOfCrime: 'cyber-crimes',
+      severity: 'serious',
+      address: '456 Le Loi St, District 1, HCMC',
+      description: 'Suspicious hacking activities detected on local database systems. Logs indicate unauthorized remote connection attempts starting from late night.'
+    });
+    setDate(new Date());
+    setErrors({});
+  };
+
   // Load saved data from sessionStorage on component mount
   useEffect(() => {
     const savedRelevant = sessionStorage.getItem("relevantParties");
@@ -471,6 +483,15 @@ export default function Step2({ data, onNext, onBack, isSubmitting = false, subm
         </div>
       )}
       <div className="flex justify-end gap-4 mt-8">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-32 border-dashed border-blue-500 text-blue-500 hover:bg-blue-50 hover:text-blue-600 font-semibold rounded-lg"
+          onClick={handleQuickFill}
+          disabled={isSubmitting}
+        >
+          ⚡ Quick Fill
+        </Button>
         <Button variant="outline" className="w-32" onClick={onBack} disabled={isSubmitting}>
           Back
         </Button>
