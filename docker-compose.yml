@@ -43,6 +43,33 @@ services:
     networks:
       - mockproject-network
 
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-mockproject
+    environment:
+      MYSQL_ROOT_PASSWORD: 10092412
+      MYSQL_DATABASE: crime_usa_db
+    ports:
+      - "3306:3306"
+    networks:
+      - mockproject-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-mockproject
+    ports:
+      - "6379:6379"
+    networks:
+      - mockproject-network
+    volumes:
+      - redis-data:/data
+
 networks:
   mockproject-network:
     driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
