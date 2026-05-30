@@ -27,6 +27,21 @@ if (-not (Get-Command "mvn" -ErrorAction SilentlyContinue)) {
     $mvnCmd = "D:\ProgramStudy\IntelliJ IDEA 2025.3.2\plugins\maven\lib\maven3\bin\mvn.cmd"
 }
 
+# Dynamically load variables from a local .env file in the backend folder (if it exists)
+$envFile = Join-Path -Path $baseDir -ChildPath ".env"
+if (Test-Path $envFile) {
+    Write-Host "Loading local environment variables from $envFile..."
+    Get-Content $envFile | ForEach-Object {
+        $line = $_.Trim()
+        if ($line -and -not $line.StartsWith("#") -and $line -like "*=*") {
+            $key, $value = $line -split '=', 2
+            $envKey = $key.Trim()
+            $envValue = $value.Trim().Trim('"').Trim("'")
+            [System.Environment]::SetEnvironmentVariable($envKey, $envValue)
+        }
+    }
+}
+
 # Ensure all background java processes are killed before starting
 Write-Host "Killing any existing java processes to free ports..."
 Stop-Process -Name java -Force -ErrorAction SilentlyContinue
@@ -53,10 +68,11 @@ $env:REDIS_PORT = "6379"
 # Bypasses the Spring Cloud Compatibility Verifier version checks
 $env:SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED = "false"
 
-# Cloudinary properties needed for image uploading initialization
-$env:CLOUD_NAME = "dummy_cloud"
-$env:CLOUD_API_KEY = "1234567890"
-$env:CLOUD_API_SECRET = "dummy_secret"
+# Cloudinary properties needed for image uploading initialization.
+# Fall back to safe dummy values only if they are not already defined (e.g. from local .env or system env)
+if (-not $env:CLOUD_NAME) { $env:CLOUD_NAME = "dummy_cloud" }
+if (-not $env:CLOUD_API_KEY) { $env:CLOUD_API_KEY = "1234567890" }
+if (-not $env:CLOUD_API_SECRET) { $env:CLOUD_API_SECRET = "dummy_secret" }
 
 $spawnedProcesses = @()
 
