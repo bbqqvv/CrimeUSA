@@ -2,6 +2,8 @@ server:
   port: 8083
 
 spring:
+  application:
+    name: case-service
   datasource:
     url: jdbc:mysql://localhost:3306/case_db?createDatabaseIfNotExist=true
     username: root
@@ -31,3 +33,13 @@ spring:
 kafka:
   topic:
     report-accepted: report-accepted
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+    register-with-eureka: true
+    fetch-registry: true
+
+jwt:
+  public-key-location: keys/public.pem

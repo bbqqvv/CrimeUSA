@@ -10,10 +10,15 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.Map;
 
 @Configuration
 public class KafkaListenerFactoryProvider {
+
+    @Value("${spring.kafka.bootstrap-servers:localhost:29092}")
+    private String bootstrapServers;
 
     private <T> ConsumerFactory<String, T> buildConsumerFactory(Class<T> clazz, String groupId) {
         JsonDeserializer<T> deserializer = new JsonDeserializer<>(clazz);
@@ -24,7 +29,7 @@ public class KafkaListenerFactoryProvider {
 
         return new DefaultKafkaConsumerFactory<>(
                 Map.of(
-                        ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
+                        ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                         ConsumerConfig.GROUP_ID_CONFIG, groupId,
                         ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
                         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class

@@ -14,6 +14,7 @@ import org.springframework.util.backoff.BackOff;
 import org.springframework.util.backoff.FixedBackOff;
 import org.springframework.web.client.RestTemplate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -22,13 +23,16 @@ import java.util.function.BiFunction;
 @EnableKafka
 public class KafkaCommonConfig {
 
+    @Value("${spring.kafka.bootstrap-servers:localhost:29092}")
+    private String bootstrapServers;
+
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         JsonSerializer<Object> serializer = new JsonSerializer<>();
         serializer.setAddTypeInfo(false); // Non typeId
         return new DefaultKafkaProducerFactory<>(
                 Map.of(
-                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
+                        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
                         ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
                         ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class
                 ),

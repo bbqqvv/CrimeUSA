@@ -8,7 +8,7 @@ package com.backend.suspectservice.service.serviceImpl;
 
 import com.backend.commonservice.enums.ErrorMessage;
 import com.backend.commonservice.enums.SuspectStatus;
-import com.backend.commonservice.model.AppException;
+import com.backend.commonservice.exception.AppException;
 import com.backend.suspectservice.dto.request.SuspectCreateRequest;
 import com.backend.suspectservice.dto.response.SuspectResponse;
 import com.backend.suspectservice.mapper.SuspectMapper;

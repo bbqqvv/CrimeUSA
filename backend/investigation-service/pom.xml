@@ -34,6 +34,16 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<!-- commonservice dependency -->
+		<dependency>
+			<groupId>com.backend</groupId>
+			<artifactId>common-service</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<!-- Swagger OpenAPI UI -->
 		<dependency>
 			<groupId>org.springdoc</groupId>

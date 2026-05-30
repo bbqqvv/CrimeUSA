@@ -82,4 +82,9 @@ jwt:
 internal:
   api-key: jHhHXen9L6sbH1ZjlO4iT8J6mt3qYVfc87juXtFpU6ybytNvaAIITl3v6v4cSZjd
 
-
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka}
+    register-with-eureka: true
+    fetch-registry: true
