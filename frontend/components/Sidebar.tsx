@@ -3,8 +3,9 @@
 import { FiHome, FiFileText, FiBriefcase, FiLogOut, FiX } from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
+import { authService } from '../services/auth.service';
 
 const navItems = [
   { label: 'Dashboard', icon: FiHome, href: '/dashboard' },
@@ -20,6 +21,12 @@ export default function Sidebar({
   onClose: () => void;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    authService.logout();
+    router.push('/sign-in');
+  };
 
   return (
     <aside
@@ -77,7 +84,10 @@ export default function Sidebar({
 
         {/* Logout at bottom */}
         <div className="p-4 border-t border-gray-700">
-          <button className="flex items-center w-full p-2 bg-gray-700 hover:bg-gray-600 rounded">
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full p-2 bg-gray-700 hover:bg-gray-600 rounded"
+          >
             <FiLogOut className="mr-3" size={18} />
             <span className="text-sm font-medium">Logout</span>
           </button>

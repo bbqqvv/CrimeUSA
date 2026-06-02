@@ -20,6 +20,7 @@ spring:
   cloud:
     gateway:
       default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
         - name: RequestRateLimiter
           args:
             # Trong 1s sẽ có 10 token được cấp phát
@@ -90,7 +91,7 @@ spring:
         - id: report-service
           uri: lb://report-service
           predicates:
-            - Path=${app.api-prefix}/reports/**
+            - Path=${app.api-prefix}/reports, ${app.api-prefix}/reports/**
           filters:
             - PreserveHostHeader
             - StripPrefix=2

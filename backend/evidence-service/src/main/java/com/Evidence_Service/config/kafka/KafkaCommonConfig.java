@@ -15,7 +15,6 @@ import org.springframework.util.backoff.FixedBackOff;
 import org.springframework.web.client.RestTemplate;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Value;
-
 import java.util.Map;
 import java.util.function.BiFunction;
 

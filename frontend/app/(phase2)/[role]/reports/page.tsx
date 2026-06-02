@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Search, LogOut, ChevronDown } from "lucide-react"
+import { authService } from "@/services/auth.service"
 import {
   Table,
   TableBody,
@@ -55,6 +56,11 @@ export default function ReportsPage() {
   const [entriesPerPage, setEntriesPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
 
+  const handleLogout = () => {
+    authService.logout()
+    router.push("/sign-in")
+  }
+
   const handleRowClick = (caseId: string) => {
     // Remove the # symbol from caseId for URL
     const reportId = caseId.replace('#', '')
@@ -93,7 +99,12 @@ export default function ReportsPage() {
                 <div className="text-sm font-medium text-gray-900">MATTHA, JOHN</div>
                 <div className="text-xs text-gray-500">Sheriff</div>
               </div>
-              <Button variant="ghost" size="icon" className="text-gray-500 hover:text-gray-700">
+              <Button
+                onClick={handleLogout}
+                variant="ghost"
+                size="icon"
+                className="text-gray-500 hover:text-gray-700"
+              >
                 <LogOut className="h-5 w-5" />
               </Button>
             </div>
